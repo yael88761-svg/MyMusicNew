@@ -1,0 +1,327 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\MyMusicNew\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{9AB1C4E2-4A36-D2E0-B9CC-6F31C49BED18}|MyMusicNew\\MyMusicNew.csproj|d:\\mymusicnew\\mymusicnew\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9AB1C4E2-4A36-D2E0-B9CC-6F31C49BED18}|MyMusicNew\\MyMusicNew.csproj|solutionrelative:mymusicnew\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6FD173F0-EBCD-4F8E-BB18-800557D7FCE8}|DataContext\\DataContext.csproj|d:\\mymusicnew\\datacontext\\musiccontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6FD173F0-EBCD-4F8E-BB18-800557D7FCE8}|DataContext\\DataContext.csproj|solutionrelative:datacontext\\musiccontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5DB80F36-25E0-453D-8EAD-69660EE05DFA}|Repositories\\Repositories.csproj|d:\\mymusicnew\\repositories\\repositories\\audiofeaturesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5DB80F36-25E0-453D-8EAD-69660EE05DFA}|Repositories\\Repositories.csproj|solutionrelative:repositories\\repositories\\audiofeaturesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5DB80F36-25E0-453D-8EAD-69660EE05DFA}|Repositories\\Repositories.csproj|d:\\mymusicnew\\repositories\\entities\\audiofeatures.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5DB80F36-25E0-453D-8EAD-69660EE05DFA}|Repositories\\Repositories.csproj|solutionrelative:repositories\\entities\\audiofeatures.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9AB1C4E2-4A36-D2E0-B9CC-6F31C49BED18}|MyMusicNew\\MyMusicNew.csproj|d:\\mymusicnew\\mymusicnew\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{9AB1C4E2-4A36-D2E0-B9CC-6F31C49BED18}|MyMusicNew\\MyMusicNew.csproj|solutionrelative:mymusicnew\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5DB80F36-25E0-453D-8EAD-69660EE05DFA}|Repositories\\Repositories.csproj|d:\\mymusicnew\\repositories\\repositories\\playhistoryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5DB80F36-25E0-453D-8EAD-69660EE05DFA}|Repositories\\Repositories.csproj|solutionrelative:repositories\\repositories\\playhistoryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5DB80F36-25E0-453D-8EAD-69660EE05DFA}|Repositories\\Repositories.csproj|d:\\mymusicnew\\repositories\\entities\\playhistory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5DB80F36-25E0-453D-8EAD-69660EE05DFA}|Repositories\\Repositories.csproj|solutionrelative:repositories\\entities\\playhistory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5DB80F36-25E0-453D-8EAD-69660EE05DFA}|Repositories\\Repositories.csproj|d:\\mymusicnew\\repositories\\repositories\\playlistrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5DB80F36-25E0-453D-8EAD-69660EE05DFA}|Repositories\\Repositories.csproj|solutionrelative:repositories\\repositories\\playlistrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5DB80F36-25E0-453D-8EAD-69660EE05DFA}|Repositories\\Repositories.csproj|d:\\mymusicnew\\repositories\\entities\\playlist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5DB80F36-25E0-453D-8EAD-69660EE05DFA}|Repositories\\Repositories.csproj|solutionrelative:repositories\\entities\\playlist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5DB80F36-25E0-453D-8EAD-69660EE05DFA}|Repositories\\Repositories.csproj|d:\\mymusicnew\\repositories\\repositories\\playlistsongrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5DB80F36-25E0-453D-8EAD-69660EE05DFA}|Repositories\\Repositories.csproj|solutionrelative:repositories\\repositories\\playlistsongrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5DB80F36-25E0-453D-8EAD-69660EE05DFA}|Repositories\\Repositories.csproj|d:\\mymusicnew\\repositories\\repositories\\songrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5DB80F36-25E0-453D-8EAD-69660EE05DFA}|Repositories\\Repositories.csproj|solutionrelative:repositories\\repositories\\songrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5DB80F36-25E0-453D-8EAD-69660EE05DFA}|Repositories\\Repositories.csproj|d:\\mymusicnew\\repositories\\repositories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5DB80F36-25E0-453D-8EAD-69660EE05DFA}|Repositories\\Repositories.csproj|solutionrelative:repositories\\repositories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5DB80F36-25E0-453D-8EAD-69660EE05DFA}|Repositories\\Repositories.csproj|d:\\mymusicnew\\repositories\\entities\\song.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5DB80F36-25E0-453D-8EAD-69660EE05DFA}|Repositories\\Repositories.csproj|solutionrelative:repositories\\entities\\song.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5DB80F36-25E0-453D-8EAD-69660EE05DFA}|Repositories\\Repositories.csproj|d:\\mymusicnew\\repositories\\entities\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5DB80F36-25E0-453D-8EAD-69660EE05DFA}|Repositories\\Repositories.csproj|solutionrelative:repositories\\entities\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6FD173F0-EBCD-4F8E-BB18-800557D7FCE8}|DataContext\\DataContext.csproj|d:\\mymusicnew\\datacontext\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6FD173F0-EBCD-4F8E-BB18-800557D7FCE8}|DataContext\\DataContext.csproj|solutionrelative:datacontext\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5DB80F36-25E0-453D-8EAD-69660EE05DFA}|Repositories\\Repositories.csproj|d:\\mymusicnew\\repositories\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5DB80F36-25E0-453D-8EAD-69660EE05DFA}|Repositories\\Repositories.csproj|solutionrelative:repositories\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5DB80F36-25E0-453D-8EAD-69660EE05DFA}|Repositories\\Repositories.csproj|d:\\mymusicnew\\repositories\\interfaces\\irepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5DB80F36-25E0-453D-8EAD-69660EE05DFA}|Repositories\\Repositories.csproj|solutionrelative:repositories\\interfaces\\irepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5DB80F36-25E0-453D-8EAD-69660EE05DFA}|Repositories\\Repositories.csproj|d:\\mymusicnew\\repositories\\interfaces\\icontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5DB80F36-25E0-453D-8EAD-69660EE05DFA}|Repositories\\Repositories.csproj|solutionrelative:repositories\\interfaces\\icontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Playlist.cs",
+              "DocumentMoniker": "D:\\MyMusicNew\\Repositories\\Entities\\Playlist.cs",
+              "RelativeDocumentMoniker": "Repositories\\Entities\\Playlist.cs",
+              "ToolTip": "D:\\MyMusicNew\\Repositories\\Entities\\Playlist.cs",
+              "RelativeToolTip": "Repositories\\Entities\\Playlist.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAcwB0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T21:01:12.312Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\MyMusicNew\\MyMusicNew\\appsettings.json",
+              "RelativeDocumentMoniker": "MyMusicNew\\appsettings.json",
+              "ToolTip": "D:\\MyMusicNew\\MyMusicNew\\appsettings.json",
+              "RelativeToolTip": "MyMusicNew\\appsettings.json",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-01-02T09:36:34.956Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AudioFeaturesRepository.cs",
+              "DocumentMoniker": "D:\\MyMusicNew\\Repositories\\Repositories\\AudioFeaturesRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\Repositories\\AudioFeaturesRepository.cs",
+              "ToolTip": "D:\\MyMusicNew\\Repositories\\Repositories\\AudioFeaturesRepository.cs",
+              "RelativeToolTip": "Repositories\\Repositories\\AudioFeaturesRepository.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAUwAoAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T20:30:01.156Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\MyMusicNew\\MyMusicNew\\Program.cs",
+              "RelativeDocumentMoniker": "MyMusicNew\\Program.cs",
+              "ToolTip": "D:\\MyMusicNew\\MyMusicNew\\Program.cs",
+              "RelativeToolTip": "MyMusicNew\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T20:30:10.729Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MusicContext.cs",
+              "DocumentMoniker": "D:\\MyMusicNew\\DataContext\\MusicContext.cs",
+              "RelativeDocumentMoniker": "DataContext\\MusicContext.cs",
+              "ToolTip": "D:\\MyMusicNew\\DataContext\\MusicContext.cs",
+              "RelativeToolTip": "DataContext\\MusicContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T20:33:31.713Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "PlaylistRepository.cs",
+              "DocumentMoniker": "D:\\MyMusicNew\\Repositories\\Repositories\\PlaylistRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\Repositories\\PlaylistRepository.cs",
+              "ToolTip": "D:\\MyMusicNew\\Repositories\\Repositories\\PlaylistRepository.cs",
+              "RelativeToolTip": "Repositories\\Repositories\\PlaylistRepository.cs",
+              "ViewState": "AgIAACgAAAAAAAAAAIBQwC8AAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T20:56:53.07Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AudioFeatures.cs",
+              "DocumentMoniker": "D:\\MyMusicNew\\Repositories\\Entities\\AudioFeatures.cs",
+              "RelativeDocumentMoniker": "Repositories\\Entities\\AudioFeatures.cs",
+              "ToolTip": "D:\\MyMusicNew\\Repositories\\Entities\\AudioFeatures.cs",
+              "RelativeToolTip": "Repositories\\Entities\\AudioFeatures.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T20:27:13.219Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "PlayHistoryRepository.cs",
+              "DocumentMoniker": "D:\\MyMusicNew\\Repositories\\Repositories\\PlayHistoryRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\Repositories\\PlayHistoryRepository.cs",
+              "ToolTip": "D:\\MyMusicNew\\Repositories\\Repositories\\PlayHistoryRepository.cs",
+              "RelativeToolTip": "Repositories\\Repositories\\PlayHistoryRepository.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAqwCYAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T20:57:28.554Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "PlayHistory.cs",
+              "DocumentMoniker": "D:\\MyMusicNew\\Repositories\\Entities\\PlayHistory.cs",
+              "RelativeDocumentMoniker": "Repositories\\Entities\\PlayHistory.cs",
+              "ToolTip": "D:\\MyMusicNew\\Repositories\\Entities\\PlayHistory.cs",
+              "RelativeToolTip": "Repositories\\Entities\\PlayHistory.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAcwBwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T21:03:05.431Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "PlaylistSongRepository.cs",
+              "DocumentMoniker": "D:\\MyMusicNew\\Repositories\\Repositories\\PlaylistSongRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\Repositories\\PlaylistSongRepository.cs",
+              "ToolTip": "D:\\MyMusicNew\\Repositories\\Repositories\\PlaylistSongRepository.cs",
+              "RelativeToolTip": "Repositories\\Repositories\\PlaylistSongRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T20:55:48.077Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Song.cs",
+              "DocumentMoniker": "D:\\MyMusicNew\\Repositories\\Entities\\Song.cs",
+              "RelativeDocumentMoniker": "Repositories\\Entities\\Song.cs",
+              "ToolTip": "D:\\MyMusicNew\\Repositories\\Entities\\Song.cs",
+              "RelativeToolTip": "Repositories\\Entities\\Song.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAIwCwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T20:46:59.655Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "SongRepository.cs",
+              "DocumentMoniker": "D:\\MyMusicNew\\Repositories\\Repositories\\SongRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\Repositories\\SongRepository.cs",
+              "ToolTip": "D:\\MyMusicNew\\Repositories\\Repositories\\SongRepository.cs",
+              "RelativeToolTip": "Repositories\\Repositories\\SongRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADYAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T20:46:25.24Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "User.cs",
+              "DocumentMoniker": "D:\\MyMusicNew\\Repositories\\Entities\\User.cs",
+              "RelativeDocumentMoniker": "Repositories\\Entities\\User.cs",
+              "ToolTip": "D:\\MyMusicNew\\Repositories\\Entities\\User.cs",
+              "RelativeToolTip": "Repositories\\Entities\\User.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAYwBQAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T20:45:09.939Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "UserRepository.cs",
+              "DocumentMoniker": "D:\\MyMusicNew\\Repositories\\Repositories\\UserRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\Repositories\\UserRepository.cs",
+              "ToolTip": "D:\\MyMusicNew\\Repositories\\Repositories\\UserRepository.cs",
+              "RelativeToolTip": "Repositories\\Repositories\\UserRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T20:30:04.047Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Class1.cs",
+              "DocumentMoniker": "D:\\MyMusicNew\\DataContext\\Class1.cs",
+              "RelativeDocumentMoniker": "DataContext\\Class1.cs",
+              "ToolTip": "D:\\MyMusicNew\\DataContext\\Class1.cs",
+              "RelativeToolTip": "DataContext\\Class1.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T20:32:25.789Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "IRepository.cs",
+              "DocumentMoniker": "D:\\MyMusicNew\\Repositories\\Interfaces\\IRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\Interfaces\\IRepository.cs",
+              "ToolTip": "D:\\MyMusicNew\\Repositories\\Interfaces\\IRepository.cs",
+              "RelativeToolTip": "Repositories\\Interfaces\\IRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T20:28:03.233Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "IContext.cs",
+              "DocumentMoniker": "D:\\MyMusicNew\\Repositories\\Interfaces\\IContext.cs",
+              "RelativeDocumentMoniker": "Repositories\\Interfaces\\IContext.cs",
+              "ToolTip": "D:\\MyMusicNew\\Repositories\\Interfaces\\IContext.cs",
+              "RelativeToolTip": "Repositories\\Interfaces\\IContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T20:27:59.79Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "Class1.cs",
+              "DocumentMoniker": "D:\\MyMusicNew\\Repositories\\Class1.cs",
+              "RelativeDocumentMoniker": "Repositories\\Class1.cs",
+              "ToolTip": "D:\\MyMusicNew\\Repositories\\Class1.cs",
+              "RelativeToolTip": "Repositories\\Class1.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T20:26:13.553Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
