@@ -1,35 +1,34 @@
 ﻿using AutoMapper;
 using Repositories.Entities;
 using Repositories.Interfaces;
-using Repositories.Repositories;
 using Service.Dto;
 using Service.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Service.Services
+public class UserRegisterService : IRegister<UserRegisterDto>
 {
-    public class UserRegisterService(IRepository<User> repository, IMapper mapper) : IRegister<UserRegisterDto>
+    private readonly IRepository<User> _repository;
+    private readonly IMapper _mapper;
+    private readonly IToken<User> _tokenService;
+
+    public UserRegisterService(IRepository<User> repository, IMapper mapper, IToken<User> tokenService)
     {
-        private readonly IRepository<User> _repository = repository;
-        private readonly IMapper _mapper = mapper;
+        _repository = repository;
+        _mapper = mapper;
+        _tokenService = tokenService;
+    }
 
-        public async Task<string> Register(UserRegisterDto item)
-        {
-            var users = await _repository.GetAll();
-            var existingUser = users.FirstOrDefault(u => u.Email == item.Email);
+    public async Task<string> Register(UserRegisterDto item)
+    {
+        var users = await _repository.GetAll();
+        if (users.Any(u => u.Email == item.Email))
+            throw new Exception("User already exists");
 
-            if (existingUser != null)
-                throw new Exception("User already exists");
+        var newUser = _mapper.Map<User>(item);
 
-            var newUser = _mapper.Map<User>(item);
+        // שמירת המשתמש וקבלת האובייקט עם ה-ID שנוצר
+        var addedUser = await _repository.AddItem(newUser);
 
-            await _repository.AddItem(newUser);
-
-            return "Register successful";
-        }
+        // מחזירים טוקן עבור המשתמש החדש
+        return _tokenService.CreateToken(addedUser);
     }
 }

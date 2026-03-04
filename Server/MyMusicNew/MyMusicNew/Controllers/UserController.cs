@@ -22,8 +22,11 @@ namespace MyMusicNew.Controllers
         {
             try
             {
-                var result = await _registerService.Register(userRegisterDto);
-                return Ok(result);
+                // ה-Service עכשיו מחזיר מחרוזת שהיא הטוקן עצמו
+                var token = await _registerService.Register(userRegisterDto);
+
+                // נחזיר אובייקט עם שדה בשם token, זה סטנדרטי יותר
+                return Ok(new { token });
             }
             catch (Exception ex)
             {
@@ -36,11 +39,14 @@ namespace MyMusicNew.Controllers
         {
             try
             {
-                var result = await _loginService.Login(userLoginDto);
-                return Ok(result);
+                // ה-Service מחזיר את הטוקן שנוצר ב-TokenService
+                var token = await _loginService.Login(userLoginDto);
+
+                return Ok(new { token });
             }
             catch (Exception ex)
             {
+                // אם הסיסמה לא נכונה, ה-Service זורק Exception וזה יגיע לכאן
                 return BadRequest(ex.Message);
             }
         }
