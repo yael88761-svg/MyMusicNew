@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+  </Folder>
+  <Project Path="DataContext/DataContext.csproj" Id="6fd173f0-ebcd-4f8e-bb18-800557d7fce8" />
+  <Project Path="MyMusicNew/MyMusicNew.csproj" />
+  <Project Path="Repositories/Repositories.csproj" Id="5db80f36-25e0-453d-8ead-69660ee05dfa" />
+  <Project Path="Service/Service.csproj" Id="3e2f90cd-d4a6-4a9d-8b9a-d4549c95af1c" />
+</Solution>
