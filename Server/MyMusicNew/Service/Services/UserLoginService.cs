@@ -12,23 +12,26 @@ using System.Threading.Tasks;
 
 namespace Service.Services
 {
-    public class UserLoginService(IRepository<User> repository, IMapper mapper) : ILogin<UserLoginDto>
+    public class UserLoginService(IRepository<User> repository, IToken<User> tokenService) : ILogin<UserLoginDto>
     {
         private readonly IRepository<User> _repository = repository;
-        private readonly IMapper _mapper = mapper;
+        private readonly IToken<User> _tokenService= tokenService; // הזרקת שירות הטוקן
+
 
         public async Task<string> Login(UserLoginDto item)
         {
             var users = await _repository.GetAll();
 
+            // מחפשים את המשתמש
             var user = users.FirstOrDefault(u =>
                 u.Email == item.Email &&
-                u.PasswordHash == item.Password);
+                u.PasswordHash == item.Password); // הערה: בהמשך כדאי לעבור ל-Hash אמיתי
 
             if (user == null)
                 throw new Exception("Invalid email or password");
 
-            return "Login successful";
+            // מחזירים את הטוקן במקום את הטקסט "Login successful"
+            return _tokenService.CreateToken(user);
         }
     }
 }

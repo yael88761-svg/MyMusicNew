@@ -3,36 +3,57 @@ using Microsoft.EntityFrameworkCore;
 using Repositories.Entities;
 using Service.Interfaces;
 using Service.Services;
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.AspNetCore.Authentication.JwtBearer; // תוספת
+using Microsoft.IdentityModel.Tokens; // תוספת
+using System.Text; // תוספת
 
+var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// 2. הפעלת ה-Extension Method שיצרת
+// 1. הגדרת Authentication - זה החלק שבודק את הטוקן
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    };
+});
+
 builder.Services.AddProjectServices(connectionString);
 
-
-// Add services to the container.
 builder.Services.AddDbContext<MusicContext>(options =>
     options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
+        connectionString,
         b => b.MigrationsAssembly("DataContext")
     ));
 
-
-
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
-});
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+    {
+        options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+    });
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IToken<User>, TokenService>();//האם זה צריך להיות פה השורה הזו??
+
+// הזרקת השירות שלך - תקין לגמרי!
+builder.Services.AddScoped<IToken<User>, TokenService>();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -41,7 +62,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+// --- חשוב מאוד: הסדר כאן קריטי! ---
+app.UseAuthentication(); // קודם כל בודקים מי המשתמש (חובה להוסיף לפני Authorization)
+app.UseAuthorization();  // אחר כך בודקים מה מותר לו
 
 app.MapControllers();
 
