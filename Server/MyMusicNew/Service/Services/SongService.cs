@@ -11,8 +11,9 @@ using System.Threading.Tasks;
 
 namespace Service.Services
 {
-    public class SongService(IRepository<Song> repository,IMapper mapper) : IService<SongDto>
+    public class SongService(IRepository<Song> repository,ISongRepository<Song> songRepository,IMapper mapper) : IService<SongDto>,ISong<SongDto>
     {
+        private readonly ISongRepository<Song> _songRepository = songRepository;
         private readonly IRepository<Song> _repository = repository;
         private readonly IMapper _mapper = mapper;
 
@@ -38,6 +39,14 @@ namespace Service.Services
         public async Task<List<SongDto>> GetAll()
         {
             var songs = await _repository.GetAll();
+            return _mapper.Map<List<SongDto>>(songs);
+        }
+
+        public async Task<List<SongDto>> GetAll(int userId)
+        {
+            var songs = await _songRepository.GetAll(userId);
+
+            // המרה ל-DTO והחזרה
             return _mapper.Map<List<SongDto>>(songs);
         }
 

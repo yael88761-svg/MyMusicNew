@@ -1,10 +1,11 @@
 ﻿using Repositories.Entities;
 using Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 namespace Repositories.Repositories
 
 {
-    public class SongRepository : IRepository<Song>
+    public class SongRepository : IRepository<Song>,ISongRepository<Song>
     {
         private readonly IContext ctx;
 
@@ -33,6 +34,11 @@ namespace Repositories.Repositories
         public async Task<List<Song>> GetAll()
         {
             return await ctx.Songs.ToListAsync();
+        }
+
+        public async Task<List<Song>> GetAll(int id)
+        {
+            return await ctx.Songs.Where(s => s.UserId == id).ToListAsync();
         }
 
         public async Task<Song> GetById(int id)

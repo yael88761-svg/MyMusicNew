@@ -1,12 +1,15 @@
 using DataContext;
+using Microsoft.AspNetCore.Authentication.JwtBearer; // תוספת
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens; // תוספת
+using Microsoft.OpenApi.Models;
 using Repositories.Entities;
+using Repositories.Interfaces;
+using Repositories.Repositories;
+using Service.Dto;
 using Service.Interfaces;
 using Service.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer; // תוספת
-using Microsoft.IdentityModel.Tokens; // תוספת
 using System.Text; // תוספת
-using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,6 +83,7 @@ builder.Services.AddSwaggerGen(c =>
 // הזרקת השירות שלך - תקין לגמרי!
 builder.Services.AddScoped<IToken<User>, TokenService>();
 
+// רישום הרפוזיטורי המיוחד
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

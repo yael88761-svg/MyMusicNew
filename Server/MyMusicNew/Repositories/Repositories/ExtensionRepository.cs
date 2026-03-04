@@ -14,6 +14,7 @@ namespace Repositories.Repositories
         public static IServiceCollection AddRepository(this IServiceCollection services)
         {
             services.AddScoped<IRepository<User>, UserRepository>();
+            services.AddScoped<ISongRepository<Song>, SongRepository>();
             services.AddScoped<IRepository<Song>, SongRepository>();
             services.AddScoped<IRepository<Playlist>, PlaylistRepository>();
             services.AddScoped<IRepository<PlaylistSong>, PlaylistSongRepository>();
