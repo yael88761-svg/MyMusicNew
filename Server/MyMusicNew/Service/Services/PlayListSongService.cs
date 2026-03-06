@@ -11,9 +11,10 @@ using System.Threading.Tasks;
 
 namespace Service.Services
 {
-    public class PlayListSongService(IRepository<PlaylistSong> repository, IMapper mapper) : IService<PlaylistSongDto>
+    public class PlayListSongService(IRepository<PlaylistSong> repository,IRepository<Playlist> playlistRepository, IMapper mapper) : IService<PlaylistSongDto>
     {
         private readonly IRepository<PlaylistSong> _repository = repository;
+        private readonly IRepository<Playlist> _playlistRepository = playlistRepository;
         private readonly IMapper _mapper = mapper;
 
         public async Task<PlaylistSongDto> AddItem(PlaylistSongDto item)

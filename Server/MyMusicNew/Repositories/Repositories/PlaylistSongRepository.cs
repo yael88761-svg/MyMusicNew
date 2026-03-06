@@ -18,7 +18,14 @@ namespace Repositories.Repositories
             ctx = context;
         }
 
-
+        public async Task<List<PlaylistSong>> GetAllByUserId(int userId)
+        {
+            // אנחנו ניגשים לשירי-פלייליסט, ומסננים לפי ה-UserId שנמצא בתוך טבלת ה-Playlist המקושרת
+            return await ctx.PlaylistSongs
+                .Include(ps => ps.Playlist) // טעינת הפלייליסט המקושר
+                .Where(ps => ps.Playlist.UserId == userId)
+                .ToListAsync();
+        }
         public async Task<PlaylistSong> AddItem(PlaylistSong item)
         {
             await ctx.PlaylistSongs.AddAsync(item);
