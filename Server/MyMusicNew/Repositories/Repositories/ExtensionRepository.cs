@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Repositories.Entities;
 using Repositories.Interfaces;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace Repositories.Repositories
             services.AddScoped<ISongRepository<Song>, SongRepository>();
             services.AddScoped<IRepository<Song>, SongRepository>();
             services.AddScoped<IRepository<Playlist>, PlaylistRepository>();
+            services.AddScoped<IPlaylistRepository<Playlist>, PlaylistRepository>();
             services.AddScoped<IRepository<PlaylistSong>, PlaylistSongRepository>();
             services.AddScoped<IRepository<PlayHistory>, PlayHistoryRepository>();
             services.AddScoped<IRepository<AudioFeatures>, AudioFeaturesRepository>();

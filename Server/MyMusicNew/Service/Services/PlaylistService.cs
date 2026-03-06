@@ -11,8 +11,9 @@ using System.Threading.Tasks;
 
 namespace Service.Services
 {
-    public class PlaylistService(IRepository<Playlist> repository,IMapper mapper) : IService<PlaylistDto>
+    public class PlaylistService(IRepository<Playlist> repository,IPlaylistRepository<Playlist>  playlistRepository,IMapper mapper) : IService<PlaylistDto>, IPlaylist<PlaylistDto>
     {
+        private readonly IPlaylistRepository<Playlist> _playlistRepository = playlistRepository;
         private readonly IRepository<Playlist> _repository = repository;
         private readonly IMapper _mapper = mapper;
 
@@ -40,6 +41,15 @@ namespace Service.Services
         {
             var Playlist = await _repository.GetAll();
             return _mapper.Map<List<PlaylistDto>>(Playlist);
+        }
+
+        public async Task<List<PlaylistDto>> GetAll(int userId)
+        {
+            // 1. קריאה לרפוזיטורי הספציפי שסידרנו קודם (זה ששולף לפי UserId)
+            var playlists = await _playlistRepository.GetAll(userId);
+
+            // 2. המרה של רשימת הישויות (Entities) לרשימה של DTOs בעזרת המאפר
+            return _mapper.Map<List<PlaylistDto>>(playlists);
         }
 
         public async Task<PlaylistDto> GetById(int id)

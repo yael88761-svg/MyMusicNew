@@ -1,15 +1,34 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Service.Dto;
 using Service.Interfaces;
-
+using System.Security.Claims;
 namespace MyMusicNew.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
 
-    public class PlaylistController(IService<PlaylistDto> service):ControllerBase
+    public class PlaylistController(IService<PlaylistDto> service, IPlaylist<PlaylistDto> playlistService):ControllerBase
     {
         private readonly IService<PlaylistDto> _service = service;
+        private readonly IPlaylist<PlaylistDto> _playlistService = playlistService;
+
+        [HttpGet("my-playlists")]
+        public async Task<IActionResult> GetMyPlaylists()
+        {
+            // 1. שליפת ה-ID מהטוקן (Claims)
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+            if (userIdClaim == null) return Unauthorized("User ID not found in token");
+
+            int userId = int.Parse(userIdClaim.Value);
+
+            // 2. קריאה לסרוויס הספציפי עם ה-ID שחילצנו
+            var myPlaylists = await _playlistService.GetAll(userId);
+
+            return Ok(myPlaylists);
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
@@ -47,16 +66,21 @@ namespace MyMusicNew.Controllers
         {
             try
             {
+                // חילוץ ה-ID מהטוקן כדי לוודא שהפלייליסט נרשם על שמי
+                var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+                if (userIdClaim == null) return Unauthorized();
+
+                // עדכון ה-UserId בתוך האובייקט שמגיע מהלקוח
+                item.UserId = int.Parse(userIdClaim.Value);
+
                 var addPlaylist = await _service.AddItem(item);
                 return Ok(addPlaylist);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.ToString());
+                return BadRequest(ex.Message);
             }
-
         }
-
 
     }
 }

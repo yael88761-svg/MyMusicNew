@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Repositories.Repositories
 {
-    internal class PlaylistRepository : IRepository<Playlist>
+    internal class PlaylistRepository : IRepository<Playlist>, IPlaylistRepository<Playlist>
     {
         private readonly IContext ctx;
 
@@ -38,6 +38,13 @@ namespace Repositories.Repositories
             .Include(p => p.User)
             .Include(p => p.PlaylistSongs)
             .ToListAsync();
+        }
+
+        public async Task<List<Playlist>> GetAll(int userId)
+        {
+            return await ctx.Playlists
+                    .Where(p => p.UserId == userId)
+                    .ToListAsync();
         }
 
         public async Task<Playlist> GetById(int id)
