@@ -52,24 +52,64 @@ namespace Service.Services
 
         //            return tokenHandler.WriteToken(token);
         //        }
+        //public string CreateToken(User user)
+        //{
+        //    // 1. שליפת המפתח מהקונפיגורציה
+        //    string secretKey = _config["Jwt:Key"] ;
+
+        //    // 2. המרה למערך בייטים (כאן היתה השגיאה)
+        //    var keyBytes = Encoding.UTF8.GetBytes(secretKey);
+        //    var key = new SymmetricSecurityKey(keyBytes);
+
+        //    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        //    // 3. יצירת ה-Claims (שימי לב לשמות השדות שלך)
+        //    var claims = new List<Claim>
+        //    {
+        //        new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+        //        new Claim(ClaimTypes.Name, user.Username ?? ""),
+        //        new Claim(ClaimTypes.Email, user.Email ?? "")
+        //    };
+
+        //    var tokenDescriptor = new SecurityTokenDescriptor
+        //    {
+        //        Subject = new ClaimsIdentity(claims),
+        //        Expires = DateTime.UtcNow.AddDays(7),
+        //        SigningCredentials = creds,
+        //        Issuer = _config["Jwt:Issuer"],
+        //        Audience = _config["Jwt:Audience"]
+        //    };
+
+        //    var tokenHandler = new JwtSecurityTokenHandler();
+        //    var token = tokenHandler.CreateToken(tokenDescriptor);
+
+        //    return tokenHandler.WriteToken(token);
+        //}
+
         public string CreateToken(User user)
         {
             // 1. שליפת המפתח מהקונפיגורציה
-            string secretKey = _config["Jwt:Key"] ?? "Default_Secret_Key_At_Least_32_Chars_Long";
+            string secretKey = _config["Jwt:Key"];
 
-            // 2. המרה למערך בייטים (כאן היתה השגיאה)
+            // בדיקה קריטית: אם המפתח לא נמצא, אנחנו רוצים לדעת מזה מיד ולא לקבל 401 מסתורי
+            if (string.IsNullOrEmpty(secretKey))
+            {
+                throw new Exception("שגיאה: המפתח Jwt:Key לא נמצא ב-appsettings.json! ודאי שהקובץ שמור ומוגדר כ-Copy to Output Directory.");
+            }
+
+            // 2. המרה למערך בייטים
             var keyBytes = Encoding.UTF8.GetBytes(secretKey);
             var key = new SymmetricSecurityKey(keyBytes);
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            // 3. יצירת ה-Claims (שימי לב לשמות השדות שלך)
+            // 3. יצירת ה-Claims
             var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-                new Claim(ClaimTypes.Name, user.Username ?? ""),
-                new Claim(ClaimTypes.Email, user.Email ?? "")
-            };
+    {
+        new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+        new Claim(ClaimTypes.Name, user.Username ?? ""),
+        new Claim(ClaimTypes.Email, user.Email ?? "")
+    };
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {

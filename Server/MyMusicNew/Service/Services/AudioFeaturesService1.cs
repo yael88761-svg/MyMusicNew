@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Service.Interfaces
 {
-    public class AudioFeaturesService(IRepository<AudioFeatures> repository, IMapper mapper) : IService<AudioFeaturesDto>
+    public class AudioFeaturesService1(IRepository<AudioFeatures> repository, IMapper mapper) : IService<AudioFeaturesDto>
     {
         private readonly IRepository<AudioFeatures> _repository = repository;
         private readonly IMapper _mapper = mapper;

@@ -27,7 +27,7 @@ namespace Service.Services
             services.AddScoped<IService<PlaylistSongDto>, PlayListSongService>();
             services.AddScoped<IService<PlaylistDto>,PlaylistService>();
             services.AddScoped<IService<PlayHistoryDto>, PlayHistoryService>();
-            services.AddScoped<IService<AudioFeaturesDto>, AudioFeaturesService>();
+            services.AddScoped<IService<AudioFeaturesDto>, AudioFeaturesService1>();
 
 
             return services;

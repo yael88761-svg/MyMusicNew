@@ -1,7 +1,7 @@
 using DataContext;
-using Microsoft.AspNetCore.Authentication.JwtBearer; // תוספת
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens; // תוספת
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Repositories.Entities;
 using Repositories.Interfaces;
@@ -9,13 +9,14 @@ using Repositories.Repositories;
 using Service.Dto;
 using Service.Interfaces;
 using Service.Services;
-using System.Text; // תוספת
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// שליפת מחרוזת החיבור מה-appsettings.json
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// 1. הגדרת Authentication - זה החלק שבודק את הטוקן
+// --- 1. הגדרת Authentication (אימות) ---
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -32,30 +33,37 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+
+        // התיקון הקריטי למניעת 401 בגלל הפרשי זמנים ב-Localhost
+        ClockSkew = TimeSpan.Zero
     };
 });
 
+// --- 2. רישום שירותי הפרויקט (Extensions) ---
 builder.Services.AddProjectServices(connectionString);
 
+// --- 3. הגדרת בסיס הנתונים ---
 builder.Services.AddDbContext<MusicContext>(options =>
     options.UseSqlServer(
         connectionString,
         b => b.MigrationsAssembly("DataContext")
     ));
 
+// --- 4. הגדרת Controllers ו-JSON ---
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
     });
 
+// --- 5. הגדרת Swagger עם תמיכה ב-JWT ---
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "MusicPlayer API", Version = "v1" });
 
-    // הגדרת אפשרות להזנת טוקן ב-Swagger
+    // הוספת כפתור ה-Authorize ל-Swagger
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
@@ -80,11 +88,13 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-// הזרקת השירות שלך - תקין לגמרי!
+
+// רישום ה-TokenService (אם לא רשום בתוך AddProjectServices)
 builder.Services.AddScoped<IToken<User>, TokenService>();
 
-// רישום הרפוזיטורי המיוחד
 var app = builder.Build();
+
+// --- 6. הגדרת Middleware (סדר הפעולות) ---
 
 if (app.Environment.IsDevelopment())
 {
@@ -94,9 +104,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// --- חשוב מאוד: הסדר כאן קריטי! ---
-app.UseAuthentication(); // קודם כל בודקים מי המשתמש (חובה להוסיף לפני Authorization)
-app.UseAuthorization();  // אחר כך בודקים מה מותר לו
+// חובה: Authentication לפני Authorization!
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 
