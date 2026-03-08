@@ -20,9 +20,9 @@ namespace Repositories.Repositories
             services.AddScoped<IRepository<Playlist>, PlaylistRepository>();
             services.AddScoped<IPlaylistRepository<Playlist>, PlaylistRepository>();
             services.AddScoped<IRepository<PlaylistSong>, PlaylistSongRepository>();
+            services.AddScoped<IPlaylistSongRepository, PlaylistSongRepository>();
             services.AddScoped<IRepository<PlayHistory>, PlayHistoryRepository>();
             services.AddScoped<IRepository<AudioFeatures>, AudioFeaturesRepository>();
-
             return services;
         }
 

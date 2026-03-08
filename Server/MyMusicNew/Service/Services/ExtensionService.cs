@@ -29,7 +29,7 @@ namespace Service.Services
             services.AddScoped<IPlaylist<PlaylistDto>, PlaylistService>();
             services.AddScoped<IService<PlayHistoryDto>, PlayHistoryService>();
             services.AddScoped<IService<AudioFeaturesDto>, AudioFeaturesService1>();
-
+            services.AddScoped<IPlaylistSong, PlayListSongService>();
 
             return services;
         }

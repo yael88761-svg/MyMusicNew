@@ -1,60 +1,79 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Repositories.Entities;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Service.Dto;
 using Service.Interfaces;
+using System.Security.Claims;
 
 namespace MyMusicNew.Controllers
 {
+    [Authorize] 
     [ApiController]
     [Route("api/[controller]")]
-
-    public class PlaylistSongController(IService<PlaylistSongDto> service): ControllerBase
+    public class PlaylistSongController(IPlaylistSong playlistSongService) : ControllerBase
     {
-        private readonly IService<PlaylistSongDto> _service = service;
+        private readonly IPlaylistSong _playlistSongService = playlistSongService;
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        private int GetUserIdFromToken()
         {
-            var PlaylistSongs = await _service.GetAll();
-            return Ok(PlaylistSongs);
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null) return 0;
+            return int.Parse(userIdClaim.Value);
         }
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+
+        [HttpGet("my-songs")] 
+        public async Task<IActionResult> GetAllMySongs()
         {
-            var PlaylistSong = await _service.GetById(id);
-            if (PlaylistSong == null)
-            {
-                return NotFound();
-            }
-            return Ok(PlaylistSong);
+            int userId = GetUserIdFromToken();
+            if (userId == 0) return Unauthorized();
+
+            var songs = await _playlistSongService.GetAllByUserId(userId);
+            return Ok(songs);
         }
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            try
-            {
-                await _service.DeleteItem(id);
-                return NoContent();
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-        }
+
         [HttpPost]
         public async Task<IActionResult> AddItem([FromBody] PlaylistSongDto item)
         {
             try
             {
-                var addPlaylistSong = await _service.AddItem(item);
+                int userId = GetUserIdFromToken();
+                if (userId == 0) return Unauthorized();
+
+                var addPlaylistSong = await _playlistSongService.AddItem(item, userId);
                 return Ok(addPlaylistSong);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Forbid(ex.Message);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.ToString());
+                return BadRequest(ex.Message);
             }
-
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                int userId = GetUserIdFromToken();
+                if (userId == 0) return Unauthorized();
+
+                await _playlistSongService.DeleteItem(id, userId);
+                return NoContent();
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Forbid(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
