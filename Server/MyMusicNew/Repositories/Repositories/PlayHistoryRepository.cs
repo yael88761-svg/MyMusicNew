@@ -2,18 +2,24 @@
 using Repositories.Entities;
 using Repositories.Interfaces;
 using System.Collections.Generic;
+using System.Linq; // חשוב בשביל ה-Where
 using System.Threading.Tasks;
 
 namespace Repositories.Repositories
 {
-    internal class PlayHistoryRepository : IRepository<PlayHistory>
+    // 1. שינוי ל-public ומימוש הממשק הספציפי
+    public class PlayHistoryRepository(IContext context) : IPlayHistoryRepository
     {
-        private readonly IContext ctx;
+        private readonly IContext ctx = context;
 
-        // בנאי רגיל – תואם C# 8
-        public PlayHistoryRepository(IContext context)
+
+        public async Task<List<PlayHistory>> GetByUserId(int userId)
         {
-            ctx = context;
+            return await ctx.PlayHistories
+                .Include(h => h.Song) 
+                .Where(h => h.UserId == userId)
+                .OrderByDescending(h => h.PlayedAt) // השירים האחרונים ששמעו יופיעו ראשונים
+                .ToListAsync();
         }
 
         public async Task<PlayHistory> AddItem(PlayHistory item)
@@ -36,17 +42,15 @@ namespace Repositories.Repositories
         public async Task<List<PlayHistory>> GetAll()
         {
             return await ctx.PlayHistories
-             .Include(h => h.Song)
-             .Include(h => h.Song)
-              .ToListAsync();
+                .Include(h => h.Song)
+                .ToListAsync();
         }
 
         public async Task<PlayHistory> GetById(int id)
         {
             return await ctx.PlayHistories
-            .Include(h => h.Song)
-            .Include(h => h.Song)
-            .FirstOrDefaultAsync(h => h.HistoryId == id);
+                .Include(h => h.Song)
+                .FirstOrDefaultAsync(h => h.HistoryId == id);
         }
 
         public async Task<PlayHistory> UpdateItem(int id, PlayHistory item)
@@ -56,7 +60,7 @@ namespace Repositories.Repositories
                 return null;
 
             existing.SongId = item.SongId;
-            existing.SongId = item.SongId;
+            existing.UserId = item.UserId; 
             existing.PlayedAt = item.PlayedAt;
             existing.CompletionPercentage = item.CompletionPercentage;
 
