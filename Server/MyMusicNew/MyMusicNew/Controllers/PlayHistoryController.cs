@@ -1,32 +1,41 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Service.Dto;
 using Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace MyMusicNew.Controllers
 {
+    [Authorize] 
     [ApiController]
     [Route("api/[controller]")]
-
-
-    public class PlayHistoryController(IService<PlayHistoryDto> service) : ControllerBase
+    public class PlayHistoryController(IPlayHistory service) : ControllerBase
     {
-        private readonly IService<PlayHistoryDto> _service = service;
+        private readonly IPlayHistory _service = service;
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        private int GetUserIdFromToken()
         {
-            var PlayHistory = await _service.GetAll();
-            return Ok(PlayHistory);
+            var claim = User.FindFirst(ClaimTypes.NameIdentifier);
+            return claim == null ? 0 : int.Parse(claim.Value);
         }
+
+        [HttpGet("my-history")]
+        public async Task<IActionResult> GetMyHistory()
+        {
+            int userId = GetUserIdFromToken();
+            var history = await _service.GetUserHistory(userId);
+            return Ok(history);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var PlayHistory = await _service.GetById(id);
-            if (PlayHistory == null)
+            var playHistory = await ((IService<PlayHistoryDto>)_service).GetById(id);
+            if (playHistory == null)
             {
                 return NotFound();
             }
-            return Ok(PlayHistory);
+            return Ok(playHistory);
         }
 
         [HttpDelete("{id}")]
@@ -34,7 +43,7 @@ namespace MyMusicNew.Controllers
         {
             try
             {
-                await _service.DeleteItem(id);
+                await ((IService<PlayHistoryDto>)_service).DeleteItem(id);
                 return NoContent();
             }
             catch (KeyNotFoundException ex)
@@ -48,14 +57,14 @@ namespace MyMusicNew.Controllers
         {
             try
             {
-                var addPlayHistory = await _service.AddItem(item);
+                int userId = GetUserIdFromToken();
+                var addPlayHistory = await _service.AddToHistory(item, userId);
                 return Ok(addPlayHistory);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.ToString());
+                return BadRequest(ex.Message);
             }
         }
-
-        }
+    }
 }

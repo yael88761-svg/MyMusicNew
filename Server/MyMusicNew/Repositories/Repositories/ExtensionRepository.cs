@@ -23,6 +23,7 @@ namespace Repositories.Repositories
             services.AddScoped<IPlaylistSongRepository, PlaylistSongRepository>();
             services.AddScoped<IRepository<PlayHistory>, PlayHistoryRepository>();
             services.AddScoped<IRepository<AudioFeatures>, AudioFeaturesRepository>();
+            services.AddScoped<IPlayHistoryRepository, PlayHistoryRepository>();
             return services;
         }
 

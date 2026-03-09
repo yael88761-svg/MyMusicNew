@@ -16,12 +16,14 @@ namespace Repositories.Repositories
         public async Task<List<PlayHistory>> GetByUserId(int userId)
         {
             return await ctx.PlayHistories
-                .Include(h => h.Song) 
+                .Include(h => h.Song)
                 .Where(h => h.UserId == userId)
-                .OrderByDescending(h => h.PlayedAt) // השירים האחרונים ששמעו יופיעו ראשונים
+                // 1. מיון מהחדש ביותר לישן ביותר
+                .OrderByDescending(h => h.PlayedAt)
+                // 2. הגבלה (למשל ל-20 שירים אחרונים) - אופציונלי
+                .Take(20)
                 .ToListAsync();
         }
-
         public async Task<PlayHistory> AddItem(PlayHistory item)
         {
             await ctx.PlayHistories.AddAsync(item);
