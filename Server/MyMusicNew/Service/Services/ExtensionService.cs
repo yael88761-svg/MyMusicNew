@@ -31,7 +31,7 @@ namespace Service.Services
             services.AddScoped<IPlayHistory, PlayHistoryService>();
             services.AddScoped<IService<AudioFeaturesDto>, AudioFeaturesService1>();
             services.AddScoped<IPlaylistSong, PlayListSongService>();
-
+            services.AddScoped<Tools>();
             return services;
         }
     }
