@@ -44,10 +44,16 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddProjectServices(connectionString);
 
 // --- 3. הגדרת בסיס הנתונים ---
+//builder.Services.AddDbContext<MusicContext>(options =>
+//    options.UseSqlServer(
+//        connectionString,
+//        b => b.MigrationsAssembly("DataContext")
+//    ));
+// --- 3. הגדרת בסיס הנתונים ---
 builder.Services.AddDbContext<MusicContext>(options =>
     options.UseSqlServer(
         connectionString,
-        b => b.MigrationsAssembly("DataContext")
+        b => b.MigrationsAssembly("DataContext") // ודאי שזה השם המדויק של הפרויקט שבו נמצא קובץ ה-DbContext
     ));
 
 // --- 4. הגדרת Controllers ו-JSON ---

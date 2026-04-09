@@ -15,7 +15,7 @@ namespace Repositories.Entities
         [Required]
         [MaxLength(255)]
         //enum 
-        public MyPlaylistsNames PlaylistName { get; set; }
+        public string PlaylistName { get; set; }
 
         public bool IsSmartPlaylist { get; set; }
 

@@ -1,5 +1,4 @@
 ﻿using Repositories.Entities;
-using Repositories.enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -18,7 +17,7 @@ namespace Service.Dto
         [Required]
         public string PlaylistName { get; set; }
         public bool IsSmartPlaylist { get; set; }
-        public DateTime AddedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
         //public virtual ICollection<PlaylistSong> PlaylistSongs { get; set; }
 
     }
