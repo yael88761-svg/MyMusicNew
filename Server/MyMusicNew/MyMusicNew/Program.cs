@@ -109,7 +109,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseStaticFiles();
 // חובה: Authentication לפני Authorization!
 app.UseAuthentication();
 app.UseAuthorization();

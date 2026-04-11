@@ -26,13 +26,13 @@ namespace Service.Dto
         [MaxLength(255)]
         public string Artist { get; set; }
 
-        public int Duration { get; set; } // in seconds
+        public int? Duration { get; set; } // in seconds
 
         [MaxLength(100)]
-        public string Genre { get; set; }
+        public string? Genre { get; set; }
 
         [MaxLength(100)]
-        public string Mood { get; set; }
+        public string? Mood { get; set; }
 
 
 
