@@ -10,16 +10,16 @@ namespace Repositories.Entities
        // [ForeignKey("Song")]
         public int SongId { get; set; }
 
-        public float Tempo { get; set; } // BPM
+        public float ?Tempo { get; set; } // BPM
 
-        public float Energy { get; set; } // 0.0 to 1.0
+        public float ?Energy { get; set; } // 0.0 to 1.0
 
         [MaxLength(10)]
-        public string Key { get; set; } // "C", "G#", etc.
+        public string ?Key { get; set; } // "C", "G#", etc.
 
-        public float Valence { get; set; } // 0.0 to 1.0 (happiness)
+        public float ?Valence { get; set; } // 0.0 to 1.0 (happiness)
 
-        public float Danceability { get; set; } // 0.0 to 1.0
+        public float ?Danceability { get; set; } // 0.0 to 1.0
 
         // Navigation Properties
         [ForeignKey("SongId")]

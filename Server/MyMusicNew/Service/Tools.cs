@@ -48,89 +48,57 @@ namespace Service
         }
 
 
-        // 1. פונקציית ה-AI: מקבלת שם ואמן ומחזירה מאפיינים פסיכולוגיים של השיר
-        //public async Task<AudioFeatures> GetAudioFeaturesFromAI(string title, string artist, int songId)
-        //{
-        //    // יצירת ה"שליח" (RestSharp) עם הכתובת של גוגל והמפתח שלך
-        //    var client = new RestClient("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyAIeNsrjIlU6vndPY8XYZetIhdrX8NEGCc");
-        //    var request = new RestRequest("", Method.Post);
-
-        //    // הגדרת השאלה (Prompt) - אנחנו מבקשים מה-AI להחזיר רק JSON כדי שהמחשב יוכל לקרוא אותו בקלות
-        //    var prompt = $"Analyze the song '{title}' by '{artist}'. Return ONLY a JSON object with these exact fields: " +
-        //                 "tempo (int), energy (float 0-1), valence (float 0-1), danceability (float 0-1). " +
-        //                 "No conversational text, just the JSON.";
-
-        //    // אריזת השאלה בפורמט שגוגל מבינה
-        //    request.AddJsonBody(new { contents = new[] { new { parts = new[] { new { text = prompt } } } } });
-
-        //    // השליח יוצא לדרך ומחכה לתשובה
-        //    var response = await client.ExecuteAsync(request);
-
-        //    if (response.IsSuccessful && response.Content != null)
-        //    {
-        //        // ה-AI לפעמים עוטף את התשובה בסימנים של קוד (```json), אנחנו מנקים אותם
-        //        var cleanJson = response.Content.Replace("```json", "").Replace("```", "").Trim();
-
-        //        // הופכים את הטקסט שחזר מה-AI לאובייקט C# אמיתי
-        //        var data = JsonSerializer.Deserialize<AudioFeaturesJsonDto>(cleanJson);
-
-        //        return new AudioFeatures
-        //        {
-        //            SongId = songId,
-        //            Tempo = data.tempo,
-        //            Energy = data.energy,
-        //            Valence = data.valence,
-        //            Danceability = data.danceability,
-        //            Key = "Unknown"
-        //        };
-        //    }
-        //    return null;
-        //}
-        // 2. פונקציית חילוץ מידע: קוראת את הנתונים ה"נסתרים" בתוך קובץ ה - MP3
-
         public async Task<AudioFeatures> GetAudioFeaturesFromAI(string title, string artist, int songId)
         {
-            // 1. הגדרת ה-Base URL בלבד ב-Client כדי למנוע את שגיאת path1
-            var client = new RestClient("https://generativelanguage.googleapis.com");
-
-            // 2. הגדרת הנתיב המלא ב-Request והוספת המפתח כפרמטר
-            var request = new RestRequest("/v1beta/models/gemini-1.5-flash:generateContent", Method.Post);
-            request.AddQueryParameter("key", "AIzaSyAIeNsrjIlU6vndPY8XYZetIhdrX8NEGCc");
-
-            var prompt = $"Analyze the song '{title}' by '{artist}'. Return ONLY a JSON object with these exact fields: " +
-                         "tempo (int), energy (float 0-1), valence (float 0-1), danceability (float 0-1). " +
-                         "No conversational text, just the JSON.";
-
-            request.AddJsonBody(new { contents = new[] { new { parts = new[] { new { text = prompt } } } } });
-
-            var response = await client.ExecuteAsync(request);
-
-            if (response.IsSuccessful && response.Content != null)
+            try
             {
-                // 3. חילוץ הטקסט מתוך המבנה המורכב של גוגל (Candidates -> Content -> Parts -> Text)
-                using var doc = JsonDocument.Parse(response.Content);
-                var aiRawText = doc.RootElement
-                    .GetProperty("candidates")[0]
-                    .GetProperty("content")
-                    .GetProperty("parts")[0]
-                    .GetProperty("text").GetString();
+                var client = new RestClient("https://generativelanguage.googleapis.com");
+                var request = new RestRequest("/v1beta/models/gemini-1.5-flash:generateContent", Method.Post);
+                request.AddQueryParameter("key", "AIzaSyAIeNsrjIlU6vndPY8XYZetIhdrX8NEGCc");
 
-                // ניקוי סימני Markdown אם ה-AI הוסיף אותם
-                var cleanJson = aiRawText.Replace("```json", "").Replace("```", "").Trim();
+                // פרומפט ממוקד יותר
+                var prompt = $"Analyze the musical characteristics of the song '{title}' by '{artist}'. " +
+                             "If you don't know the song, provide estimated values based on the genre. " +
+                             "Return ONLY a raw JSON object: {\"tempo\": int, \"energy\": float, \"valence\": float, \"danceability\": float}";
 
-                var data = JsonSerializer.Deserialize<AudioFeaturesJsonDto>(cleanJson);
+                request.AddJsonBody(new { contents = new[] { new { parts = new[] { new { text = prompt } } } } });
 
-                return new AudioFeatures
+                var response = await client.ExecuteAsync(request);
+
+                if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
                 {
-                    SongId = songId,
-                    Tempo = (int)data.tempo,
-                    Energy = data.energy,
-                    Valence = data.valence,
-                    Danceability = data.danceability,
-                    Key = "Unknown"
-                };
+                    using var doc = JsonDocument.Parse(response.Content);
+                    var aiRawText = doc.RootElement.GetProperty("candidates")[0].GetProperty("content").GetProperty("parts")[0].GetProperty("text").GetString();
+
+                    var cleanJson = aiRawText.Replace("```json", "").Replace("```", "").Trim();
+                    var data = JsonSerializer.Deserialize<AudioFeaturesJsonDto>(cleanJson, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                    return new AudioFeatures
+                    {
+                        SongId = songId,
+                        Tempo = (int)data.tempo,
+                        Energy = data.energy,
+                        Valence = data.valence,
+                        Danceability = data.danceability,
+                        Key = "Unknown"
+                    };
+                }
             }
-            return null;
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("AI Error: " + ex.Message);
+            }
+
+            // אם הכל נכשל - מחזירים ערכי ברירת מחדל כדי שהטבלה לא תישאר ריקה
+            return new AudioFeatures
+            {
+                SongId = songId,
+                Tempo = 120,
+                Energy = 0.5f,
+                Valence = 0.5f,
+                Danceability = 0.5f,
+                Key = "Unknown"
+            };
         }
 
         public SongInfo ExtractMetadata(string filePath)
@@ -156,17 +124,17 @@ namespace Service
             if (currentFeatures == null) return null;
 
             // חישוב מתמטי פשוט: מי השיר שההפרש באנרגיה ובשמחה שלו הוא הכי קטן?
+            // חישוב מתמטי פשוט: מי השיר שההפרש באנרגיה ובשמחה שלו הוא הכי קטן
             var recommendedSong = await _context.AudioFeatures
                 .Include(f => f.Song) // מביא גם את פרטי השיר
                 .Where(f => f.SongId != currentSongId)
-                .OrderBy(f => Math.Abs(f.Energy - currentFeatures.Energy) +
-                              Math.Abs(f.Valence - currentFeatures.Valence))
-                .Select(f => f.Song)
+                .OrderBy(f => Math.Abs((double)(f.Energy ?? 0.5f) - (double)(currentFeatures.Energy ?? 0.5f)) +
+                             Math.Abs((double)(f.Valence ?? 0.5f) - (double)(currentFeatures.Valence ?? 0.5f)))
+                .Select(f => f.Song) // שליפת השיר עצמו ולא את טבלת המאפיינים
                 .FirstOrDefaultAsync();
 
             return recommendedSong;
         }
-
         // 2. רישום היסטוריה: מעדכן את מסד הנתונים ששיר הושמע
         public async Task LogPlayHistoryAsync(int userId, int songId)
         {
@@ -185,8 +153,8 @@ namespace Service
     public class AudioFeaturesJsonDto
     {
         public float tempo { get; set; }
-        public float energy { get; set; }
-        public float valence { get; set; }
+        public float ?energy { get; set; }
+        public float ?valence { get; set; }
         public float danceability { get; set; }
     }
 
