@@ -49,8 +49,10 @@ namespace Service
                 var request = new RestRequest("/v1beta/models/gemini-1.5-flash:generateContent", Method.Post);
                 request.AddQueryParameter("key", "AIzaSyAIeNsrjIlU6vndPY8XYZetIhdrX8NEGCc");
 
-                var prompt = $"Analyze the musical characteristics of the song '{title}' by '{artist}'. " +
-                             "Return ONLY a raw JSON object: {\"tempo\": int, \"energy\": float, \"valence\": float, \"danceability\": float}";
+                // 1. ה-Prompt המעודכן שמבקש ניקוי שמות
+                var prompt = $"The following text contains a song title and artist, but it might be messy: '{title}'. " +
+                             "Identify the correct artist and song title. " +
+                             "Return ONLY a raw JSON object: {\"cleaned_title\": , \"key\": \"string\", \"cleaned_artist\": \"string\", \"tempo\": int, \"energy\": float, \"valence\": float, \"danceability\": float}";
 
                 request.AddJsonBody(new { contents = new[] { new { parts = new[] { new { text = prompt } } } } });
                 var response = await client.ExecuteAsync(request);
@@ -63,6 +65,16 @@ namespace Service
 
                     var data = JsonSerializer.Deserialize<AudioFeaturesJsonDto>(cleanJson, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
+                    // --- 2. עדכון שם הזמר והשיר בבסיס הנתונים (החלק החדש) ---
+                    var song = await _context.Songs.FindAsync(songId);
+                    if (song != null && data != null)
+                    {
+                        song.Title = data.cleaned_title ?? song.Title;
+                        song.Artist = data.cleaned_artist ?? song.Artist;
+                        await _context.SaveChangesAsync(); // שמירה של השמות הנקיים ב-SQL
+                    }
+                    // -------------------------------------------------------
+
                     return new AudioFeatures
                     {
                         SongId = songId,
@@ -70,7 +82,7 @@ namespace Service
                         Energy = data?.energy ?? 0.5f,
                         Valence = data?.valence ?? 0.5f,
                         Danceability = data?.danceability ?? 0.5f,
-                        Key = "Unknown"
+                        Key = data?.key ?? "Unknown"
                     };
                 }
             }
@@ -78,7 +90,6 @@ namespace Service
 
             return new AudioFeatures { SongId = songId, Tempo = 120, Energy = 0.5f, Valence = 0.5f, Danceability = 0.5f, Key = "Unknown" };
         }
-
         public SongInfo ExtractMetadata(string filePath)
         {
             try
@@ -117,6 +128,9 @@ namespace Service
 
     public class AudioFeaturesJsonDto
     {
+        public string? key { get; set; }
+        public string? cleaned_title { get; set; } // שדה חדש
+        public string? cleaned_artist { get; set; } // שדה חדש
         public float tempo { get; set; }
         public float? energy { get; set; }
         public float? valence { get; set; }
