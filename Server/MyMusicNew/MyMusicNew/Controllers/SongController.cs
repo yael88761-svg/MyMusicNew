@@ -11,16 +11,24 @@ namespace MyMusicNew.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class SongController(
-        IService<SongDto> service,
-        ISong<SongDto> serviceSong,
-        Tools tools,
-        MusicContext context) : ControllerBase
+    public class SongController : ControllerBase
     {
-        private readonly ISong<SongDto> _serviceSong = serviceSong;
-        private readonly IService<SongDto> _service = service;
-        private readonly Tools _tools = tools;
-        private readonly MusicContext _context = context;
+        private readonly ISong<SongDto> _serviceSong;
+        private readonly IService<SongDto> _service;
+        private readonly Tools _tools;
+        private readonly MusicContext _context;
+
+        public SongController(
+            IService<SongDto> service,
+            ISong<SongDto> serviceSong,
+            Tools tools,
+            MusicContext context)
+        {
+            _service = service;
+            _serviceSong = serviceSong;
+            _tools = tools;
+            _context = context;
+        }
 
         [HttpGet("my-songs")]
         public async Task<IActionResult> GetAllSongsByUser()
@@ -33,7 +41,6 @@ namespace MyMusicNew.Controllers
                 int currentUserId = int.Parse(userIdFromToken);
                 var userSongs = await _serviceSong.GetAll(currentUserId);
 
-                // תיקון: החזרת רשימה ריקה למניעת שגיאת Data is Null (נפתר עבור image_769f43.png)
                 return Ok(userSongs ?? new List<SongDto>());
             }
             catch (Exception ex)
@@ -79,11 +86,20 @@ namespace MyMusicNew.Controllers
                 if (userIdClaim == null || file == null) return BadRequest("משתמש לא מזוהה או קובץ חסר");
                 int currentUserId = int.Parse(userIdClaim.Value);
 
+                // יצירת נתיב ושמירת הקובץ
                 string fileName = Guid.NewGuid().ToString() + "_" + file.FileName;
-                string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", fileName);
+                string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
 
-                using (var stream = new FileStream(filePath, FileMode.Create)) { await file.CopyToAsync(stream); }
+                if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
 
+                string filePath = Path.Combine(uploadsFolder, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                // חילוץ מטא-דאטה ראשוני והוספה לטבלת Songs
                 var info = _tools.ExtractMetadata(filePath);
                 var addedSong = await _service.AddItem(new SongDto
                 {
@@ -93,14 +109,27 @@ namespace MyMusicNew.Controllers
                     UserId = currentUserId
                 });
 
-                // הפעלת ה-AI ושמירה
+                // הפעלת ה-AI לניתוח מעמיק וניקוי שמות (מעדכן את ה-Title וה-Artist בתוך ה-Tools)
                 var features = await _tools.GetAudioFeaturesFromAI(addedSong.Title, addedSong.Artist, addedSong.SongId);
+
+                // שמירת הפיצ'רים (Tempo, Energy וכו') בבסיס הנתונים
                 _context.AudioFeatures.Add(features);
                 await _context.SaveChangesAsync();
 
-                return Ok(new { status = "Success", song = addedSong, features });
+                // שליפת השיר המעודכן מה-DB כדי להחזיר למשתמש את השמות הנקיים שה-AI יצר
+                var updatedSong = await _service.GetById(addedSong.SongId);
+
+                return Ok(new
+                {
+                    status = "Success",
+                    song = updatedSong,
+                    features = features
+                });
             }
-            catch (Exception ex) { return BadRequest(ex.Message); }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
         }
     }
 }

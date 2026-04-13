@@ -21,7 +21,7 @@ namespace Repositories.Repositories
                 // 1. מיון מהחדש ביותר לישן ביותר
                 .OrderByDescending(h => h.PlayedAt)
                 // 2. הגבלה (למשל ל-20 שירים אחרונים) - אופציונלי
-                .Take(20)
+                .Take(80)
                 .ToListAsync();
         }
         public async Task<PlayHistory> AddItem(PlayHistory item)

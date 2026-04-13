@@ -45,35 +45,64 @@ namespace Service
         {
             try
             {
+                // יצירת Client חדש לכל קריאה כדי למנוע Cache של נתונים ישנים
                 var client = new RestClient("https://generativelanguage.googleapis.com");
                 var request = new RestRequest("/v1beta/models/gemini-1.5-flash:generateContent", Method.Post);
                 request.AddQueryParameter("key", "AIzaSyAIeNsrjIlU6vndPY8XYZetIhdrX8NEGCc");
 
-                // 1. ה-Prompt המעודכן שמבקש ניקוי שמות
-                var prompt = $"The following text contains a song title and artist, but it might be messy: '{title}'. " +
-                             "Identify the correct artist and song title. " +
-                             "Return ONLY a raw JSON object: {\"cleaned_title\": , \"key\": \"string\", \"cleaned_artist\": \"string\", \"tempo\": int, \"energy\": float, \"valence\": float, \"danceability\": float}";
+                // פרומפט הרבה יותר נוקשה שמכריח הפרדה
+                var prompt = $@"
+            STRICT INSTRUCTION: Analyze only the string: '{title}'. 
+            Task: Separate it into two distinct parts: 'cleaned_artist' and 'cleaned_title'.
+            Rules:
+            1. Remove any underscores (__), file extensions (.mp3), or junk characters.
+            2. If the string contains a dash '-' or ':', split it. 
+            3. Return the result ONLY as a JSON object.
+            
+            Format Example:
+            {{
+                ""cleaned_title"": ""שם השיר בלבד"",
+                ""cleaned_artist"": ""שם האמן בלבד"",
+                ""key"": ""C Major"",
+                ""tempo"": 128,
+                ""energy"": 0.7,
+                ""valence"": 0.5,
+                ""danceability"": 0.6
+            }}";
 
-                request.AddJsonBody(new { contents = new[] { new { parts = new[] { new { text = prompt } } } } });
+                request.AddJsonBody(new
+                {
+                    contents = new[] { new { parts = new[] { new { text = prompt } } } },
+                    generationConfig = new
+                    {
+                        temperature = 0.0, // שינוי ל-0.0 - הכי פחות יצירתי שיש
+                        topP = 1,
+                        responseMimeType = "application/json"
+                    }
+                });
+
                 var response = await client.ExecuteAsync(request);
 
                 if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
                 {
                     using var doc = JsonDocument.Parse(response.Content);
-                    var aiRawText = doc.RootElement.GetProperty("candidates")[0].GetProperty("content").GetProperty("parts")[0].GetProperty("text").GetString();
-                    var cleanJson = aiRawText?.Replace("```json", "").Replace("```", "").Trim();
+                    var aiRawText = doc.RootElement.GetProperty("candidates")[0]
+                                                   .GetProperty("content")
+                                                   .GetProperty("parts")[0]
+                                                   .GetProperty("text").GetString();
 
+                    var cleanJson = aiRawText?.Replace("```json", "").Replace("```", "").Trim();
                     var data = JsonSerializer.Deserialize<AudioFeaturesJsonDto>(cleanJson, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-                    // --- 2. עדכון שם הזמר והשיר בבסיס הנתונים (החלק החדש) ---
                     var song = await _context.Songs.FindAsync(songId);
                     if (song != null && data != null)
                     {
-                        song.Title = data.cleaned_title ?? song.Title;
-                        song.Artist = data.cleaned_artist ?? song.Artist;
-                        await _context.SaveChangesAsync(); // שמירה של השמות הנקיים ב-SQL
+                        // כאן אנחנו מוודאים שאנחנו לא דורסים עם נתונים ריקים
+                        if (!string.IsNullOrEmpty(data.cleaned_title)) song.Title = data.cleaned_title;
+                        if (!string.IsNullOrEmpty(data.cleaned_artist)) song.Artist = data.cleaned_artist;
+
+                        await _context.SaveChangesAsync();
                     }
-                    // -------------------------------------------------------
 
                     return new AudioFeatures
                     {
@@ -86,7 +115,10 @@ namespace Service
                     };
                 }
             }
-            catch { /* Fallback to defaults */ }
+            catch (Exception ex)
+            {
+                Console.WriteLine("AI Error: " + ex.Message);
+            }
 
             return new AudioFeatures { SongId = songId, Tempo = 120, Energy = 0.5f, Valence = 0.5f, Danceability = 0.5f, Key = "Unknown" };
         }
@@ -114,10 +146,11 @@ namespace Service
                 .Include(f => f.Song)
                 .Where(f => f.SongId != currentSongId)
                 .OrderBy(f => Math.Abs((double)f.Energy - (double)(currentFeatures.Energy ?? 0.5f)) +
-                             Math.Abs((double)f.Valence - (double)(currentFeatures.Valence ?? 0.5f)))
+                                 Math.Abs((double)f.Valence - (double)(currentFeatures.Valence ?? 0.5f)))
                 .Select(f => f.Song)
                 .FirstOrDefaultAsync();
         }
+
         public async Task LogPlayHistoryAsync(int userId, int songId)
         {
             var history = new PlayHistory { UserId = userId, SongId = songId, PlayedAt = DateTime.Now };
@@ -129,8 +162,8 @@ namespace Service
     public class AudioFeaturesJsonDto
     {
         public string? key { get; set; }
-        public string? cleaned_title { get; set; } // שדה חדש
-        public string? cleaned_artist { get; set; } // שדה חדש
+        public string? cleaned_title { get; set; }
+        public string? cleaned_artist { get; set; }
         public float tempo { get; set; }
         public float? energy { get; set; }
         public float? valence { get; set; }
