@@ -29,13 +29,13 @@ namespace Repositories.Entities
         public int Duration { get; set; } // in seconds
 
         [MaxLength(100)]
-        public string Genre { get; set; }
+        public string ?Genre { get; set; }
 
         [MaxLength(100)]
-        public string Mood { get; set; }
+        public string ?Mood { get; set; }
 
         [Column(TypeName = "nvarchar(MAX)")]
-        public string LyricsText { get; set; } = "";
+        public string ?LyricsText { get; set; } = "";
 
 
         public DateTime UploadedAt { get; set; } = DateTime.UtcNow;

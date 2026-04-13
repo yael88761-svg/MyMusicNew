@@ -23,6 +23,6 @@ namespace Repositories.Entities
 
         // Navigation Properties
         [ForeignKey("SongId")]
-        public virtual Song Song { get; set; }
+        public virtual Song ?Song { get; set; }
     }
 }
