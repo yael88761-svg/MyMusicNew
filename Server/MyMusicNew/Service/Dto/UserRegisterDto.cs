@@ -7,16 +7,17 @@ using System.Threading.Tasks;
 
 namespace Service.Dto
 {
+    using System.Text.Json.Serialization;
+
     public class UserRegisterDto
     {
-        [Required]
-        public string Name { get; set; } = string.Empty;
+        [JsonPropertyName("name")] // אומר לשרת לחפש name ב-JSON
+        public string Name { get; set; }
 
-        [Required, EmailAddress]
-        public string Email { get; set; } = string.Empty;
+        [JsonPropertyName("email")]
+        public string Email { get; set; }
 
-        [Required, MinLength(6), RegularExpression(@"^(?=.*[0-9])(?=.*[a-zA-Z]).{6,20}$")]
-        public string Password { get; set; } = string.Empty;
-
+        [JsonPropertyName("password")]
+        public string Password { get; set; }
     }
 }

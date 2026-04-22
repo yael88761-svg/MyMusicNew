@@ -23,12 +23,21 @@ public class UserRegisterService : IRegister<UserRegisterDto>
         if (users.Any(u => u.Email == item.Email))
             throw new Exception("User already exists");
 
+        // 1. מיפוי ראשוני (יעביר רק את ה-Email כי השאר לא תואם בשמות)
         var newUser = _mapper.Map<User>(item);
 
-        // שמירת המשתמש וקבלת האובייקט עם ה-ID שנוצר
+        // 2. השלמה ידנית של השדות שלא עברו בגלל שמות שונים:
+
+        // מעביר את Name ל-Username
+        newUser.Username = item.Name;
+
+        // מעביר את Password ל-PasswordHash
+        newUser.PasswordHash = item.Password;
+
+        // 3. שמירה למסד הנתונים
         var addedUser = await _repository.AddItem(newUser);
 
-        // מחזירים טוקן עבור המשתמש החדש
+        // 4. החזרת טוקן
         return _tokenService.CreateToken(addedUser);
     }
 }

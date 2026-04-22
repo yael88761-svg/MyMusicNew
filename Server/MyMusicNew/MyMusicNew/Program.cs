@@ -44,16 +44,10 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddProjectServices(connectionString);
 
 // --- 3. הגדרת בסיס הנתונים ---
-//builder.Services.AddDbContext<MusicContext>(options =>
-//    options.UseSqlServer(
-//        connectionString,
-//        b => b.MigrationsAssembly("DataContext")
-//    ));
-// --- 3. הגדרת בסיס הנתונים ---
 builder.Services.AddDbContext<MusicContext>(options =>
     options.UseSqlServer(
         connectionString,
-        b => b.MigrationsAssembly("DataContext") // ודאי שזה השם המדויק של הפרויקט שבו נמצא קובץ ה-DbContext
+        b => b.MigrationsAssembly("DataContext")
     ));
 
 // --- 4. הגדרת Controllers ו-JSON ---
@@ -65,11 +59,21 @@ builder.Services.AddControllers()
 
 // --- 5. הגדרת Swagger עם תמיכה ב-JWT ---
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "MusicPlayer API", Version = "v1" });
 
-    // הוספת כפתור ה-Authorize ל-Swagger
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
@@ -95,13 +99,11 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// רישום ה-TokenService (אם לא רשום בתוך AddProjectServices)
 builder.Services.AddScoped<IToken<User>, TokenService>();
 
 var app = builder.Build();
 
 // --- 6. הגדרת Middleware (סדר הפעולות) ---
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -110,7 +112,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-// חובה: Authentication לפני Authorization!
+
+// התיקון נמצא כאן:
+app.UseRouting(); // מוודא שהניתוב עובד
+
+// *** הוספתי את השורה הזו כאן - זה המיקום הקריטי! ***
+app.UseCors("AllowFrontend");
+
 app.UseAuthentication();
 app.UseAuthorization();
 

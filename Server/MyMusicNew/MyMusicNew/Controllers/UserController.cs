@@ -82,19 +82,6 @@ namespace MyMusicNew.Controllers
                 return BadRequest(ex.ToString());
             }
         }
-        [HttpPost]
-        public async Task<IActionResult> AddItem(UserDto item)
-        {
-            try
-            {
-                var addedUser = await _service.AddItem(item);
-                return Ok(addedUser);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.ToString());
-            }
-
-        }
+      
     }
 }
