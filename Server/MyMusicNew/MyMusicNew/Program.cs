@@ -10,6 +10,7 @@ using Service.Dto;
 using Service.Interfaces;
 using Service.Services;
 using System.Text;
+using System.Text.Json.Serialization; // נדרש עבור ReferenceHandler
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,8 +35,6 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
-
-        // התיקון הקריטי למניעת 401 בגלל הפרשי זמנים ב-Localhost
         ClockSkew = TimeSpan.Zero
     };
 });
@@ -50,11 +49,18 @@ builder.Services.AddDbContext<MusicContext>(options =>
         b => b.MigrationsAssembly("DataContext")
     ));
 
-// --- 4. הגדרת Controllers ו-JSON ---
+// --- 4. הגדרת Controllers ו-JSON עם התעלמות מלולאות ---
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
-        options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+        // הוספת המרת Enum למחרוזת
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+
+        // תיקון: מניעת לולאה אינסופית ב-JSON
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+
+        // הבטחה שמות השדות ב-JSON יהיו זהים לשמות ב-C# (PascalCase)
+        options.JsonSerializerOptions.PropertyNamingPolicy = null;
     });
 
 // --- 5. הגדרת Swagger עם תמיכה ב-JWT ---
@@ -73,7 +79,6 @@ builder.Services.AddCors(options =>
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "MusicPlayer API", Version = "v1" });
-
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
@@ -82,17 +87,12 @@ builder.Services.AddSwaggerGen(c =>
         Type = SecuritySchemeType.ApiKey,
         Scheme = "Bearer"
     });
-
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
             new OpenApiSecurityScheme
             {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
             },
             new string[] {}
         }
@@ -104,19 +104,13 @@ builder.Services.AddScoped<IToken<User>, TokenService>();
 var app = builder.Build();
 
 // --- 6. הגדרת Middleware (סדר הפעולות) ---
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseRouting();
 
-// התיקון נמצא כאן:
-app.UseRouting(); // מוודא שהניתוב עובד
-
-// *** הוספתי את השורה הזו כאן - זה המיקום הקריטי! ***
 app.UseCors("AllowFrontend");
 
 app.UseAuthentication();

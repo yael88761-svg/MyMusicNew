@@ -44,9 +44,10 @@ namespace Repositories.Repositories
         {
             return await ctx.Playlists
                     .Where(p => p.UserId == userId)
+                    .Include(p => p.PlaylistSongs)      // טעינת רשימת הקשר (פלייליסט-שיר)
+                        .ThenInclude(ps => ps.Song)     // טעינת נתוני השיר הספציפי
                     .ToListAsync();
         }
-
         public async Task<Playlist> GetById(int id)
         {
             return await ctx.Playlists

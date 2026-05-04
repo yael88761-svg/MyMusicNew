@@ -16,5 +16,6 @@ namespace Service.Dto
             //public string PlaylistName { get; set; }
             public string SongTitle { get; set; }
 
+            public SongDto Song { get; set; }
     }
 }
