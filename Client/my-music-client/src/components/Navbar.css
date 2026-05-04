@@ -1,0 +1,106 @@
+/* מיכל הניווט הראשי */
+.smart-player-nav {
+  display: flex;
+  justify-content: space-between; /* מרווח שווה בין הלוגו, הקישורים והכפתורים */
+  align-items: center;
+  padding: 0.8rem 2rem;
+  background-color: #000000; /* שחור מוחלט או #121212 */
+  color: white;
+  position: sticky; /* נצמד לחלק העליון בזמן גלילה */
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid #282828;
+}
+
+/* עיצוב הלוגו */
+.nav-logo a {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #1DB954; /* ירוק נגן */
+  text-decoration: none;
+  letter-spacing: -1px;
+}
+
+/* קישורי ניווט מרכזיים */
+.nav-links {
+  display: flex;
+  gap: 30px;
+}
+
+.nav-links a {
+  color: #b3b3b3;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: white; /* הארה במעבר עכבר */
+}
+
+/* אזור המשתמש (התחברות/פרופיל) */
+.nav-auth {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* כפתור הרשמה בולט */
+.signup-btn {
+  background-color: white;
+  color: black;
+  padding: 10px 25px;
+  border-radius: 500px; /* עיגול מושלם */
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.9rem;
+  transition: transform 0.2s ease;
+}
+
+.signup-btn:hover {
+  transform: scale(1.05); /* הגדלה קלה במעבר עכבר */
+  background-color: #f6f6f6;
+}
+
+/* קישור התחברות עדין */
+.login-link {
+  color: #b3b3b3;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.login-link:hover {
+  color: white;
+  text-decoration: underline;
+}
+
+/* עיצוב למשתמש מחובר */
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-profile span {
+  font-size: 0.9rem;
+  color: #fff;
+}
+
+/* כפתור התנתקות */
+.logout-btn {
+  background-color: transparent;
+  color: #b3b3b3;
+  border: 1px solid #b3b3b3;
+  padding: 5px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.3s;
+}
+
+.logout-btn:hover {
+  border-color: #ff4d4d;
+  color: #ff4d4d;
+}
