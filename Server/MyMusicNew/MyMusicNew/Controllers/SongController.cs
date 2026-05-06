@@ -5,6 +5,7 @@ using Service.Dto;
 using Service.Interfaces;
 using System.Security.Claims;
 using Service;
+using Repositories.Entities;
 
 namespace MyMusicNew.Controllers
 {
@@ -77,8 +78,8 @@ namespace MyMusicNew.Controllers
             catch (Exception ex) { return BadRequest(ex.Message); }
         }
 
-        [HttpPost("upload-music")]
-        public async Task<IActionResult> UploadMusic(IFormFile file)
+        [HttpPost("upload-music/{playlistId}")]
+        public async Task<IActionResult> UploadMusic(IFormFile file, int playlistId)
         {
             try
             {
@@ -109,14 +110,25 @@ namespace MyMusicNew.Controllers
                     UserId = currentUserId
                 });
 
-                // הפעלת ה-AI לניתוח מעמיק וניקוי שמות (מעדכן את ה-Title וה-Artist בתוך ה-Tools)
+                // הפעלת ה-AI לניתוח מעמיק וניקוי שמות
                 var features = await _tools.GetAudioFeaturesFromAI(addedSong.Title, addedSong.Artist, addedSong.SongId);
 
-                // שמירת הפיצ'רים (Tempo, Energy וכו') בבסיס הנתונים
+                // שמירת הפיצ'רים בבסיס הנתונים
                 _context.AudioFeatures.Add(features);
+
+                // --- החלק שחסר: יצירת הקשר לפלייליסט ---
+                var playlistLink = new PlaylistSong
+                {
+                    PlaylistId = playlistId,
+                    SongId = addedSong.SongId,
+                    AddedAt = DateTime.Now
+                };
+                _context.PlaylistSongs.Add(playlistLink);
+                // ---------------------------------------
+
                 await _context.SaveChangesAsync();
 
-                // שליפת השיר המעודכן מה-DB כדי להחזיר למשתמש את השמות הנקיים שה-AI יצר
+                // שליפת השיר המעודכן
                 var updatedSong = await _service.GetById(addedSong.SongId);
 
                 return Ok(new

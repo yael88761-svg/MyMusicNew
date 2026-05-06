@@ -43,15 +43,31 @@ namespace Service.Services
             return _mapper.Map<List<PlaylistDto>>(Playlist);
         }
 
+        //public async Task<List<PlaylistDto>> GetAll(int userId)
+        //{
+        //    // 1. קריאה לרפוזיטורי הספציפי שסידרנו קודם (זה ששולף לפי UserId)
+        //    var playlists = await _playlistRepository.GetAll(userId);
+
+        //    // 2. המרה של רשימת הישויות (Entities) לרשימה של DTOs בעזרת המאפר
+        //    return _mapper.Map<List<PlaylistDto>>(playlists);
+        //}
+
         public async Task<List<PlaylistDto>> GetAll(int userId)
         {
-            // 1. קריאה לרפוזיטורי הספציפי שסידרנו קודם (זה ששולף לפי UserId)
             var playlists = await _playlistRepository.GetAll(userId);
 
-            // 2. המרה של רשימת הישויות (Entities) לרשימה של DTOs בעזרת המאפר
-            return _mapper.Map<List<PlaylistDto>>(playlists);
-        }
+            // בדיקה: האם בתוך הישויות (Entities) יש שירים לפני המיפוי?
+            var count = playlists.FirstOrDefault()?.PlaylistSongs?.Count;
+            Console.WriteLine($"Found {count} songs in entity");
 
+            var dtos = _mapper.Map<List<PlaylistDto>>(playlists);
+
+            // בדיקה: האם אחרי המיפוי עדיין יש שירים?
+            var dtoCount = dtos.FirstOrDefault()?.PlaylistSongs?.Count;
+            Console.WriteLine($"Found {dtoCount} songs in DTO");
+
+            return dtos;
+        }
         public async Task<PlaylistDto> GetById(int id)
         {
             var playlist = await _repository.GetById(id);

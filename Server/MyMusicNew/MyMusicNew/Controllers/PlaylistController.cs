@@ -19,10 +19,17 @@ namespace MyMusicNew.Controllers
         // פונקציית עזר פרטית כדי לא לשכפל קוד של חילוץ ID
         private int GetUserId()
         {
+            // נסיון ראשון: לפי הטיפוס הסטנדרטי
             var claim = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            // נסיון שני: אם ה-ID נשמר תחת המפתח "userId" בטוקן
+            if (claim == null)
+            {
+                claim = User.FindFirst("userId");
+            }
+
             return claim == null ? 0 : int.Parse(claim.Value);
         }
-
         [HttpGet("my-playlists")]
         public async Task<IActionResult> GetMyPlaylists()
         {

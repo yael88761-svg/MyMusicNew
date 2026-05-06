@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
 using Repositories.Entities;
 using Service.Dto;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Service.Services
 {
@@ -13,6 +8,7 @@ namespace Service.Services
     {
         public MapperProfile()
         {
+            // מיפוי משתמשים
             CreateMap<User, UserDto>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Username))
                 .ReverseMap()
@@ -26,22 +22,32 @@ namespace Service.Services
                 .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password))
                 .ReverseMap();
 
-            CreateMap<SongDto, Song>().ReverseMap();
+            // מיפוי שירים
+            CreateMap<Song, SongDto>().ReverseMap();
 
+            // מיפוי אובייקט הקשר פלייליסט-שיר
+            // הוספנו מיפוי מפורש לאובייקט השיר כדי לוודא שנתוני השיר עוברים ל-DTO
             CreateMap<PlaylistSong, PlaylistSongDto>()
-                //.ForMember(dest => dest.PlaylistName, opt => opt.MapFrom(src => src.Playlist.PlaylistName))
                 .ForMember(dest => dest.SongTitle, opt => opt.MapFrom(src => src.Song.Title))
+                .ForMember(dest => dest.Song, opt => opt.MapFrom(src => src.Song))
                 .ReverseMap();
 
-            CreateMap<Playlist, PlaylistDto>().ReverseMap();
+            // מיפוי פלייליסט
+            // הוספנו הנחיה מפורשת למיפוי האוסף PlaylistSongs
+            CreateMap<Playlist, PlaylistDto>()
+                .ForMember(dest => dest.PlaylistSongs, opt => opt.MapFrom(src => src.PlaylistSongs))
+                .ReverseMap();
 
             CreateMap<PlaylistDto, Playlist>()
-                .ForMember(dest => dest.User, opt => opt.Ignore()); // מתעלמים רק מהאובייקט המקושר, לא מה-ID
+                .ForMember(dest => dest.User, opt => opt.Ignore());
+
+            // מיפוי היסטוריית השמעה
             CreateMap<PlayHistory, PlayHistoryDto>()
                 .ForMember(dest => dest.SongTitle, opt => opt.MapFrom(src => src.Song.Title))
                 .ReverseMap()
-                .ForMember(dest => dest.Song, opt => opt.Ignore());// התעלמות מאובייקט השיר ביצירה
+                .ForMember(dest => dest.Song, opt => opt.Ignore());
 
+            // מיפוי תכונות אודיו
             CreateMap<AudioFeatures, AudioFeaturesDto>().ReverseMap();
         }
     }

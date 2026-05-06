@@ -1,92 +1,285 @@
+/* מבנה כללי */
 .library-layout {
     display: flex;
     height: 100vh;
-    background-color: #121212;
+    background: linear-gradient(to bottom, #222222, #121212);
     color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
 }
 
+/* סיידבר */
 .sidebar {
-    width: 240px;
+    width: 260px;
     background-color: #000;
-    padding: 20px;
-    border-right: 1px solid #282828;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-.sidebar li {
-    list-style: none;
+.sidebar-header {
     padding: 10px;
+}
+
+.header-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.add-playlist-btn {
+    background: none;
+    border: none;
+    color: #b3b3b3;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.add-playlist-btn:hover {
+    color: white;
+    transform: scale(1.1);
+}
+
+.playlist-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.playlist-list li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
     cursor: pointer;
     color: #b3b3b3;
-    transition: 0.3s;
+    border-radius: 4px;
+    transition: 0.2s;
 }
 
-.sidebar li:hover, .sidebar li.active {
+.playlist-list li:hover, .playlist-list li.active {
     color: white;
     background-color: #282828;
+}
+
+.playlist-icon-box {
+    width: 32px;
+    height: 32px;
+    background-color: #282828;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 4px;
 }
 
+/* תוכן מרכזי */
 .main-content {
     flex: 1;
-    padding: 40px;
     overflow-y: auto;
+    padding-bottom: 100px; /* רווח בשביל הנגן */
 }
 
-.song-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
+/* Header של הפלייליסט */
+.playlist-view-header {
+    display: flex;
+    align-items: flex-end;
+    gap: 24px;
+    padding: 40px 30px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.5));
 }
 
-.song-table th {
-    text-align: left;
-    color: #b3b3b3;
-    border-bottom: 1px solid #282828;
-    padding: 10px;
+.playlist-image-big {
+    width: 192px;
+    height: 192px;
+    background-color: #282828;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 60px rgba(0,0,0,0.5);
 }
 
-.song-table tr:hover {
-    background-color: rgba(255,255,255,0.1);
+.playlist-title-display {
+    font-size: 4rem !important;
+    font-weight: 900 !important;
+    margin: 8px 0 !important;
+}
+
+/* שורת כפתורי פעולה */
+.action-bar {
+    padding: 20px 30px;
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.big-play-btn {
+    width: 56px;
+    height: 56px;
+    background-color: #1DB954;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
+    transition: 0.2s;
 }
 
-.song-table td {
-    padding: 12px 10px;
+.big-play-btn:hover {
+    transform: scale(1.05);
+    background-color: #1ed760;
 }
 
-.player-bar {
+/* עיצוב הטבלה */
+.song-row {
+    transition: 0.2s;
+    border-bottom: none !important;
+}
+
+.song-row:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.index-cell {
+    position: relative;
+    text-align: center;
+}
+
+.row-play-icon {
+    display: none;
+}
+
+.song-row:hover .num {
+    display: none;
+}
+
+.song-row:hover .row-play-icon {
+    display: inline-block;
+}
+
+.song-img-placeholder {
+    width: 40px;
+    height: 40px;
+    background-color: #282828;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+}
+
+/* הנגן התחתון המעוצב */
+.spotify-player {
     position: fixed;
     bottom: 0;
     width: 100%;
     height: 90px;
-    background-color: #181818;
+    background-color: #000;
     border-top: 1px solid #282828;
+    display: grid;
+    grid-template-columns: 30% 40% 30%;
+    align-items: center;
+    padding: 0 16px;
+    z-index: 1000;
+}
+
+.player-song-info {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 0 20px;
-}
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-  color: #b3b3b3;
+    gap: 14px;
 }
 
-th {
-  text-align: right;
-  border-bottom: 1px solid #282828;
-  padding: 10px;
-  font-size: 0.8rem;
-  text-transform: uppercase;
+.player-img-box {
+    width: 56px;
+    height: 56px;
+    background-color: #282828;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-tr:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: white;
+.player-title {
+    font-size: 0.9rem !important;
+    font-weight: 500 !important;
+    color: white;
 }
 
-td {
-  padding: 12px 10px;
-  font-size: 0.9rem;
+.player-artist {
+    font-size: 0.75rem !important;
+    color: #b3b3b3;
+}
+
+/* פקדי שליטה בנגן */
+.player-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.control-buttons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.play-pause-circle {
+    width: 32px;
+    height: 32px;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.progress-container {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.time {
+    font-size: 11px;
+    color: #b3b3b3;
+    min-width: 30px;
+}
+
+.progress-bar {
+    flex: 1;
+    height: 4px;
+    background-color: #4f4f4f;
+    border-radius: 2px;
+    position: relative;
+    cursor: pointer;
+}
+
+.progress-fill {
+    width: 30%; /* דוגמה להתקדמות */
+    height: 100%;
+    background-color: #b3b3b3;
+    border-radius: 2px;
+}
+
+.progress-bar:hover .progress-fill {
+    background-color: #1DB954;
+}
+
+/* ווליום וצד שמאל */
+.player-extra {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+}
+
+.volume-bar {
+    width: 100px;
+    height: 4px;
+    background-color: #4f4f4f;
+    border-radius: 2px;
 }

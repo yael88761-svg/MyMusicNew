@@ -10,7 +10,8 @@ using Service.Dto;
 using Service.Interfaces;
 using Service.Services;
 using System.Text;
-using System.Text.Json.Serialization; // נדרש עבור ReferenceHandler
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,18 +50,18 @@ builder.Services.AddDbContext<MusicContext>(options =>
         b => b.MigrationsAssembly("DataContext")
     ));
 
-// --- 4. הגדרת Controllers ו-JSON עם התעלמות מלולאות ---
+// --- 4. הגדרת Controllers ו-JSON עם התאמה ל-Frontend ---
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         // הוספת המרת Enum למחרוזת
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 
-        // תיקון: מניעת לולאה אינסופית ב-JSON
+        // פתרון בעיית המעגליות: מניעת לולאה אינסופית ב-JSON
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 
-        // הבטחה שמות השדות ב-JSON יהיו זהים לשמות ב-C# (PascalCase)
-        options.JsonSerializerOptions.PropertyNamingPolicy = null;
+        // הגדרת שמות השדות ב-JSON ל-camelCase (אות קטנה בהתחלה) - מומלץ ל-JS/TS
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
     });
 
 // --- 5. הגדרת Swagger עם תמיכה ב-JWT ---
@@ -104,13 +105,15 @@ builder.Services.AddScoped<IToken<User>, TokenService>();
 var app = builder.Build();
 
 // --- 6. הגדרת Middleware (סדר הפעולות) ---
-app.UseSwagger();
-app.UseSwaggerUI();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-
 app.UseCors("AllowFrontend");
 
 app.UseAuthentication();
