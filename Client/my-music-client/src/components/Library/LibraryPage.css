@@ -1,47 +1,109 @@
-/* LibraryPage.css */
+/* מבנה ראשי */
 .library-layout {
   display: flex;
   width: 100%;
-  height: 100%;
-
+  height: calc(100vh - 90px); /* מוריד את גובה הנגן מהגובה הכללי */
+  background-color: #000;
 }
-/* סיידבר מעוצב בצד */
+
+/* סיידבר */
 .sidebar {
-  width: 280px;
-  min-width: 280px;
+  width: 300px;
+  min-width: 300px;
   background-color: #000000;
-  padding: 20px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
-  border-left: 1px solid #282828;
+  gap: 10px;
 }
 
-/* אזור השירים המרכזי */
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  margin-bottom: 10px;
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* אזור התוכן המרכזי - התיקון הגדול */
 .main-content {
-  flex-grow: 1; /* גורם לאזור התוכן למלא את כל שאר המסך */
-  background: linear-gradient(to bottom, #1e1e1e 0%, #121212 100%);
+  flex-grow: 1;
+  background: linear-gradient(to bottom, #000000 0%, #000000 100%);
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  align-items: center; /* ממרכז את התוכן אופקית */
-  padding: 40px 20px;
-  overflow-y: auto;
+  padding: 0; /* ביטלתי פדינג כדי שההדר יגיע לקצוות */
 }
 
-/* העטיפה ששומרת על הטבלה במרכז */
 .content-wrapper {
   width: 100%;
-  max-width: 1000px; /* רוחב אידיאלי למרכוז עין המשתמש */
+  height: 100%;
 }
 
-/* ניקוי MUI כדי שהטבלה לא תהיה לבנה */
-.main-content .MuiPaper-root {
-  background-color: transparent !important;
-  box-shadow: none !important;
-  width: 100% !important;
-}
-
+/* תיקון הלבן של MUI - חובה */
+.main-content .MuiPaper-root,
+.main-content .MuiTypography-root,
+.main-content .MuiTable-root,
 .main-content .MuiTableCell-root {
-  color: #b3b3b3 !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-  text-align: right;
+  background-color: transparent !important;
+  color: white !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  box-shadow: none !important;
+}
+
+/* הקטנת האייקון הגדול בתוך PlaylistView */
+/* הנחה: בתוך PlaylistView יש אייקון או תמונה */
+.main-content svg.lucide-music {
+    width: 8px; /* גודל שפוי במקום ענק */
+    height: 8px;
+}
+
+/* הקטנת שם הפלייליסט (כמו ה-23 בתמונה) */
+.main-content h1, 
+.main-content .MuiTypography-h1 {
+    font-size: 1.25rem !important; /* גודל ספוטיפיי קלאסי */
+    font-weight: 80 !important;
+    margin: 10px 0 !important;
+    letter-spacing: -1px;
+}
+
+/* מצב ריק (כשלא נבחר פלייליסט) */
+.empty-state {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.big-icon-circle {
+    width: 120px;
+    height: 120px;
+    background-color: #282828;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+/* עיצוב הטבלה בתוך ה-Content */
+.main-content table {
+    width: 95%;
+    margin: 20px auto;
+    border-spacing: 0;
+}
+
+.main-content th {
+    color: #b3b3b3;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    border-bottom: 1px solid #282828;
+    padding: 10px;
 }

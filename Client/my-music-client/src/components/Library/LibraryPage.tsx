@@ -3,10 +3,10 @@ import { useGetPlaylistsQuery, useUploadSongToPlaylistMutation } from '../../fea
 import { Typography } from '@mui/material';
 import { Library, Music } from 'lucide-react';
 
-
-import PlaylistList from './Sidebar/PlaylistList';     // הסרנו נקודה אחת כי Sidebar הוא אח של LibraryPage
+import PlaylistList from './Sidebar/PlaylistList'; 
 import CreatePlaylistBtn from './Sidebar/CreatePlaylistBtn'; 
-import PlaylistView from './Content/PlaylistView';     // כנ"ל לגבי Contentimport './LibraryPage.css';
+import PlaylistView from './Content/PlaylistView'; 
+import './LibraryPage.css';
 
 const LibraryPage = () => {
     const { data: playlists, isLoading, error } = useGetPlaylistsQuery(); 
@@ -31,24 +31,36 @@ const LibraryPage = () => {
         <div className="library-layout">
             <aside className="sidebar">
                 <div className="sidebar-header">
-                    <div className="header-title"><Library size={24} /><Typography variant="h6">הספרייה שלך</Typography></div>
+                    <div className="header-title">
+                        <Library size={24} color="#b3b3b3" />
+                        <Typography variant="h6" sx={{ color: '#b3b3b3', fontWeight: 'bold' }}>הספרייה שלך</Typography>
+                    </div>
                     <CreatePlaylistBtn />
                 </div>
-                <PlaylistList playlists={playlists} selectedPlaylistId={selectedPlaylist?.playlistId} onSelect={setSelectedPlaylist} />
+                <PlaylistList 
+                    playlists={playlists} 
+                    selectedPlaylistId={selectedPlaylist?.playlistId} 
+                    onSelect={setSelectedPlaylist} 
+                />
             </aside>
 
             <main className="main-content">
                 {activePlaylistData ? (
-                    <PlaylistView 
-                        playlistData={activePlaylistData} 
-                        fileInputRef={fileInputRef} 
-                        onUploadClick={() => fileInputRef.current?.click()} 
-                        onFileUpload={handleFileUpload} 
-                    />
+                    <div className="content-wrapper">
+                        {/* כאן ה-PlaylistView יקבל את העיצוב החדש דרך ה-CSS */}
+                        <PlaylistView 
+                            playlistData={activePlaylistData} 
+                            fileInputRef={fileInputRef} 
+                            onUploadClick={() => fileInputRef.current?.click()} 
+                            onFileUpload={handleFileUpload} 
+                        />
+                    </div>
                 ) : (
                     <div className="empty-state">
-                        <Music size={64} color="#282828" />
-                        <Typography variant="h5">בחר פלייליסט כדי להתחיל</Typography>
+                        <div className="big-icon-circle">
+                            <Music size={48} color="#b3b3b3" />
+                        </div>
+                        <Typography variant="h5" sx={{ color: 'white', mt: 2 }}>בחר פלייליסט כדי להתחיל</Typography>
                     </div>
                 )}
             </main>
