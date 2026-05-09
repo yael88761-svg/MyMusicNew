@@ -13,11 +13,9 @@ namespace Repositories.Entities
         public int UserId { get; set; }
 
         [Required]
-        [MaxLength(255)]
-        //enum 
+        [MaxLength(15)]
         public string PlaylistName { get; set; }
 
-        public bool IsSmartPlaylist { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

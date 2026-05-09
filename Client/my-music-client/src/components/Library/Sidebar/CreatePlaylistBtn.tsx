@@ -10,7 +10,7 @@ const CreatePlaylistBtn = () => {
         const name = prompt("איך לקרוא לפלייליסט החדש?");
         if (!name) return;
         try {
-            await createPlaylist({ playlistName: name, isSmartPlaylist: false }).unwrap();
+            await createPlaylist({ playlistName: name }).unwrap();
         } catch (err) {
             alert("שגיאה ביצירת הפלייליסט");
         }

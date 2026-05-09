@@ -63,7 +63,6 @@ namespace Repositories.Repositories
                 return null;
 
             existing.PlaylistName = item.PlaylistName;
-            existing.IsSmartPlaylist = item.IsSmartPlaylist;
             existing.UserId = item.UserId;
 
             await ctx.Save();
