@@ -21,9 +21,6 @@ const PlaylistList: React.FC<PlaylistListProps> = ({ playlists, selectedPlaylist
                     onClick={() => onSelect(pl)}
                     className={selectedPlaylistId === pl.playlistId ? 'active' : ''}
                 >
-                    <div className="playlist-icon-box">
-                        <Music size={16} />
-                    </div>
                     <span className="playlist-name-text">{pl.playlistName}</span>
                 </li>
             ))}        

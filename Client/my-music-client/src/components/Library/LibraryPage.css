@@ -8,8 +8,8 @@
 
 /* סיידבר */
 .sidebar {
-  width: 300px;
-  min-width: 300px;
+  width: 150px;
+  min-width: 100px;
   background-color: #000000;
   padding: 12px;
   display: flex;

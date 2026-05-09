@@ -1,0 +1,89 @@
+.playlist-container {
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+    background: linear-gradient(to bottom, #222222 0%, #121212 400px);
+    min-height: 100vh;
+    box-sizing: border-box;
+    direction: rtl; /* מבטיח שהימין הוא צד ההתחלה */
+}
+
+.playlist-main-header {
+    display: flex;
+    justify-content: space-between; 
+    align-items: flex-end; 
+    margin-bottom: 40px;
+    width: 100%;
+}
+
+/* צד ימין: הכפתורים (העיגול האדום שלך) */
+.header-actions-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 10px;
+}
+
+/* צד שמאל: הטקסט */
+.playlist-details-left {
+    text-align: left; /* יישור הטקסט לשמאל */
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.type-label {
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    color: #b3b3b3 !important;
+    text-transform: uppercase;
+}
+
+.playlist-name-title {
+    font-size: 4.5rem;
+    font-weight: 900;
+    color: white;
+    margin: 0;
+    line-height: 1;
+}
+
+.playlist-stats {
+    color: #b3b3b3 !important;
+    text-align: left;
+}
+
+/* עיצוב כפתורים */
+.play-button-main {
+    width: 56px;
+    height: 56px;
+    background-color: #1db954;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.play-button-main:hover {
+    transform: scale(1.05);
+}
+
+.upload-button-outline {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #727272;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.table-wrapper {
+    width: 100%;
+    margin-top: 20px;
+}

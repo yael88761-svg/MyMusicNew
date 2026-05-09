@@ -1,7 +1,8 @@
 import React from 'react';
-import { Typography, Button } from '@mui/material';
-import { Music, Play, Upload } from 'lucide-react';
+import { Typography } from '@mui/material';
+import { Play, Upload } from 'lucide-react';
 import SongTable from './SongTable';
+import './PlaylistView.css';
 
 interface PlaylistViewProps {
     playlistData: any;
@@ -12,39 +13,45 @@ interface PlaylistViewProps {
 
 const PlaylistView: React.FC<PlaylistViewProps> = ({ playlistData, fileInputRef, onUploadClick, onFileUpload }) => {
     return (
-        <div className="playlist-view">
-            <header className="playlist-view-header">
-                <div className="playlist-image-big">
-                    <Music size={64} color="#b3b3b3" />
+        <div className="playlist-container">
+            <header className="playlist-main-header">
+                
+                {/* צד ימין: הכפתורים - איפה שסימנת "פה" בעיגול האדום */}
+                <div className="header-actions-right">
+                    <button className="play-button-main" title="נגן הכל">
+                        <Play fill="black" size={28} />
+                    </button>
+                    
+                    <button className="upload-button-outline" onClick={onUploadClick}>
+                        <Upload size={18} />
+                        <span>הוסף שיר</span>
+                    </button>
+                    
+                    <input 
+                        type="file" 
+                        ref={fileInputRef} 
+                        style={{ display: 'none' }} 
+                        onChange={onFileUpload} 
+                        accept="audio/*" 
+                    />
                 </div>
-                <div className="playlist-info-text">
-                    <Typography variant="overline" sx={{ color: 'white' }}>פלייליסט</Typography>
-                    <Typography variant="h1" className="playlist-title-display">
-                        {playlistData?.playlistName}
+
+                {/* צד שמאל: פרטי הפלייליסט */}
+                <div className="playlist-details-left">
+                    <Typography className="type-label">פלייליסט</Typography>
+                    <h1 className="playlist-name-title">
+                        {playlistData?.playlistName || "23"}
+                    </h1>
+                    <Typography variant="body2" className="playlist-stats">
+                        {playlistData?.playlistSongs?.length || 0} שירים
                     </Typography>
                 </div>
+
             </header>
 
-            <div className="action-bar">
-                <button className="big-play-btn"><Play fill="black" size={24} /></button>
-                <input 
-                    type="file" 
-                    accept="audio/*" 
-                    style={{ display: 'none' }} 
-                    ref={fileInputRef}
-                    onChange={onFileUpload}
-                />
-                <Button 
-                    variant="outlined" 
-                    startIcon={<Upload />}
-                    onClick={onUploadClick}
-                    sx={{ color: 'white', borderColor: '#b3b3b3', borderRadius: '20px', textTransform: 'none' }}
-                >
-                    הוסף שיר
-                </Button>
+            <div className="table-wrapper">
+                <SongTable songs={playlistData?.playlistSongs || []} />
             </div>
-
-            <SongTable songs={playlistData?.playlistSongs || []} />
         </div>
     );
 };
