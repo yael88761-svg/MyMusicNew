@@ -1,0 +1,13 @@
+.player-container {
+  height: 20;
+  background-color: #121212;
+  border-top: 1px solid #282828;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  z-index: 1001;
+}

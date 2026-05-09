@@ -1,60 +1,29 @@
-/* האפליקציה כולה - מבנה של עמודה (Navbar למעלה, Content למטה) */
-.app-container {
-  min-height: 100vh;
-  background-color: #121212;
-  color: white;
-  display: flex;
-  flex-direction: column;
-}
+/* בתוך LibraryPage.css */
 
-/* התוכן המשתנה - כאן נכנסת הספרייה או דפי הרישום */
-.content {
-  flex: 1; /* ממלא את כל הגובה שנותר */
+.library-layout {
   display: flex;
-  /* שים לב: הסרנו מפה את ה-justify-content: center כדי שהספרייה תוכל להיצמד לצדדים */
-}
-
-/* קונטיינר מיוחד לדפי לוגין וסיינאפ - מחזיר אותם למרכז */
-.auth-container {
   width: 100%;
+  height: 100%;
+  direction: rtl; /* חשוב לעברית - שהסיידבר יהיה בימין */
+}
+
+.sidebar {
+  width: 260px;
+  flex-shrink: 0; /* מונע מהסיידבר להתכווץ */
+  background-color: #000;
+  /* עיצוב נוסף... */
+}
+
+.main-content {
+  flex-grow: 1; /* תופס את כל שאר המקום */
   display: flex;
-  justify-content: center; /* ממרכז אופקית */
-  align-items: flex-start; /* מצמיד למעלה עם קצת מרווח */
-  padding-top: 50px;
+  justify-content: center; /* ממרכז את התוכן אופקית מול המשתמש */
+  overflow-y: auto;
+  padding: 20px;
 }
 
-/* עיצוב הטפסים (Login/Signup) */
-form {
-  background-color: #181818;
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  width: 350px;
-}
-
-/* שדות קלט */
-input {
-  padding: 12px;
-  border-radius: 4px;
-  border: 1px solid #333;
-  background-color: #282828;
-  color: white;
-}
-
-/* כפתור ירוק ספוטיפיי */
-button {
-  padding: 12px;
-  background-color: #1DB954;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #1ed760;
+/* העטיפה הפנימית שבאמת מחזיקה את הטבלה */
+.main-content > div {
+  width: 100%;
+  max-width: 1000px; /* גורם לזה להיראות מרכזי ומקצועי, לא נמרח מקצה לקצה */
 }

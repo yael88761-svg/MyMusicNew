@@ -1,8 +1,13 @@
 import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-import SongRow from './SongRow';
+import SongRow from './SongRow'; // תיקון: SongRow נמצא באותה תיקייה (Content)
 import { useDispatch } from 'react-redux';
-import { setCurrentSong } from '../../../features/song/songSlice';
+
+// תיקון הנתיב: צריך לעלות 3 רמות למעלה כדי להגיע ל-features
+// 1. מ-Content ל-Library
+// 2. מ-Library ל-components
+// 3. מ-components ל-src (שם נמצאת תיקיית features)
+import { setCurrentSong } from '../../../features/song/songSlice'; 
 
 interface SongTableProps {
     songs: any[];
