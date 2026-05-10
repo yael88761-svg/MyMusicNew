@@ -16,7 +16,6 @@ namespace Service.Dto
 
         [Required]
         public string PlaylistName { get; set; }
-        public bool IsSmartPlaylist { get; set; }
         public DateTime CreatedAt { get; set; }
         public virtual ICollection<PlaylistSongDto> PlaylistSongs { get; set; }
 

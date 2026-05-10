@@ -34,7 +34,7 @@ export const playlistApi = createApi({
     }),
     
     // יצירת פלייליסט חדש
-    createPlaylist: builder.mutation<any, { playlistName: string; isSmartPlaylist: boolean }>({
+    createPlaylist: builder.mutation<any, { playlistName: string }>({
       query: (newPlaylist) => ({
         url: 'Playlist',
         method: 'POST',
