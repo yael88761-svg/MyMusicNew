@@ -16,6 +16,7 @@
     box-sizing: border-box;
 }
 
+
 /* אזור 1: מידע על השיר (ימין) */
 .current-song-info {
     display: flex;
@@ -172,4 +173,30 @@
 
 .volume-slider:hover {
     accent-color: #1db954;
+}
+/* חיווי ויזואלי לכפתורים פעילים (ערבוב וחזרתיות) */
+.active-icon {
+    color: #1db954 !important; /* צבע ירוק של ספוטיפיי */
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.active-icon:hover {
+    color: #1ed760 !important; /* ירוק בהיר יותר במעבר עכבר */
+}
+
+/* עטיפה לכפתור החזרתיות כדי לשמור על גודל אחיד */
+.repeat-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+/* שיפור קטן לכפתור הקודם/הבא למניעת בחירת טקסט בלחיצות מהירות */
+.secondary-btn {
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
