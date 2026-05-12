@@ -1,7 +1,9 @@
 import React from 'react';
+import { useDispatch } from 'react-redux'; // ייבוא הדיספאצ'
 import { Typography } from '@mui/material';
 import { Play, Upload } from 'lucide-react';
 import SongTable from './SongTable';
+import { setCurrentSong, setCurrentPlaylist } from '../../../features/song/songSlice'; // וודאי שהנתיב ל-Slice נכון
 import './PlaylistView.css';
 
 interface PlaylistViewProps {
@@ -12,13 +14,35 @@ interface PlaylistViewProps {
 }
 
 const PlaylistView: React.FC<PlaylistViewProps> = ({ playlistData, fileInputRef, onUploadClick, onFileUpload }) => {
+    const dispatch = useDispatch();
+
+    // הפונקציה שמפעילה את הכל
+    const handlePlayPlaylist = () => {
+        const songs = playlistData?.playlistSongs || [];
+        
+        if (songs.length > 0) {
+            // 1. מעדכנים את הנגן בכל רשימת השירים הנוכחית
+            dispatch(setCurrentPlaylist(songs));
+            
+            // 2. מפעילים את השיר הראשון ברשימה
+            dispatch(setCurrentSong(songs[0]));
+            
+            console.log("Playlist sent to player:", songs.length, "songs");
+        }
+    };
+
     return (
         <div className="playlist-container">
             <header className="playlist-main-header">
                 
-                {/* צד ימין: הכפתורים - איפה שסימנת "פה" בעיגול האדום */}
+                {/* צד ימין: הכפתורים */}
                 <div className="header-actions-right">
-                    <button className="play-button-main" title="נגן הכל">
+                    {/* כאן הוספתי את ה-onClick */}
+                    <button 
+                        className="play-button-main" 
+                        title="נגן הכל" 
+                        onClick={handlePlayPlaylist}
+                    >
                         <Play fill="black" size={28} />
                     </button>
                     
