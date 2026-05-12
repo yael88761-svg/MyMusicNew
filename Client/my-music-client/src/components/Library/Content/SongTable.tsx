@@ -1,13 +1,10 @@
 import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-import SongRow from './SongRow'; // תיקון: SongRow נמצא באותה תיקייה (Content)
+import SongRow from './SongRow'; 
 import { useDispatch } from 'react-redux';
 
-// תיקון הנתיב: צריך לעלות 3 רמות למעלה כדי להגיע ל-features
-// 1. מ-Content ל-Library
-// 2. מ-Library ל-components
-// 3. מ-components ל-src (שם נמצאת תיקיית features)
-import { setCurrentSong } from '../../../features/song/songSlice'; 
+// 1. הוסף את setPlaylist לייבוא
+import { setCurrentSong, setCurrentPlaylist } from '../../../features/song/songSlice'; 
 
 interface SongTableProps {
     songs: any[];
@@ -15,6 +12,17 @@ interface SongTableProps {
 
 const SongTable: React.FC<SongTableProps> = ({ songs }) => {
     const dispatch = useDispatch();
+
+    // 2. צור פונקציה שמטפלת בניגון ושומרת את כל הרשימה
+    const handlePlaySong = (selectedSong: any) => {
+        // שליחת השיר הספציפי לנגן
+        dispatch(setCurrentSong(selectedSong));
+        
+        // שליחת כל רשימת השירים שקיימת בטבלה לנגן
+        // אנחנו מבצעים map כדי לשלוח רק את אובייקט ה-song מתוך המבנה של ps.song
+        const songsToPlay = songs.map(ps => ps.song).filter(Boolean);
+        dispatch(setCurrentPlaylist(songsToPlay));
+    };
 
     return (
         <TableContainer component={Paper} sx={{ backgroundColor: 'transparent', boxShadow: 'none' }}>
@@ -33,7 +41,8 @@ const SongTable: React.FC<SongTableProps> = ({ songs }) => {
                                 key={ps.song.songId} 
                                 song={ps.song} 
                                 index={index} 
-                                onPlay={(song) => dispatch(setCurrentSong(song))} 
+                                // 3. השתמש בפונקציה החדשה שיצרנו
+                                onPlay={handlePlaySong} 
                             />
                         )
                     ))}
