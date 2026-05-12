@@ -1,9 +1,9 @@
 import React from 'react';
-import { useDispatch } from 'react-redux'; // ייבוא הדיספאצ'
+import { useDispatch } from 'react-redux';
 import { Typography } from '@mui/material';
 import { Play, Upload } from 'lucide-react';
 import SongTable from './SongTable';
-import { setCurrentSong, setCurrentPlaylist } from '../../../features/song/songSlice'; // וודאי שהנתיב ל-Slice נכון
+import { setCurrentSong, setCurrentPlaylist } from '../../../features/song/songSlice'; 
 import './PlaylistView.css';
 
 interface PlaylistViewProps {
@@ -16,33 +16,44 @@ interface PlaylistViewProps {
 const PlaylistView: React.FC<PlaylistViewProps> = ({ playlistData, fileInputRef, onUploadClick, onFileUpload }) => {
     const dispatch = useDispatch();
 
-    // הפונקציה שמפעילה את הכל
     const handlePlayPlaylist = () => {
-        const songs = playlistData?.playlistSongs || [];
+        const rawSongs = playlistData?.playlistSongs || [];
         
-        if (songs.length > 0) {
-            // 1. מעדכנים את הנגן בכל רשימת השירים הנוכחית
-            dispatch(setCurrentPlaylist(songs));
-            
-            // 2. מפעילים את השיר הראשון ברשימה
-            dispatch(setCurrentSong(songs[0]));
-            
-            console.log("Playlist sent to player:", songs.length, "songs");
+        if (rawSongs.length > 0) {
+            const formattedSongs = rawSongs.map((item: any) => {
+                // הנתונים האמיתיים נמצאים בתוך item.song לפי הדיבאג שלך!
+                const songData = item.song || {}; 
+                
+                // חילוץ הנתיב מתוך תת-האובייקט song
+                const songPath = songData.filePath || songData.path || songData.url;
+
+                return {
+                    ...item, // שומר על נתוני הקישור (playlistId וכו')
+                    songId: songData.songId || item.songId, 
+                    title: songData.title || item.songTitle || "שיר ללא שם",
+                    artist: songData.artist || "אמן לא ידוע",
+                    filePath: songPath || "" // עכשיו זה לא יהיה ריק!
+                };
+            });
+
+            console.log("Success! First song path found:", formattedSongs[0].filePath);
+
+            dispatch(setCurrentPlaylist(formattedSongs));
+            dispatch(setCurrentSong(formattedSongs[0]));
         }
     };
-
     return (
         <div className="playlist-container">
             <header className="playlist-main-header">
                 
-                {/* צד ימין: הכפתורים */}
+                {/* צד ימין: כפתור הפעלה והוספה */}
                 <div className="header-actions-right">
-                    {/* כאן הוספתי את ה-onClick */}
                     <button 
                         className="play-button-main" 
                         title="נגן הכל" 
                         onClick={handlePlayPlaylist}
                     >
+                        {/* הכפתור הירוק הגדול שסימנת */}
                         <Play fill="black" size={28} />
                     </button>
                     
@@ -60,7 +71,7 @@ const PlaylistView: React.FC<PlaylistViewProps> = ({ playlistData, fileInputRef,
                     />
                 </div>
 
-                {/* צד שמאל: פרטי הפלייליסט */}
+                {/* צד שמאל: כותרת וסטטיסטיקה */}
                 <div className="playlist-details-left">
                     <Typography className="type-label">פלייליסט</Typography>
                     <h1 className="playlist-name-title">
@@ -74,6 +85,7 @@ const PlaylistView: React.FC<PlaylistViewProps> = ({ playlistData, fileInputRef,
             </header>
 
             <div className="table-wrapper">
+                {/* העברת השירים לטבלה */}
                 <SongTable songs={playlistData?.playlistSongs || []} />
             </div>
         </div>
