@@ -34,7 +34,7 @@ namespace Service.Dto
         [MaxLength(100)]
         public string? Mood { get; set; }
 
-
+        public DateTime UploadedAt { get; set; }
 
     }
 }

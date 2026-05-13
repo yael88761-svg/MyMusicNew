@@ -43,7 +43,7 @@ namespace Repositories.Entities
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
         public virtual AudioFeatures AudioFeatures { get; set; }
-        public virtual ICollection<PlaylistSong> PlaylistSongs { get; set; }
-        public virtual ICollection<PlayHistory> PlayHistories { get; set; }
+        public virtual ICollection<PlaylistSong> PlaylistSongs { get; set; } = new List<PlaylistSong>();
+        public virtual ICollection<PlayHistory> PlayHistories { get; set; } = new List<PlayHistory>();
     }
 }
