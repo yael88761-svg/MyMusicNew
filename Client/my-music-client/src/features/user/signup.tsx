@@ -3,9 +3,10 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useSignupMutation } from './userApi';
 import { loginSuccess } from './userSlice';
-
+import { playlistApi } from '../playlist/playlistApi';
+import { songApi } from '../song/songApi';
 const Signup: React.FC = () => {
-  const [userName, setUserName] = useState(''); // שינוי ל-userName כדי להתאים ל-Controller
+  const [name, setName] = useState(''); // שינוי ל-name כדי להתאים ל-Controller
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   
@@ -17,7 +18,7 @@ const Signup: React.FC = () => {
     e.preventDefault();
     try {
       // 1. ביצוע ההרשמה מול השרת
-      const response = await signup({ userName, email, password }).unwrap();
+      const response = await signup({ name, email, password }).unwrap();
       
       // 2. ניקוי שאריות מה-Cache (ליתר ביטחון אם היה משתמש קודם ללא רענון דף)
       dispatch(playlistApi.util.resetApiState());
@@ -41,7 +42,7 @@ const Signup: React.FC = () => {
         <input 
           placeholder="שם משתמש" 
           required
-          onChange={(e) => setUserName(e.target.value)} 
+          onChange={(e) => setName(e.target.value)} 
         />
         <input 
           type="email" 

@@ -68,5 +68,25 @@ namespace Repositories.Repositories
             await ctx.Save();
             return existing;
         }
+        public async Task<List<Song>> GetSongsByDate(DateTime fromDate)
+        {
+                 return await ctx.Songs
+                .Where(s => s.UploadedAt >= fromDate)
+                .OrderByDescending(s => s.UploadedAt)
+                .ToListAsync();
+        }
+        public async Task<IEnumerable<dynamic>> GetRecentSongsAsync(int userId, DateTime startDate)
+        {
+            // שליפה ישירות מטבלת השירים (Songs)
+            return await ctx.Songs
+                .Where(s => s.UserId == userId && s.UploadedAt >= startDate)
+                .OrderByDescending(s => s.UploadedAt) // שהחדשים ביותר יהיו למעלה
+                .Select(s => new {
+                    SongId = s.SongId,
+                    PlaylistId = 0, // מסמנים כ-0 כי זה לא שייך לפלייליסט ספציפי
+                    Song = s // האובייקט המלא של השיר
+                })
+                .ToListAsync();
+        }
     }
 }

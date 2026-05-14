@@ -1,0 +1,13 @@
+.special-playlist {
+    font-weight: bold;
+    color: #4a90e2; /* צבע מעט שונה */
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.playlist-divider {
+    border: 0;
+    height: 1px;
+    background: #e0e0e0;
+    margin: 10px 0;
+}

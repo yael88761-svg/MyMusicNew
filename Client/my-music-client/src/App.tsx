@@ -6,7 +6,8 @@ import Signup from './features/user/signup';
 import LibraryPage from "./components/Library/LibraryPage";
 import MusicPlayer from "./components/Library/Player/MusicPlayer";
 import './App.css';
-
+import PlaylistList from './components/Library/Sidebar/PlaylistList';
+import RecentPlaylistView from '../src/components/Library/Sidebar/RecentPlaylistView';
 function App() {
   return (
     <Router>
@@ -22,7 +23,11 @@ function App() {
             {/* דף הבית והספרייה */}
             <Route path="/" element={<LibraryPage />} />
             <Route path="/library" element={<LibraryPage />} />
-
+            {/* דף פלייליסט רגיל לפי ID */}
+            <Route path="/playlist/:id" element={<PlaylistList />} />
+            
+            {/* דף ייעודי לפלייליסט החדשים */}
+            <Route path="/playlist/recent" element={<RecentPlaylistView />} />
             {/* דפי משתמש */}
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />

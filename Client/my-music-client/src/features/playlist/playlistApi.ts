@@ -15,6 +15,13 @@ export const playlistApi = createApi({
   tagTypes: ['Playlists'],
   endpoints: (builder) => ({
     
+    // שליפת פלייליסט "נוספו לאחרונה"
+    getRecentPlaylist: builder.query<any, void>({
+      query: () => 'Playlist/recent-playlist',
+      // שימוש בתגית כדי לאפשר רענון אוטומטי כששיר חדש מועלה
+      providesTags: [{ type: 'Playlists', id: 'RECENT' }],
+    }),
+
     // שליפת כל הפלייליסטים של המשתמש
     getPlaylists: builder.query<any[], void>({
       query: () => 'Playlist/my-playlists',
@@ -50,16 +57,15 @@ export const playlistApi = createApi({
         formData.append('file', file);
 
         return {
-          url: `Song/upload-music/${playlistId}`, // הכתובת המעודכנת ב-Backend
+          url: `Song/upload-music/${playlistId}`,
           method: 'POST',
           body: formData,
-          // RTK Query מזהה אוטומטית FormData ומגדיר Content-Type מתאים
         };
       },
-      // גורם לרענון הפלייליסט הספציפי כדי שהשיר החדש יופיע מיד
       invalidatesTags: (result, error, { playlistId }) => [
         { type: 'Playlists', id: playlistId },
-        { type: 'Playlists', id: 'LIST' }
+        { type: 'Playlists', id: 'LIST' },
+        { type: 'Playlists', id: 'RECENT' } // מרענן גם את "נוספו לאחרונה"
       ],
     }),
 
@@ -81,14 +87,16 @@ export const playlistApi = createApi({
       }),
       invalidatesTags: [{ type: 'Playlists', id: 'LIST' }],
     }),
+    
   }),
 });
 
 export const { 
   useGetPlaylistsQuery, 
   useGetPlaylistByIdQuery,
+  useGetRecentPlaylistQuery, // ה-Hook החדש לשימוש בקומפוננטה
   useCreatePlaylistMutation,
-  useUploadSongToPlaylistMutation, // ה-Hook החדש להעלאת שירים
+  useUploadSongToPlaylistMutation,
   useUpdatePlaylistMutation,
   useDeletePlaylistMutation 
 } = playlistApi;

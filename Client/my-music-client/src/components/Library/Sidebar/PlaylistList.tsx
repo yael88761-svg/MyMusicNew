@@ -1,5 +1,4 @@
 import React from 'react';
-import { Music } from 'lucide-react';
 
 interface Playlist {
     playlistId: string;
@@ -13,8 +12,27 @@ interface PlaylistListProps {
 }
 
 const PlaylistList: React.FC<PlaylistListProps> = ({ playlists, selectedPlaylistId, onSelect }) => {
+    
+    // הגדרת הפלייליסט המיוחד כאובייקט קבוע
+    const recentPlaylist: Playlist = {
+        playlistId: 'recent',
+        playlistName: '✨ נוספו לאחרונה'
+    };
+
     return (
         <ul className="playlist-list">
+            {/* הצגת הפלייליסט המיוחד תמיד בראש הרשימה */}
+            <li 
+                key={recentPlaylist.playlistId}
+                onClick={() => onSelect(recentPlaylist)}
+                className={selectedPlaylistId === recentPlaylist.playlistId ? 'active special-playlist' : 'special-playlist'}
+            >
+                <span className="playlist-name-text">{recentPlaylist.playlistName}</span>
+            </li>
+
+            <hr className="playlist-divider" /> {/* קו מפריד אופציונלי */}
+
+            {/* הצגת שאר הפלייליסטים מהשרת */}
             {playlists?.map((pl) => (
                 <li 
                     key={pl.playlistId}

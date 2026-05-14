@@ -86,5 +86,36 @@ namespace MyMusicNew.Controllers
             var addPlaylist = await _service.AddItem(item);
             return Ok(addPlaylist);
         }
+        [Authorize] // חשוב כדי לוודא שיש משתמש מחובר
+        [HttpGet("recent-playlist")]
+        public async Task<IActionResult> GetRecentPlaylist()
+        {
+            // שימוש בפונקציית העזר הקיימת שלך כדי לקבל את מזהה המשתמש מהטוקן
+            int userId = GetUserId();
+
+            // אם המשתמש לא מזוהה, מחזירים שגיאת אבטחה
+            if (userId == 0)
+            {
+                return Unauthorized();
+            }
+
+            try
+            {
+                // קריאה לשירות (Service) כדי לקבל רק את השירים החדשים של המשתמש הספציפי
+                // הפעולה GetRecentSongs צריכה להיות מוגדרת בממשק IPlaylist
+                var userRecentSongs = await _playlistService.GetRecentSongs(userId);
+
+                return Ok(new
+                {
+                    PlaylistName = "נוספו לאחרונה",
+                    PlaylistSongs = userRecentSongs
+                });
+            }
+            catch (Exception ex)
+            {
+                // במקרה של שגיאה בלוגיקה הפנימית
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

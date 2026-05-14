@@ -5,7 +5,8 @@ import { Library, Music } from 'lucide-react';
 
 import PlaylistList from './Sidebar/PlaylistList'; 
 import CreatePlaylistBtn from './Sidebar/CreatePlaylistBtn'; 
-import PlaylistView from './Content/PlaylistView'; 
+import PlaylistView from '../Library/Content/PlaylistView'; 
+import RecentPlaylistView from '../Library/Sidebar/RecentPlaylistView'; // ייבוא הקומפוננטה החדשה
 import './LibraryPage.css';
 
 const LibraryPage = () => {
@@ -14,14 +15,19 @@ const LibraryPage = () => {
     const [selectedPlaylist, setSelectedPlaylist] = useState<any>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
+    // לוגיקת בחירת הנתונים להצגה
+    const isRecentSelected = selectedPlaylist?.playlistId === 'recent';
     const activePlaylistData = playlists?.find((pl: any) => pl.playlistId === selectedPlaylist?.playlistId);
 
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        if (!file || !selectedPlaylist) return;
+        if (!file || !selectedPlaylist || isRecentSelected) return; // מניעת העלאה לפלייליסט וירטואלי
+        
         try {
             await uploadSongToPlaylist({ file, playlistId: selectedPlaylist.playlistId }).unwrap();
-        } catch (err) { alert("שגיאה בהעלאה"); }
+        } catch (err) { 
+            alert("שגיאה בהעלאה"); 
+        }
     };
 
     if (isLoading) return <div className="loading">טוען...</div>;
@@ -45,9 +51,14 @@ const LibraryPage = () => {
             </aside>
 
             <main className="main-content">
-                {activePlaylistData ? (
+                {/* בדיקה האם נבחר פלייליסט "נוספו לאחרונה" */}
+                {isRecentSelected ? (
                     <div className="content-wrapper">
-                        {/* כאן ה-PlaylistView יקבל את העיצוב החדש דרך ה-CSS */}
+                        <RecentPlaylistView />
+                    </div>
+                ) : activePlaylistData ? (
+                    /* הצגת פלייליסט רגיל מהמסד נתונים */
+                    <div className="content-wrapper">
                         <PlaylistView 
                             playlistData={activePlaylistData} 
                             fileInputRef={fileInputRef} 
@@ -56,6 +67,7 @@ const LibraryPage = () => {
                         />
                     </div>
                 ) : (
+                    /* מצב ריק כששום דבר לא נבחר */
                     <div className="empty-state">
                         <div className="big-icon-circle">
                             <Music size={48} color="#b3b3b3" />

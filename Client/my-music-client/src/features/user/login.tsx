@@ -3,7 +3,8 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom'; // ייבוא ה-Hook לניווט
 import { useLoginMutation } from './userApi';
 import { loginSuccess } from './userSlice';
-
+import { playlistApi } from '../playlist/playlistApi';
+import { songApi } from '../song/songApi';
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

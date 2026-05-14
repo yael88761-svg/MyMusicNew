@@ -9,5 +9,7 @@ namespace Service.Interfaces
     public interface IPlaylist<PlaylistDto>
     {
         Task<List<PlaylistDto>> GetAll(int userId);
+        Task<PlaylistDto> GetRecentlyAdded(int userId);
+        Task<IEnumerable<dynamic>> GetRecentSongs(int userId);
     }
 }

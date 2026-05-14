@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Repositories.Entities;
 using Repositories.Interfaces;
 using Service.Dto;
@@ -79,6 +80,38 @@ namespace Service.Services
             var PlaylistEntity = _mapper.Map<Playlist>(item);
             var updatedPlaylist = await _repository.UpdateItem(id, PlaylistEntity);
             return _mapper.Map<PlaylistDto>(PlaylistEntity);
+        }
+        public async Task<PlaylistDto> GetRecentlyAdded(int userId)
+        {
+            var thirtyDaysAgo = DateTime.UtcNow.AddDays(-30);
+
+            // שליפת הישויות של השירים מה-Repository
+            var recentSongs = await _playlistRepository.GetSongsByDate(thirtyDaysAgo);
+
+            var playlistDto = new PlaylistDto
+            {
+                PlaylistName = "נוספו לאחרונה",
+                UserId = userId,
+                // יצירת רשימת הקישורים עבור ה-DTO
+                PlaylistSongs = recentSongs.Select(s => new PlaylistSongDto
+                {
+                    SongId = s.SongId,
+                    // מיפוי ישות השיר ל-SongDto כדי שיוצג ב-React
+                    Song = _mapper.Map<SongDto>(s)
+                }).ToList()
+            };
+
+            return playlistDto;
+        }
+        public async Task<IEnumerable<dynamic>> GetRecentSongs(int userId)
+        {
+            // חישוב התאריך (30 יום אחורה)
+            var thirtyDaysAgo = DateTime.UtcNow.AddDays(-30);
+
+            // קריאה לרפוזיטורי שיבצע את השאילתה בפועל מול מסד הנתונים
+            var recentSongs = await _playlistRepository.GetRecentSongsAsync(userId, thirtyDaysAgo);
+
+            return recentSongs;
         }
     }
 }

@@ -22,18 +22,18 @@ namespace MyMusicNew.Controllers
         {
             try
             {
-                // ה-Service עכשיו מחזיר מחרוזת שהיא הטוקן עצמו
-                var token = await _registerService.Register(userRegisterDto);
+                // הדפסה זמנית ל-Console של השרת כדי לראות מה באמת הגיע מה-Frontend
+                Console.WriteLine($"Registering: Name={userRegisterDto.Name}, Email={userRegisterDto.Email}");
 
-                // נחזיר אובייקט עם שדה בשם token, זה סטנדרטי יותר
+                var token = await _registerService.Register(userRegisterDto);
                 return Ok(new { token });
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                // הוסף את הערכים לשגיאה כדי שתראה אותם בדפדפן
+                return BadRequest($"{ex.Message} (Tried with: {userRegisterDto.Email})");
             }
         }
-
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserLoginDto userLoginDto)
         {

@@ -1,5 +1,7 @@
 /* בתוך LibraryPage.css */
-
+.body{
+  background-color: #000;
+}
 .library-layout {
   display: flex;
   width: 100%;
