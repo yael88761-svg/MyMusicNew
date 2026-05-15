@@ -3,9 +3,10 @@ import { createSlice } from '@reduxjs/toolkit';
 
 interface SongState {
   currentSong: any | null;      
-  currentPlaylist: any[];      // השם הנבחר
+  currentPlaylist: any[];      
   isPlaying: boolean;          
   volume: number;              
+  hasStartedPlaying: boolean; // ✅ הדגל החדש ששולט על הצגת הנגן לראשונה
 }
 
 const initialState: SongState = {
@@ -13,20 +14,21 @@ const initialState: SongState = {
   currentPlaylist: [],         
   isPlaying: false,
   volume: 0.7,
+  hasStartedPlaying: false,   // ✅ ברירת מחדל: לא התחיל לנגן (הנגן מוסתר)
 };
 
 export const songSlice = createSlice({
   name: 'song',
   initialState,
   reducers: {
-    // איחדתי את setPlaylist ו-setCurrentPlaylist לאותו שם כדי למנוע בלבול
     setCurrentPlaylist: (state, action: PayloadAction<any[]>) => {
-      state.currentPlaylist = action.payload; // ✅ עכשיו זה תואם ל-initialState
+      state.currentPlaylist = action.payload;
     },
     
     setCurrentSong: (state, action: PayloadAction<any>) => {
       state.currentSong = action.payload;
       state.isPlaying = true;
+      state.hasStartedPlaying = true; // ✅ ברגע שנבחר שיר, הנגן יורשה להופיע
     },
 
     togglePlay: (state) => {
@@ -37,15 +39,17 @@ export const songSlice = createSlice({
       state.volume = action.payload;
     },
 
+    // פונקציה שתקראי לה גם בזמן Logout
     stopSong: (state) => {
       state.currentSong = null;
       state.currentPlaylist = [];
       state.isPlaying = false;
+      state.hasStartedPlaying = false; // ✅ מאפס את המצב כך שבכניסה הבאה הנגן יהיה מוסתר
     },
   },
 });
 
-// ייצוא השמות המדויקים
+// ייצוא הפעולות
 export const { 
   setCurrentSong, 
   setCurrentPlaylist, 

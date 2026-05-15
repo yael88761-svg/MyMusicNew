@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom'; // ייבוא ה-Hook לניווט
+import { useNavigate } from 'react-router-dom';
 import { useLoginMutation } from './userApi';
 import { loginSuccess } from './userSlice';
-import { playlistApi } from '../playlist/playlistApi';
-import { songApi } from '../song/songApi';
-const Login: React.FC = () => {
+
+interface LoginProps {
+  onLoginSuccess: () => void;
+}
+
+const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [login, { isLoading, error }] = useLoginMutation();
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // אתחול פונקציית הניווט
+  const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,7 +24,10 @@ const Login: React.FC = () => {
       // שמירת פרטי המשתמש והטוקן ב-Redux וב-LocalStorage
       dispatch(loginSuccess({ user: response, token: response.token }));
       
-      // מעבר אוטומטי לדף הפלייליסטים
+      // עדכון ה-App שבוצע לוגין (כדי להציג את הנגן)
+      onLoginSuccess();
+      
+      // מעבר אוטומטי לדף הספרייה
       navigate('/library'); 
     } catch (err) {
       console.error('Failed to login:', err);

@@ -4,13 +4,17 @@ import { Link, useNavigate } from 'react-router-dom';
 import type { RootState } from '../app/store.ts';
 import { logout } from '../features/user/userSlice';
 
-// הוספת הייבוא של ה-APIs כדי לאפשר את ניקוי הזיכרון (Cache)
+// ייבוא ה-APIs לניקוי ה-Cache
 import { playlistApi } from '../features/playlist/playlistApi';
 import { songApi } from '../features/song/songApi';
 
 import './Navbar.css';
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  onLogout: () => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
@@ -18,15 +22,17 @@ const Navbar: React.FC = () => {
   const { currentUser } = useSelector((state: RootState) => state.user);
 
   const handleLogout = () => {
-    // 1. עדכון ה-State של המשתמש (מחיקת טוקן ופרטי משתמש)
+    // 1. עדכון ה-State של המשתמש ב-Redux (מנקה טוקן ופרטים)
     dispatch(logout());
 
-    // 2. ניקוי מוחלט של כל הנתונים השמורים ב-API
-    // זה מה שיגרום לרשימת הפלייליסטים ב-Sidebar להיעלם מיד
+    // 2. ניקוי ה-Cache של הנתונים כדי שלא יישארו פלייליסטים בזיכרון
     dispatch(playlistApi.util.resetApiState());
     dispatch(songApi.util.resetApiState());
 
-    // 3. הפניה לדף הבית או להתחברות
+    // 3. עדכון ה-App שהתנתקנו (יעלים את ה-MusicPlayer ב-App.tsx)
+    onLogout();
+
+    // 4. הפניה לדף הלוגין
     navigate('/login');
   };
 
@@ -44,8 +50,7 @@ const Navbar: React.FC = () => {
       <div className="nav-auth">
         {currentUser ? (
           <div className="user-profile">
-            <span>שלום, <strong>{currentUser.userName}</strong></span>
-            {/* שינוי הקריאה ל-handleLogout המעודכן */}
+            <span>שלום, <strong>{currentUser.name}</strong></span>
             <button onClick={handleLogout} className="logout-btn">התנתק</button>
           </div>
         ) : (
