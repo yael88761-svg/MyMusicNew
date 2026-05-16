@@ -36,15 +36,34 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
     navigate('/login');
   };
 
+  // פונקציה להגנת הקישורים במידה והמשתמש לא מחובר
+  const handleProtectedClick = (e: React.MouseEvent) => {
+    if (!currentUser) {
+      e.preventDefault(); // מונע את הניווט של ה-Link
+      alert("לא התחברת עדיין! יש להתחבר כדי לגשת לחלק זה.");
+    }
+  };
+
   return (
     <nav className="smart-player-nav">
-      <div className="nav-logo">
-        <Link to="/">🎵 SmartPlayer</Link>
-      </div>
+
+        <div  id="nav-logo" >🎵 SmartPlayer</div>
 
       <div className="nav-links">
-        <Link to="/library">ספריה</Link>
-        <Link to="/trending">פופולארי</Link>
+        <Link 
+          to="/Library/Content/AllSongsView.tsx" 
+          onClick={handleProtectedClick}
+          className={!currentUser ? 'disabled-link' : ''}
+        >
+          ספריה
+        </Link>
+        <Link 
+          to="/trending" 
+          onClick={handleProtectedClick}
+          className={!currentUser ? 'disabled-link' : ''}
+        >
+          פופולארי
+        </Link>
       </div>
 
       <div className="nav-auth">

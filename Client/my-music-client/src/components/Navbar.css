@@ -7,9 +7,10 @@
   background-color: #000000;
   border-bottom: 1px solid #282828;
   z-index: 1000;
+  position: relative; /* מבטיח שהנאב-באר יישאר יציב */
 }
 
-.nav-logo a {
+#nav-logo {
   font-size: 1.4rem;
   font-weight: 800;
   color: #1DB954;
@@ -28,7 +29,46 @@
   transition: 0.2s;
 }
 
-.nav-links a:hover { color: white; }
+.nav-links a:hover { 
+  color: white; 
+}
+
+/* --- עיצוב מיוחד עבור קישורים חסומים (משתמש לא מחובר) --- */
+.nav-links a.disabled-link {
+  opacity: 0.4;          /* הופך את הכפתור לעמום וחצי שקוף */
+  cursor: not-allowed;   /* משנה את האייקון של העכבר לסימן חסימה */
+  pointer-events: auto;  /* חשוב! משאיר את ה-click פעיל כדי שה-onClick ב-React יקפיץ את ה-alert */
+}
+
+.nav-links a.disabled-link:hover {
+  color: #b3b3b3;        /* מונע מהטקסט להפוך ללבן בריחוף */
+  text-decoration: none; /* מונע קו תחתון בריחוף */
+}
+
+/* --- אזור כפתורי ההתחברות והפרופיל --- */
+.nav-auth {
+  display: flex;
+  align-items: center;
+}
+
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.login-link {
+  color: #b3b3b3;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.85rem;
+  transition: 0.2s;
+}
+
+.login-link:hover {
+  color: white;
+  transform: scale(1.04); /* אפקט קטן ויפה בריחוף */
+}
 
 .signup-btn {
   background-color: white;
@@ -38,4 +78,40 @@
   text-decoration: none;
   font-weight: bold;
   font-size: 0.85rem;
+  transition: 0.2s;
+}
+
+.signup-btn:hover {
+  transform: scale(1.04);
+  background-color: #f6f6f6;
+}
+
+/* --- פרופיל משתמש מחובר --- */
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: white;
+  font-size: 0.9rem;
+}
+
+.user-profile strong {
+  color: #1DB954; /* צובע את שם המשתמש בירוק של הלוגו */
+}
+
+.logout-btn {
+  background-color: transparent;
+  color: white;
+  border: 1px solid #a7a7a7;
+  padding: 6px 16px;
+  border-radius: 500px;
+  font-weight: bold;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.logout-btn:hover {
+  border-color: white;
+  background-color: rgba(255, 255, 255, 0.1);
 }
