@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useGetPlaylistsQuery } from '../../features/playlist/playlistApi';
-import { useUploadSongMutation } from '../../features/song/songApi'; // ייבוא ה-Hook המדויק למוטציה
+import { useUploadSongMutation } from '../../features/song/songApi'; 
 import { Typography } from '@mui/material';
 import { Library } from 'lucide-react';
 
@@ -8,12 +8,13 @@ import PlaylistList from './Sidebar/PlaylistList';
 import CreatePlaylistBtn from './Sidebar/CreatePlaylistBtn'; 
 import PlaylistView from '../Library/Content/PlaylistView'; 
 import RecentPlaylistView from '../Library/Sidebar/RecentPlaylistView';
-import AllSongsView from '../Library/Content/AllSongsView'; // הייבוא של הקומפוננטה החדשה
+import AllSongsView from '../Library/Content/AllSongsView'; 
 
 import './LibraryPage.css';
 
 const LibraryPage = () => {
-    const { data: playlists, isLoading: playlistsLoading, error: playlistsError } = useGetPlaylistsQuery(); 
+    // ✅ שינוי 1: חילצנו את פונקציית ה-refetch מתוך ה-Hook של הפלייליסטים
+    const { data: playlists, isLoading: playlistsLoading, error: playlistsError, refetch } = useGetPlaylistsQuery(); 
     const [uploadSong] = useUploadSongMutation();
     const [selectedPlaylist, setSelectedPlaylist] = useState<any>({ playlistId: 'all-songs' });
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -30,7 +31,12 @@ const LibraryPage = () => {
         formData.append('file', file);
 
         try {
+            // העלאת השיר לשרת
             await uploadSong({ formData, playlistId: selectedPlaylist.playlistId }).unwrap();
+            
+            // ✅ שינוי 2: פוקדים על השאילתה לרוץ שוב ולמשוך את הרשימה המעודכנת מהשרת!
+            refetch(); 
+            
             alert("השיר הועלה בהצלחה!");
         } catch (err) { 
             alert("שגיאה בהעלאת השיר"); 
@@ -59,7 +65,6 @@ const LibraryPage = () => {
 
             <main className="main-content">
                 {isAllSongsSelected ? (
-                    /* זימון פשוט ונקי של הקומפוננטה החדשה */
                     <AllSongsView playlists={playlists || []} />
                 ) : isRecentSelected ? (
                     <div className="content-wrapper">
@@ -84,5 +89,4 @@ const LibraryPage = () => {
     );
 };
 
-// שורת המחץ שהייתה חסרה וגרמה לקריסה:
 export default LibraryPage;

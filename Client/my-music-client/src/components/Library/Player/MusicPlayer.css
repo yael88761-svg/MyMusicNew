@@ -16,7 +16,6 @@
     box-sizing: border-box;
 }
 
-
 /* אזור 1: מידע על השיר (ימין) */
 .current-song-info {
     display: flex;
@@ -91,6 +90,13 @@
     background: none;
     border: none;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 10;
+    pointer-events: auto;
+    user-select: none;
 }
 
 .secondary-btn:hover {
@@ -174,6 +180,7 @@
 .volume-slider:hover {
     accent-color: #1db954;
 }
+
 /* חיווי ויזואלי לכפתורים פעילים (ערבוב וחזרתיות) */
 .active-icon {
     color: #1db954 !important; /* צבע ירוק של ספוטיפיי */
@@ -182,7 +189,19 @@
 }
 
 .active-icon:hover {
-    color: #1ed760 !important; /* ירוק בהיר יותר במעבר עכבר */
+    color: #81f1a9 !important;
+}
+
+/* ✅ חיווי ויזואלי ייחודי עבור כפתור הפעלה חכמה */
+.active-smart-icon {
+    color: #32f546 !important; /* צבע תכלת-בינה מלאכותית זוהר */
+    cursor: pointer;
+    transition: color 0.2s, filter 0.2s;
+    filter: drop-shadow(0px 0px 4px rgba(0, 210, 255, 0.6));
+}
+
+.active-smart-icon:hover {
+    color: #2bf367 !important;
 }
 
 /* עטיפה לכפתור החזרתיות כדי לשמור על גודל אחיד */
@@ -191,16 +210,4 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-}
-
-/* שיפור קטן לכפתור הקודם/הבא למניעת בחירת טקסט בלחיצות מהירות */
-.secondary-btn {
-    user-select: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    z-index: 10; /* מבטיח שהכפתור מעל הכל */
-    pointer-events: auto; /* מבטיח שהוא קליקבילי */
-
 }
