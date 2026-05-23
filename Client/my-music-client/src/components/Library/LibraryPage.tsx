@@ -13,7 +13,7 @@ import AllSongsView from '../Library/Content/AllSongsView';
 import './LibraryPage.css';
 
 const LibraryPage = () => {
-    // ✅ שינוי 1: חילצנו את פונקציית ה-refetch מתוך ה-Hook של הפלייליסטים
+    // חילצנו את פונקציית ה-refetch מתוך ה-Hook של הפלייליסטים
     const { data: playlists, isLoading: playlistsLoading, error: playlistsError, refetch } = useGetPlaylistsQuery(); 
     const [uploadSong] = useUploadSongMutation();
     const [selectedPlaylist, setSelectedPlaylist] = useState<any>({ playlistId: 'all-songs' });
@@ -34,7 +34,7 @@ const LibraryPage = () => {
             // העלאת השיר לשרת
             await uploadSong({ formData, playlistId: selectedPlaylist.playlistId }).unwrap();
             
-            // ✅ שינוי 2: פוקדים על השאילתה לרוץ שוב ולמשוך את הרשימה המעודכנת מהשרת!
+            // פוקדים על השאילתה לרוץ שוב ולמשוך את הרשימה המעודכנת מהשרת
             refetch(); 
             
             alert("השיר הועלה בהצלחה!");
@@ -50,7 +50,7 @@ const LibraryPage = () => {
         <div className="library-layout">
             <aside className="sidebar">
                 <div className="sidebar-header">
-                    <div className="header-title" onClick={() => setSelectedPlaylist({ playlistId: 'all-songs' })} style={{ cursor: 'pointer' }}>
+                    <div className="header-title" onClick={() => setSelectedPlaylist({ playlistId: 'all-songs' })}>
                         <Library size={24} color="#b3b3b3" />
                         <Typography variant="h6" sx={{ color: '#b3b3b3', fontWeight: 'bold' }}>הספרייה שלך</Typography>
                     </div>

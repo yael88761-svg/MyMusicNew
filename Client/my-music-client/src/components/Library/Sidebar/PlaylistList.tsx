@@ -1,4 +1,5 @@
 import React from 'react';
+import './PlaylistList.css'; // חיבור קובץ ה-CSS המעודכן
 
 interface Playlist {
     playlistId: string;
@@ -25,12 +26,12 @@ const PlaylistList: React.FC<PlaylistListProps> = ({ playlists, selectedPlaylist
             <li 
                 key={recentPlaylist.playlistId}
                 onClick={() => onSelect(recentPlaylist)}
-                className={selectedPlaylistId === recentPlaylist.playlistId ? 'active special-playlist' : 'special-playlist'}
+                className={`special-playlist ${selectedPlaylistId === recentPlaylist.playlistId ? 'active' : ''}`}
             >
                 <span className="playlist-name-text">{recentPlaylist.playlistName}</span>
             </li>
 
-            <hr className="playlist-divider" /> {/* קו מפריד אופציונלי */}
+            <hr className="playlist-divider" />
 
             {/* הצגת שאר הפלייליסטים מהשרת */}
             {playlists?.map((pl) => (

@@ -1,61 +1,67 @@
 .playlist-container {
     display: flex;
     flex-direction: column;
-    padding: 40px;
-    background: linear-gradient(to bottom, #222222 0%, #121212 400px);
-    min-height: 100vh;
+    padding: 10px 24px 0px 24px; /* אפס ריפוד תחתון להצמדה מלאה לנגן */
+    background-color: #000000 !important;
+    height: 100%; /* תופס בדיוק את כל הגובה הפנוי */
+    width: 100%;
     box-sizing: border-box;
-    direction: rtl; /* מבטיח שהימין הוא צד ההתחלה */
+    direction: rtl;
+    overflow: hidden !important; /* מונע מהעמוד כולו לגלול - ה-Header נשאר קבוע למעלה! */
 }
 
+/* ה-Header הקבוע - שורה צרה, אסתטית ולא זזה */
 .playlist-main-header {
     display: flex;
     justify-content: space-between; 
-    align-items: flex-end; 
-    margin-bottom: 40px;
+    align-items: center; 
+    margin-bottom: 10px;
     width: 100%;
+    flex-shrink: 0; /* מונע מההדר להתכווץ או להשתנות בגובה */
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* קו הפרדה עדין ומקצועי */
 }
 
-/* צד ימין: הכפתורים (העיגול האדום שלך) */
-.header-actions-right {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    padding-bottom: 10px;
-}
-
-/* צד שמאל: הטקסט */
+/* צד ימין של השורה: שם הפלייליסט והסטטיסטיקה */
 .playlist-details-left {
-    text-align: left; /* יישור הטקסט לשמאל */
+    text-align: right;
     display: flex;
-    flex-direction: column;
-    gap: 4px;
+    flex-direction: row; 
+    align-items: center;
+    gap: 12px;
 }
 
 .type-label {
     font-size: 0.75rem !important;
     font-weight: 700 !important;
-    color: #b3b3b3 !important;
+    color: #1db954 !important;
     text-transform: uppercase;
 }
 
 .playlist-name-title {
-    font-size: 4.5rem;
-    font-weight: 900;
+    font-size: 1.4rem; 
+    font-weight: 800;
     color: white;
-    margin: 0;
+    margin: 0 !important;
     line-height: 1;
 }
 
 .playlist-stats {
     color: #b3b3b3 !important;
-    text-align: left;
+    font-size: 0.75rem !important;
 }
 
-/* עיצוב כפתורים */
+/* צד שמאל של השורה: כפתורי הפעולה */
+.header-actions-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* כפתור נגן ירוק קטן ומהיר */
 .play-button-main {
-    width: 56px;
-    height: 56px;
+    width: 38px;
+    height: 38px;
     background-color: #1db954;
     border-radius: 50%;
     border: none;
@@ -70,20 +76,47 @@
     transform: scale(1.05);
 }
 
+/* כפתור העלאת שיר קומפקטי במיוחד */
 .upload-button-outline {
     display: flex;
     align-items: center;
-    gap: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid #727272;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid #404040;
     color: white;
-    padding: 10px 20px;
-    border-radius: 50px;
-    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-weight: 600;
     cursor: pointer;
+    font-size: 0.8rem;
+    transition: background 0.2s;
 }
 
+.upload-button-outline:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* מיכל הטבלה - התיקון הנדרש: רק הטבלה גוללת ונמתחת עד לנגן למטה */
 .table-wrapper {
     width: 100%;
-    margin-top: 20px;
+    flex-grow: 1; /* לוקח את כל הגובה שנשאר במסך */
+    overflow-y: auto !important; /* פותח גלילה אנכית אך ורק לשירים בטבלה */
+    margin-top: 0px;
+    padding-bottom: 20px; /* ריפוד קטן שמונע מהשיר האחרון להתחבא תחת הנגן */
+    box-sizing: border-box;
+}
+
+/* עיצוב פס הגלילה הפנימי של השירים */
+.table-wrapper::-webkit-scrollbar {
+    width: 6px;
+}
+.table-wrapper::-webkit-scrollbar-track {
+    background: transparent;
+}
+.table-wrapper::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+}
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
 }

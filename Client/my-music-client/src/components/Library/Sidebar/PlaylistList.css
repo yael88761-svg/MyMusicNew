@@ -1,0 +1,88 @@
+/* מיכל ה-Sidebar הראשי */
+.playlist-sidebar-container {
+  width: 220px; /* הקטנת הרוחב הכללי של אזור הפלייליסטים בהתאם לבקשתך */
+  min-width: 220px;
+  max-width: 240px;
+  background-color: #000000;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* תופס בדיוק את הגובה שהוקצה לו באב */
+  padding: 16px 8px 16px 16px;
+  box-sizing: border-box;
+  
+  /* קו מפריד אנכי (אורך) בצד שמאל של ה-Sidebar */
+  border-left: 1px solid rgba(255, 255, 255, 0.1); 
+}
+
+/* רשימת ה-ul של הפלייליסטים */
+.playlist-list {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0;
+  overflow-y: auto; /* גלילה עצמאית אך ורק לפלייליסטים אם יש הרבה */
+  flex-grow: 1;
+  direction: rtl;
+}
+
+/* פריט פלייליסט ברשימה */
+.playlist-list li {
+  padding: 6px 10px; /* צמצום המרווח האנכי (מ-10px ל-6px) כדי שלא יהיו מרווחים מדי */
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-bottom: 2px; /* מרווח קטן מאוד בין שורה לשורה */
+  display: flex;
+  align-items: center;
+}
+
+/* אפקט ריחוף על פלייליסט */
+.playlist-list li:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* פלייליסט פעיל */
+.playlist-list li.active {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.playlist-list li.active .playlist-name-text {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* טקסט הפלייליסט */
+.playlist-name-text {
+  color: #b3b3b3;
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.special-playlist .playlist-name-text {
+  color: #e2a03f;
+}
+
+.playlist-list li:hover .playlist-name-text {
+  color: #ffffff;
+}
+
+/* קו מפריד אופקי מתחת ל"נוספו לאחרונה" */
+.playlist-divider {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 8px 0;
+}
+
+/* עיצוב פס הגלילה של הפלייליסטים */
+.playlist-list::-webkit-scrollbar {
+  width: 4px;
+}
+.playlist-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.playlist-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}

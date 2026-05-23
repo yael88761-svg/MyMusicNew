@@ -4,8 +4,8 @@
   box-shadow: none !important;
   background-image: none !important;
   
-  /* גובה מקסימלי קבוע כדי לאפשר גלילה פנימית בלבד */
-  max-height: calc(100vh - 160px); 
+  /* שינוי ל-height מלא בתוך אזור התוכן שלו */
+  height: calc(100% - 60px); 
   overflow-y: auto !important;
   overflow-x: hidden !important;
   direction: rtl; 
