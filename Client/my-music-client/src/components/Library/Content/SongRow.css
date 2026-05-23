@@ -1,0 +1,79 @@
+/* עיצוב השורה הכללי */
+.my-song-row {
+  cursor: pointer;
+  transition: background-color 0.2s ease !important;
+}
+
+/* הסרת קווים מפרידים בין התאים */
+.my-song-row td {
+  border: none !important;
+}
+
+/* אפקט ריחוף מותאם אישית - שינוי הרקע לאפור עדין */
+.my-song-row:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* פתרון מוחלט למסך השחור: מבטיח שכל הטקסטים יישארו בצבעם המקורי או ילבינו בריחוף */
+.my-song-row:hover .num {
+  color: #ffffff !important;
+}
+
+.my-song-row:hover .song-title-text {
+  color: #ffffff !important;
+}
+
+.my-song-row:hover .song-artist-text {
+  color: #ffffff !important;
+}
+
+/* טיפול בהצגת אייקון הנגינה (Play) במקום המספר בזמן ריחוף */
+.index-cell-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.row-play-icon {
+  display: none;
+}
+
+/* בזמן ריחוף על השורה: תעלים את המספר ותציג את האייקון */
+.my-song-row:hover .num {
+  display: none !important;
+}
+
+.my-song-row:hover .row-play-icon {
+  display: block !important;
+}
+
+/* עיצוב הטקסטים עצמם */
+.num {
+  font-size: 0.9rem;
+  color: #b3b3b3;
+}
+
+.song-title-text {
+  color: #ffffff !important;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.song-artist-text {
+  color: #b3b3b3 !important;
+  font-size: 0.85rem;
+}
+
+/* מיכל תמונת השיר */
+.song-img-placeholder {
+  width: 40px;
+  height: 40px;
+  background-color: #282828;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}

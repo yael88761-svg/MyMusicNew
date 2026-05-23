@@ -1,6 +1,7 @@
 import React from 'react';
 import { TableRow, TableCell, Box, Typography } from '@mui/material';
 import { Music, Play } from 'lucide-react';
+import './SongRow.css'; // ייבוא קובץ ה-CSS המופרד
 
 interface SongRowProps {
     song: any;
@@ -14,47 +15,40 @@ const SongRow: React.FC<SongRowProps> = ({ song, index, onPlay }) => {
 
     return (
         <TableRow 
-            hover
             onClick={() => onPlay(song)}
-            className="song-row"
-            sx={{ 
-                cursor: 'pointer',
-                '&:hover .num': { display: 'none' },
-                '&:hover .row-play-icon': { display: 'block' },
-                '& td': { border: 'none' } // הסרת קווים מפרידים לפי העיצוב שלך
-            }}
+            className="my-song-row"
         >
+            {/* עמודת מספר/אייקון נגן */}
             <TableCell className="index-cell" sx={{ width: '50px' }}>
-                {/* וידוא שהאינדקס הוא מספר תקין למניעת NaN */}
-                <span className="num">{typeof index === 'number' ? index + 1 : ''}</span>
-                <Play size={14} className="row-play-icon" style={{ display: 'none' }} fill="white" />
+                <Box className="index-cell-container">
+                    <span className="num">
+                        {typeof index === 'number' ? index + 1 : ''}
+                    </span>
+                    <Play 
+                        size={14} 
+                        className="row-play-icon" 
+                        fill="white" 
+                        color="white" 
+                    />
+                </Box>
             </TableCell>
 
+            {/* עמודת תמונה וכותרת השיר */}
             <TableCell>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                    <Box 
-                        className="song-img-placeholder" 
-                        sx={{ 
-                            width: 40, 
-                            height: 40, 
-                            bgcolor: '#282828', 
-                            display: 'flex', 
-                            alignItems: 'center', 
-                            justifyContent: 'center',
-                            borderRadius: '4px'
-                        }}
-                    >
+                    <Box className="song-img-placeholder">
                         <Music size={16} color="#b3b3b3" />
                     </Box>
                     <Box>
-                        <Typography sx={{ color: 'white', fontSize: '0.9rem', fontWeight: 500 }}>
+                        <Typography className="song-title-text">
                             {song.title || "ללא כותרת"}
                         </Typography>
                     </Box>
                 </Box>
             </TableCell>
 
-            <TableCell sx={{ color: '#b3b3b3' }}>
+            {/* עמודת שם האמן */}
+            <TableCell className="song-artist-text">
                 {song.artist || "אמן לא ידוע"}
             </TableCell>
         </TableRow>

@@ -1,18 +1,43 @@
-.song-row {
-  display: grid;
-  grid-template-columns: 50px 2fr 1fr auto;
-  align-items: center;
-  padding: 8px 16px;
+/* מיכל הטבלה הראשי - אחראי על הגלילה הפנימית */
+.song-table-container {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  background-image: none !important;
+  
+  /* גובה מקסימלי קבוע כדי לאפשר גלילה פנימית בלבד */
+  max-height: calc(100vh - 160px); 
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  direction: rtl; 
+}
+
+/* יישור הטקסט של הכותרות לימין */
+.song-table-header th {
+  text-align: right !important;
+}
+
+/* --- תיקון בעיית הצבעים בריחוף (Hover) --- */
+/* ברגע שיש hover על שורה, כל הקישורים והטקסטים בתוכה יישארו לבנים */
+.song-table-container .MuiTableRow-root:hover td,
+.song-table-container .MuiTableRow-root:hover span,
+.song-table-container .MuiTableRow-root:hover p {
+  color: #ffffff !important; 
+}
+
+/* עיצוב מותאם אישית לפס הגלילה (Scrollbar) */
+.song-table-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.song-table-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.song-table-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 4px;
-  transition: background-color 0.2s;
-  cursor: pointer;
 }
 
-.song-row:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.song-row span {
-  font-size: 0.9rem;
-  color: white;
+.song-table-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
 }
