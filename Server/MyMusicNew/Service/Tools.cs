@@ -1,23 +1,29 @@
 ﻿using DataContext;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Repositories.Entities;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration; // שמירה על ה-using הזה עבור IConfiguration
 
 namespace Service
 {
     public class Tools
     {
         private readonly MusicContext _context;
+        private readonly IConfiguration _configuration; // שדה חדש לשמירת ההגדרות
 
-        public Tools(MusicContext context)
+        // עדכון הבנאי שיקבל גם את ה-IConfiguration מהמערכת
+        public Tools(MusicContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         public async Task<List<Song>> GetTopTracksAsync(int userId, int limit = 10)
@@ -41,110 +47,17 @@ namespace Service
                 .ToListAsync();
         }
 
-        //public async Task<AudioFeatures> GetAudioFeaturesFromAI(string title, string artist, int songId)
-        //{
-        //    try
-        //    {
-        //        // יצירת Client חדש לכל קריאה כדי למנוע Cache של נתונים ישנים
-        //        var client = new RestClient("https://generativelanguage.googleapis.com");
-        //        var request = new RestRequest("/v1beta/models/gemini-1.5-flash:generateContent", Method.Post);
-        //        request.AddQueryParameter("key", "AIzaSyAIeNsrjIlU6vndPY8XYZetIhdrX8NEGCc");
-
-        //        // פרומפט הרבה יותר נוקשה שמכריח הפרדה
-        //        var prompt = $@"
-        //    STRICT INSTRUCTION: Analyze only the string: '{title}'. 
-        //    Task: Separate it into two distinct parts: 'cleaned_artist' and 'cleaned_title'.
-        //    Rules:
-        //    1. Remove any underscores (__), file extensions (.mp3), or junk characters.
-        //    2. If the string contains a dash '-' or ':', split it. 
-        //    3. Return the result ONLY as a JSON object.
-
-        //    Format Example:
-        //    {{
-        //        ""cleaned_title"": ""שם השיר בלבד"",
-        //        ""cleaned_artist"": ""שם האמן בלבד"",
-        //        ""key"": ""C Major"",
-        //        ""tempo"": 128,
-        //        ""energy"": 0.7,
-        //        ""valence"": 0.5,
-        //        ""danceability"": 0.6
-        //    }}";
-
-        //        request.AddJsonBody(new
-        //        {
-        //            contents = new[] { new { parts = new[] { new { text = prompt } } } },
-        //            generationConfig = new
-        //            {
-        //                temperature = 0.0, // שינוי ל-0.0 - הכי פחות יצירתי שיש
-        //                topP = 1,
-        //                responseMimeType = "application/json"
-        //            }
-        //        });
-
-        //        var response = await client.ExecuteAsync(request);
-
-        //        if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
-        //        {
-        //            using var doc = JsonDocument.Parse(response.Content);
-        //            var aiRawText = doc.RootElement.GetProperty("candidates")[0]
-        //                                           .GetProperty("content")
-        //                                           .GetProperty("parts")[0]
-        //                                           .GetProperty("text").GetString();
-
-        //            var cleanJson = aiRawText?.Replace("```json", "").Replace("```", "").Trim();
-        //            var data = JsonSerializer.Deserialize<AudioFeaturesJsonDto>(cleanJson, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
-        //            var song = await _context.Songs.FindAsync(songId);
-        //            if (song != null && data != null)
-        //            {
-        //                // כאן אנחנו מוודאים שאנחנו לא דורסים עם נתונים ריקים
-        //                if (!string.IsNullOrEmpty(data.cleaned_title)) song.Title = data.cleaned_title;
-        //                if (!string.IsNullOrEmpty(data.cleaned_artist)) song.Artist = data.cleaned_artist;
-
-        //                await _context.SaveChangesAsync();
-        //            }
-
-        //            return new AudioFeatures
-        //            {
-        //                SongId = songId,
-        //                Tempo = data?.tempo ?? 120,
-        //                Energy = data?.energy ?? 0.5f,
-        //                Valence = data?.valence ?? 0.5f,
-        //                Danceability = data?.danceability ?? 0.5f,
-        //                Key = data?.key ?? "Unknown"
-        //            };
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine("AI Error: " + ex.Message);
-        //    }
-
-        //    return new AudioFeatures { SongId = songId, Tempo = 120, Energy = 0.5f, Valence = 0.5f, Danceability = 0.5f, Key = "Unknown" };
-        //}
-        //public SongInfo ExtractMetadata(string filePath)
-        //{
-        //    try
-        //    {
-        //        var file = TagLib.File.Create(filePath);
-        //        return new SongInfo
-        //        {
-        //            Title = file.Tag.Title ?? "Unknown Title",
-        //            Artist = file.Tag.FirstPerformer ?? "Unknown Artist",
-        //            Duration = file.Properties.Duration
-        //        };
-        //    }
-        //    catch { return new SongInfo { Title = "Unknown Title", Artist = "Unknown Artist", Duration = TimeSpan.Zero }; }
-        //}
         public async Task<AudioFeatures> GetAudioFeaturesFromAI(string title, string artist, int songId)
         {
             try
             {
                 var client = new RestClient("https://generativelanguage.googleapis.com");
-                // שינוי לגרסה v1 ולמודל gemini-2.5-flash החדש והמהיר
                 var request = new RestRequest("/v1/models/gemini-2.5-flash:generateContent", Method.Post);
-                string myApiKey = "AIzaSyCKfufcoyl_raKnbIsWdk7I68QJy_BnAsE";
-                request.AddQueryParameter("key", myApiKey);
+
+                // שימוש ב-_configuration המוזרק במקום builder.Configuration
+                string ApiKey = _configuration["GeminiSettings:ApiKey"];
+                Console.WriteLine($"[Test] My API Key length is: {ApiKey?.Length ?? 0}");
+                request.AddQueryParameter("key", ApiKey);
 
                 var prompt = $@"
     STRICT INSTRUCTION: Analyze the song title: '{title}' and artist: '{artist}'. 
@@ -191,7 +104,7 @@ namespace Service
 
                     var cleanJson = aiRawText?.Replace("```json", "").Replace("```", "").Trim();
 
-                    // 🧠 שימוש ב-JsonNode לפענוח חסין של השדות ללא תלות ב-Case Sensitivity של ה-DTO
+                    // שימוש ב-JsonNode לפענוח חסין של השדות ללא תלות ב-Case Sensitivity של ה-DTO
                     var jsonNode = System.Text.Json.Nodes.JsonNode.Parse(cleanJson);
                     if (jsonNode != null)
                     {
@@ -232,6 +145,7 @@ namespace Service
             // ברירת מחדל בטוחה למניעת קריסה
             return new AudioFeatures { SongId = songId, Tempo = 120, Energy = 0.5f, Valence = 0.5f, Danceability = 0.5f, Key = "Unknown" };
         }
+
         public SongInfo ExtractMetadata(string filePath)
         {
             try
@@ -246,6 +160,7 @@ namespace Service
             }
             catch { return new SongInfo { Title = Path.GetFileNameWithoutExtension(filePath), Artist = "Unknown Artist", Duration = TimeSpan.Zero }; }
         }
+
         public async Task<Song?> GetSimilarSongAsync(int currentSongId, int userId)
         {
             var currentFeatures = await _context.AudioFeatures.FirstOrDefaultAsync(f => f.SongId == currentSongId);
@@ -253,12 +168,13 @@ namespace Service
 
             return await _context.AudioFeatures
                 .Include(f => f.Song)
-                .Where(f => f.SongId != currentSongId && f.Song.UserId == userId) // ✅ סינון: רק שירים ששייכים למשתמש הזה
+                .Where(f => f.SongId != currentSongId && f.Song.UserId == userId) // סינון: רק שירים ששייכים למשתמש הזה
                 .OrderBy(f => Math.Abs((double)f.Energy - (double)(currentFeatures.Energy ?? 0.5f)) +
-                                 Math.Abs((double)f.Valence - (double)(currentFeatures.Valence ?? 0.5f)))
+                             Math.Abs((double)f.Valence - (double)(currentFeatures.Valence ?? 0.5f)))
                 .Select(f => f.Song)
                 .FirstOrDefaultAsync();
         }
+
         public async Task LogPlayHistoryAsync(int userId, int songId)
         {
             var history = new PlayHistory { UserId = userId, SongId = songId, PlayedAt = DateTime.Now };
