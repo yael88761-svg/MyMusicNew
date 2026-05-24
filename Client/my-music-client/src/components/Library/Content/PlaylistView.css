@@ -10,7 +10,7 @@
     overflow: hidden !important; /* מונע מהעמוד כולו לגלול - ה-Header נשאר קבוע למעלה! */
 }
 
-/* ה-Header הקבוע - שורה צרה, אסתטית ולא זזה */
+/* ה-Header הקבוע - חלוקה ל-3 עמודות שוות כדי למרכז את התיבה בצורה אבסולוטית */
 .playlist-main-header {
     display: flex;
     justify-content: space-between; 
@@ -29,6 +29,7 @@
     flex-direction: row; 
     align-items: center;
     gap: 12px;
+    flex: 1; /* לוקח שטח שווה מימין כדי לאזן את המרכז */
 }
 
 .type-label {
@@ -51,11 +52,73 @@
     font-size: 0.75rem !important;
 }
 
+/* --- רכיבי החיפוש החדשים במרכז השורה --- */
+.header-search-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    flex: 1; /* תופס מרחב שווה במרכז */
+}
+
+.header-search-input {
+    background-color: #121212;
+    color: #ffffff;
+    border: 1px solid #282828;
+    border-radius: 20px;
+    padding: 6px 34px 6px 14px;
+    font-size: 0.8rem;
+    width: 200px;
+    direction: rtl;
+    outline: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.header-search-input:focus {
+    border-color: #1db954;
+    background-color: #1a1a1a;
+    width: 240px; /* התרחבות קלילה ואלגנטית בפוקוס */
+}
+
+.header-search-input::placeholder {
+    color: #727272;
+}
+
+.input-search-icon {
+    position: absolute;
+    right: calc(50% + 82px); /* ממקם את הזכוכית מגדלת צמוד לימין בתוך התיבה */
+    color: #727272;
+    pointer-events: none;
+    transition: right 0.2s ease-in-out;
+}
+
+.header-search-input:focus ~ .input-search-icon {
+    right: calc(50% + 102px); /* מזיז את האייקון יחד עם התרחבות התיבה */
+}
+
+.input-clear-icon {
+    position: absolute;
+    left: calc(50% - 82px);
+    color: #727272;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.header-search-input:focus ~ .input-clear-icon {
+    left: calc(50% - 102px);
+}
+
+.input-clear-icon:hover {
+    color: #ffffff;
+}
+
 /* צד שמאל של השורה: כפתורי הפעולה */
 .header-actions-right {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: 12px;
+    flex: 1; /* לוקח שטח שווה משמאל כדי לאזן את המרכז */
 }
 
 /* כפתור נגן ירוק קטן ומהיר */
@@ -96,7 +159,7 @@
     background: rgba(255, 255, 255, 0.15);
 }
 
-/* מיכל הטבלה - התיקון הנדרש: רק הטבלה גוללת ונמתחת עד לנגן למטה */
+/* מיכל הטבלה */
 .table-wrapper {
     width: 100%;
     flex-grow: 1; /* לוקח את כל הגובה שנשאר במסך */
@@ -119,4 +182,10 @@
 }
 .table-wrapper::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.3);
+}
+
+.no-search-results {
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
