@@ -3,11 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Service.Dto;
 using Service.Interfaces;
 using System.Security.Claims;
+
 namespace MyMusicNew.Controllers
 {
-    
-
-
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
@@ -16,20 +14,12 @@ namespace MyMusicNew.Controllers
         private readonly IService<PlaylistDto> _service = service;
         private readonly IPlaylist<PlaylistDto> _playlistService = playlistService;
 
-        // פונקציית עזר פרטית כדי לא לשכפל קוד של חילוץ ID
         private int GetUserId()
         {
-            // נסיון ראשון: לפי הטיפוס הסטנדרטי
-            var claim = User.FindFirst(ClaimTypes.NameIdentifier);
-
-            // נסיון שני: אם ה-ID נשמר תחת המפתח "userId" בטוקן
-            if (claim == null)
-            {
-                claim = User.FindFirst("userId");
-            }
-
+            var claim = User.FindFirst(ClaimTypes.NameIdentifier) ?? User.FindFirst("userId");
             return claim == null ? 0 : int.Parse(claim.Value);
         }
+
         [HttpGet("my-playlists")]
         public async Task<IActionResult> GetMyPlaylists()
         {
@@ -44,10 +34,8 @@ namespace MyMusicNew.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var playlist = await _service.GetById(id);
-
             if (playlist == null) return NotFound();
 
-            // בדיקה קריטית: האם הפלייליסט שייך למשתמש המחובר?
             if (playlist.UserId != GetUserId())
                 return Forbid("You don't have permission to view this playlist.");
 
@@ -59,12 +47,18 @@ namespace MyMusicNew.Controllers
         {
             try
             {
-                // קודם בודקים אם הוא קיים ושייך למשתמש
                 var playlist = await _service.GetById(id);
                 if (playlist == null) return NotFound();
 
                 if (playlist.UserId != GetUserId())
                     return Forbid("You cannot delete a playlist that isn't yours.");
+
+                // הגנה בשרת: בדיקה שהפלייליסט אכן ריק לפני מחיקה
+                // הערה: יש לוודא שב-PlaylistDto קיים מערך Songs או שדה דומה המייצג את השירים
+                if (playlist.PlaylistSongs != null && playlist.PlaylistSongs.Count > 0)
+                {
+                    return BadRequest("Cannot delete a playlist that contains songs.");
+                }
 
                 await _service.DeleteItem(id);
                 return NoContent();
@@ -81,30 +75,21 @@ namespace MyMusicNew.Controllers
             int userId = GetUserId();
             if (userId == 0) return Unauthorized();
 
-            item.UserId = userId; // דריסת ה-ID לביטחון
+            item.UserId = userId;
 
             var addPlaylist = await _service.AddItem(item);
             return Ok(addPlaylist);
         }
-        [Authorize] // חשוב כדי לוודא שיש משתמש מחובר
+
         [HttpGet("recent-playlist")]
         public async Task<IActionResult> GetRecentPlaylist()
         {
-            // שימוש בפונקציית העזר הקיימת שלך כדי לקבל את מזהה המשתמש מהטוקן
             int userId = GetUserId();
-
-            // אם המשתמש לא מזוהה, מחזירים שגיאת אבטחה
-            if (userId == 0)
-            {
-                return Unauthorized();
-            }
+            if (userId == 0) return Unauthorized();
 
             try
             {
-                // קריאה לשירות (Service) כדי לקבל רק את השירים החדשים של המשתמש הספציפי
-                // הפעולה GetRecentSongs צריכה להיות מוגדרת בממשק IPlaylist
                 var userRecentSongs = await _playlistService.GetRecentSongs(userId);
-
                 return Ok(new
                 {
                     PlaylistName = "נוספו לאחרונה",
@@ -113,7 +98,6 @@ namespace MyMusicNew.Controllers
             }
             catch (Exception ex)
             {
-                // במקרה של שגיאה בלוגיקה הפנימית
                 return BadRequest(ex.Message);
             }
         }
