@@ -1,9 +1,10 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { Table, TableBody, TableContainer } from '@mui/material'; // ייבוא רכיבי טבלה
+import { Table, TableBody, TableContainer } from '@mui/material'; 
 import { useGetRecentPlaylistQuery } from '../../../features/playlist/playlistApi';
 import { setCurrentSong, setCurrentPlaylist } from '../../../features/song/songSlice';
 import SongRow from '../Content/SongRow';
+import './RecentPlaylistView.css'; // ייבוא ה-CSS המעודכן שכולל את חוקי הגלילה
 
 const RecentPlaylistView: React.FC = () => {
     const dispatch = useDispatch();
@@ -27,15 +28,15 @@ const RecentPlaylistView: React.FC = () => {
                 <h1>{data?.playlistName || "נוספו לאחרונה"}</h1>
             </header>
             
-            {/* שינוי המעטפת לטבלה תקנית */}
-            <TableContainer>
+            {/* הוספת המחלקה המאפשרת גלילה עצמאית לטבלה בלבד */}
+            <TableContainer className="recent-table-container">
                 <Table sx={{ minWidth: 650, borderCollapse: 'collapse' }}>
                     <TableBody>
                         {data?.playlistSongs?.map((item: any, index: number) => (
                             <SongRow 
                                 key={item.songId || index} 
                                 song={item.song} 
-                                index={index} // הוספת האינדקס כדי למנוע NaN
+                                index={index} 
                                 onPlay={handleSongClick} 
                             />
                         ))}

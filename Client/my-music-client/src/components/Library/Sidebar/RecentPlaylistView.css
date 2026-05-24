@@ -1,13 +1,48 @@
-.special-playlist {
-    font-weight: bold;
-    color: #4a90e2; /* צבע מעט שונה */
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
+/* מיכל התצוגה הראשי של הפלייליסט */
+.playlist-detail-view {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* תופס את מלוא הגובה של רכיב האב */
+    max-height: 100vh; /* מונע מהקומפוננטה לחרוג מגובה המסך */
+    overflow: hidden; /* מונע גלילה כללית של כל המיכל */
+    box-sizing: border-box;
+    padding: 20px;
+    background-color: #000000; /* או צבע הרקע הכהה של האפליקציה שלך */
 }
 
-.playlist-divider {
-    border: 0;
-    height: 1px;
-    background: #e0e0e0;
-    margin: 10px 0;
+/* כותרת הפלייליסט נשארת קבועה למעלה */
+.playlist-header {
+    flex-shrink: 0; /* מונע מהכותרת להתכווץ */
+    margin-bottom: 20px;
+}
+
+.playlist-header h1 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 2rem;
+}
+
+/* מיכל הטבלה - האזור שאחראי על הגלילה הפנימית */
+.recent-table-container {
+    flex-grow: 1; /* לוקח את כל הגובה שנותר במיכל */
+    overflow-y: auto; /* מאפשר גלילה אנכית רק עבור הטבלה */
+    overflow-x: hidden; /* מונע גלילה אופקית מיותרת */
+}
+
+/* עיצוב פס הגלילה הפנימי של הטבלה להתאמה לעיצוב הכהה */
+.recent-table-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.recent-table-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.recent-table-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+}
+
+.recent-table-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
 }

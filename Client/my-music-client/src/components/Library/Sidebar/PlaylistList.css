@@ -1,12 +1,12 @@
 /* מיכל ה-Sidebar הראשי */
 .playlist-sidebar-container {
-  width: 220px; /* הקטנת הרוחב הכללי של אזור הפלייליסטים בהתאם לבקשתך */
+  width: 220px; 
   min-width: 220px;
   max-width: 240px;
   background-color: #000000;
   display: flex;
   flex-direction: column;
-  height: 100%; /* תופס בדיוק את הגובה שהוקצה לו באב */
+  height: 100%; 
   padding: 16px 8px 16px 16px;
   box-sizing: border-box;
   
@@ -19,20 +19,22 @@
   list-style: none !important;
   padding: 0 !important;
   margin: 0;
-  overflow-y: auto; /* גלילה עצמאית אך ורק לפלייליסטים אם יש הרבה */
+  overflow-y: auto; 
   flex-grow: 1;
   direction: rtl;
 }
 
 /* פריט פלייליסט ברשימה */
-.playlist-list li {
-  padding: 6px 10px; /* צמצום המרווח האנכי (מ-10px ל-6px) כדי שלא יהיו מרווחים מדי */
+.playlist-list li.playlist-item-row,
+.playlist-list li.special-playlist {
+  padding: 6px 10px; 
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  margin-bottom: 2px; /* מרווח קטן מאוד בין שורה לשורה */
+  margin-bottom: 2px; 
   display: flex;
   align-items: center;
+  justify-content: space-between; /* דוחף את כפתור הפח לקצה השמאלי */
 }
 
 /* אפקט ריחוף על פלייליסט */
@@ -58,6 +60,8 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  flex-grow: 1;
+  text-align: right;
 }
 
 .special-playlist .playlist-name-text {
@@ -66,6 +70,32 @@
 
 .playlist-list li:hover .playlist-name-text {
   color: #ffffff;
+}
+
+/* עיצוב כפתור המחיקה (אייקון פח) */
+.delete-playlist-btn {
+  display: none; /* הסתרה כברירת מחדל */
+  background: none;
+  border: none;
+  color: #b3b3b3;
+  cursor: pointer;
+  padding: 2px;
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+/* הצגת כפתור המחיקה רק בעת מעבר עכבר (Hover) על פריט הרשימה */
+.playlist-list li.playlist-item-row:hover .delete-playlist-btn {
+  display: flex;
+}
+
+/* אפקט מעבר עכבר ישירות על כפתור הפח */
+.delete-playlist-btn:hover {
+  color: #ff4d4d; /* הפיכת הפח לאדום בריחוף */
+  transform: scale(1.1);
 }
 
 /* קו מפריד אופקי מתחת ל"נוספו לאחרונה" */
