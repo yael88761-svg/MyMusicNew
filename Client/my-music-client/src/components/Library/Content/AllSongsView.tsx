@@ -5,9 +5,10 @@ import SongTable from './SongTable';
 
 interface AllSongsViewProps {
   playlists: any[];
+  onDeleteSong: (id: string) => void;
 }
 
-const AllSongsView: React.FC<AllSongsViewProps> = ({ playlists }) => {
+const AllSongsView: React.FC<AllSongsViewProps> = ({ playlists, onDeleteSong }) => {
   
   const getAllSongsFromPlaylists = () => {
     if (!playlists || !Array.isArray(playlists)) return [];
@@ -16,14 +17,27 @@ const AllSongsView: React.FC<AllSongsViewProps> = ({ playlists }) => {
     playlists.forEach((playlist: any) => {
       if (playlist.playlistSongs && Array.isArray(playlist.playlistSongs)) {
         playlist.playlistSongs.forEach((item: any) => {
-          const songId = item.songId;
-          if (songId) {
-            songsMap.set(songId, {
-              id: songId,
-              songId: songId,
-              title: item.songTitle || "ללא שם",
-              artist: item.artist || "אמן לא ידוע",
-              ...item
+          
+          // חילוץ ה-ID של השיר (לפי מה שראינו ב-Console)
+          const sId = item.songId || item.song?.songId;
+          
+          if (sId) {
+            // אנחנו שומרים ב-Map לפי ה-songId כדי שלא יהיו כפילויות של אותו שיר במסך "כל השירים"
+            songsMap.set(sId, {
+              // ה-SongTable/SongRow מצפה לקבל את ה-ID ברמה הראשית בשם id או songId
+              id: sId,
+              songId: sId,
+              // מעבירים את אובייקט ה-song המלא כפי שהוא מגיע מהשרת
+              song: item.song ? {
+                ...item.song,
+                id: item.song.id || item.song.songId,
+                songId: item.song.songId
+              } : {
+                id: sId,
+                songId: sId,
+                title: item.songTitle || "ללא שם",
+                artist: "אמן לא ידוע"
+              }
             });
           }
         });
@@ -41,7 +55,7 @@ const AllSongsView: React.FC<AllSongsViewProps> = ({ playlists }) => {
       </div>
       
       {allSongs && allSongs.length > 0 ? (
-        <SongTable songs={allSongs} />
+        <SongTable songs={allSongs} onDeleteSong={onDeleteSong} />
       ) : (
         <div className="empty-state">
           <div className="big-icon-circle">

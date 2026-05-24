@@ -7,9 +7,10 @@ import './SongTable.css';
 
 interface SongTableProps {
     songs: any[];
+    onDeleteSong: (id: string) => void;
 }
 
-const SongTable: React.FC<SongTableProps> = ({ songs }) => {
+const SongTable: React.FC<SongTableProps> = ({ songs, onDeleteSong }) => {
     const dispatch = useDispatch();
 
     const handlePlaySong = (selectedSong: any) => {
@@ -18,10 +19,17 @@ const SongTable: React.FC<SongTableProps> = ({ songs }) => {
         dispatch(setCurrentPlaylist(songsToPlay));
     };
 
+    // 🌟 פונקציית הגנה חדשה: מקפיצה התראה לפני ביצוע המחיקה
+    const handleDeleteWithConfirmation = (id: string) => {
+        const isConfirmed = window.confirm("האם אתה בטוח שברצונך למחוק את השיר ואת כל המאפיינים שלו לחלוטין מהמערכת?");
+        if (isConfirmed) {
+            onDeleteSong(id); // מפעיל את המחיקה רק אם המשתמש לחץ אישור
+        }
+    };
+
     return (
         <TableContainer component={Paper} className="song-table-container">
             <Table size="small" stickyHeader>
-                {/* ה-sx כאן פותר את בעיית השקיפות באופן מוחלט על ידי הזרקה ישירה לתתי-האלמנטים */}
                 <TableHead 
                     sx={{
                         '& .MuiTableCell-stickyHeader': {
@@ -36,16 +44,19 @@ const SongTable: React.FC<SongTableProps> = ({ songs }) => {
                         <TableCell width="50">#</TableCell>
                         <TableCell>כותרת</TableCell>
                         <TableCell align="left">אמן</TableCell>
+                        <TableCell width="50" align="center"></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {songs.map((ps: any, index: number) => (
                         ps.song && (
                             <SongRow 
-                                key={ps.song.songId} 
+                                key={ps.song.songId || ps.song.id} 
                                 song={ps.song} 
                                 index={index} 
                                 onPlay={handlePlaySong} 
+                                // 🌟 משנים כאן: מעבירים את הפונקציה החדשה עם האזהרה במקום את המקורית
+                                onDelete={handleDeleteWithConfirmation} 
                             />
                         )
                     ))}

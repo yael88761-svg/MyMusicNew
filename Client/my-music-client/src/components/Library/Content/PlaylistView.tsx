@@ -11,28 +11,30 @@ interface PlaylistViewProps {
     fileInputRef: React.RefObject<HTMLInputElement>;
     onUploadClick: () => void;
     onFileUpload: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onDeleteSong: (id: string) => void; // קבלה ישירה מהאב
 }
 
-const PlaylistView: React.FC<PlaylistViewProps> = ({ playlistData, fileInputRef, onUploadClick, onFileUpload }) => {
+const PlaylistView: React.FC<PlaylistViewProps> = ({ playlistData, fileInputRef, onUploadClick, onFileUpload, onDeleteSong }) => {
     const dispatch = useDispatch();
 
-    const handlePlayPlaylist = () => {
+    const getFormattedSongs = () => {
         const rawSongs = playlistData?.playlistSongs || [];
-        
-        if (rawSongs.length > 0) {
-            const formattedSongs = rawSongs.map((item: any) => {
-                const songData = item.song || {}; 
-                const songPath = songData.filePath || songData.path || songData.url;
+        return rawSongs.map((item: any) => {
+            const songData = item.song || {}; 
+            const songPath = songData.filePath || songData.path || songData.url;
+            return {
+                ...item,
+                songId: songData.songId || item.songId, 
+                title: songData.title || item.songTitle || "שיר ללא שם",
+                artist: songData.artist || "אמן לא ידוע",
+                filePath: songPath || ""
+            };
+        }).filter((s: any) => s.songId);
+    };
 
-                return {
-                    ...item,
-                    songId: songData.songId || item.songId, 
-                    title: songData.title || item.songTitle || "שיר ללא שם",
-                    artist: songData.artist || "אמן לא ידוע",
-                    filePath: songPath || ""
-                };
-            });
-
+    const handlePlayPlaylist = () => {
+        const formattedSongs = getFormattedSongs();
+        if (formattedSongs.length > 0) {
             dispatch(setCurrentPlaylist(formattedSongs));
             dispatch(setCurrentSong(formattedSongs[0]));
         }
@@ -41,8 +43,6 @@ const PlaylistView: React.FC<PlaylistViewProps> = ({ playlistData, fileInputRef,
     return (
         <div className="playlist-container">
             <header className="playlist-main-header">
-                
-                {/* צד ימין של השורה: שם הפלייליסט והפרטים */}
                 <div className="playlist-details-left">
                     <Typography className="type-label">פלייליסט:</Typography>
                     <h1 className="playlist-name-title">
@@ -53,7 +53,6 @@ const PlaylistView: React.FC<PlaylistViewProps> = ({ playlistData, fileInputRef,
                     </Typography>
                 </div>
 
-                {/* צד שמאל של השורה: כפתורי פעולה קומפקטיים */}
                 <div className="header-actions-right">
                     <button className="upload-button-outline" onClick={onUploadClick}>
                         <Upload size={13} />
@@ -76,11 +75,13 @@ const PlaylistView: React.FC<PlaylistViewProps> = ({ playlistData, fileInputRef,
                         accept="audio/*" 
                     />
                 </div>
-
             </header>
 
             <div className="table-wrapper">
-                <SongTable songs={playlistData?.playlistSongs || []} />
+                <SongTable 
+                    songs={playlistData?.playlistSongs || []} 
+                    onDeleteSong={onDeleteSong} 
+                />
             </div>
         </div>
     );

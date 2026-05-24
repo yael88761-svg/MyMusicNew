@@ -1,18 +1,41 @@
 import React from 'react';
 import { TableRow, TableCell, Box, Typography } from '@mui/material';
-import { Music, Play } from 'lucide-react';
+import { Music, Play, Trash2 } from 'lucide-react'; // ייבוא Trash2
 import './SongRow.css'; // ייבוא קובץ ה-CSS המופרד
 
 interface SongRowProps {
     song: any;
     index: number;
     onPlay: (song: any) => void;
+    onDelete: (id: string) => void; // פרופ חדש למחיקה
 }
 
-const SongRow: React.FC<SongRowProps> = ({ song, index, onPlay }) => {
+const SongRow: React.FC<SongRowProps> = ({ song, index, onPlay, onDelete }) => {
     // הגנה מפני קריסה אם אובייקט השיר לא קיים
     if (!song) return null;
 
+    // פונקציה שמטפלת בלחיצה על המחיקה ללא הפעלת הנגן
+    const handleDeleteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation(); 
+
+    // הגנה מוחלטת מפני קריסה: בדיקה האם onDelete הוא אכן פונקציה
+    if (typeof onDelete !== 'function') {
+        console.error(
+            "טעות: הקומפוננטה שקוראת ל-SongRow לא העבירה את הפונקציה onDelete!",
+            "ערך נוכחי שנתקבל:", onDelete
+        );
+        alert("שגיאת פיתוח: פונקציית המחיקה לא הועברה כראוי מקומפוננטת האב.");
+        return;
+    }
+
+    const targetId = song.songId || song.id;
+    if (targetId) {
+        onDelete(targetId);
+    } else {
+        console.error("לא נמצא מזהה (ID) עבור השיר הנוכחי", song);
+    }
+};
     return (
         <TableRow 
             onClick={() => onPlay(song)}
@@ -50,6 +73,17 @@ const SongRow: React.FC<SongRowProps> = ({ song, index, onPlay }) => {
             {/* עמודת שם האמן */}
             <TableCell className="song-artist-text">
                 {song.artist || "אמן לא ידוע"}
+            </TableCell>
+
+            {/* עמודת פעולת מחיקה (פח) */}
+            <TableCell className="delete-cell" sx={{ width: '50px', textAlign: 'center' }}>
+                <button 
+                    className="row-delete-icon" 
+                    onClick={handleDeleteClick}
+                    title="מחק שיר"
+                >
+                    <Trash2 size={16} />
+                </button>
             </TableCell>
         </TableRow>
     );
