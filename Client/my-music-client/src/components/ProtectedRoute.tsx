@@ -10,7 +10,6 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const location = useLocation();
 
   if (!token) {
-    // replace מונע מהמשתמש לחזור אחורה לדף המוגן בלחיצה על כפתור "חזור" בדפדפן
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 

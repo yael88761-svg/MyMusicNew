@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-// ייבוא ה-API כדי שנוכל לאפס אותו
 import { playlistApi } from '../playlist/playlistApi';
 import { songApi } from '../song/songApi';
 
@@ -29,11 +28,8 @@ const userSlice = createSlice({
       state.token = null;
       localStorage.removeItem('user');
       localStorage.removeItem('token');
-      // הערה: את ה-resetApiState נפעיל בדרך כלל בתוך ה-Component או ב-Middleware
-      // כי Slice לא אמור להכיל לוגיקה של API ישירות בתוך ה-Reducer
     },
   },
-  // שימוש ב-extraReducers כדי להגיב לאיפוס מצב כללי אם תרצי בעתיד
 });
 
 export const { loginSuccess, logout } = userSlice.actions;

@@ -6,14 +6,14 @@ export const userApi = createApi({
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (credentials) => ({
-        url: '/User/login', // ודאי ב-Swagger שזה הנתיב
+        url: '/User/login', 
         method: 'POST',
         body: credentials,
       }),
     }),
     signup: builder.mutation({
       query: (newUser) => ({
-        url: '/User/register', // ודאי ב-Swagger שזה הנתיב
+        url: '/User/register', 
         method: 'POST',
         body: newUser,
       }),
@@ -21,5 +21,4 @@ export const userApi = createApi({
   }),
 });
 
-// כאן נוצרים ה-Hooks שאת מייבאת ב-Login
 export const { useLoginMutation, useSignupMutation } = userApi;

@@ -18,16 +18,12 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // ביצוע פעולת ההתחברות מול השרת
       const response = await login({ email, password }).unwrap();
       
-      // שמירת פרטי המשתמש והטוקן ב-Redux וב-LocalStorage
       dispatch(loginSuccess({ user: response, token: response.token }));
       
-      // עדכון ה-App שבוצע לוגין (כדי להציג את הנגן)
       onLoginSuccess();
       
-      // מעבר אוטומטי לדף הספרייה
       navigate('/library'); 
     } catch (err) {
       console.error('Failed to login:', err);

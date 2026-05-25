@@ -6,7 +6,7 @@ interface SongState {
   currentPlaylist: any[];      
   isPlaying: boolean;          
   volume: number;              
-  hasStartedPlaying: boolean; // ✅ הדגל החדש ששולט על הצגת הנגן לראשונה
+  hasStartedPlaying: boolean;
 }
 
 const initialState: SongState = {
@@ -14,7 +14,7 @@ const initialState: SongState = {
   currentPlaylist: [],         
   isPlaying: false,
   volume: 0.7,
-  hasStartedPlaying: false,   // ✅ ברירת מחדל: לא התחיל לנגן (הנגן מוסתר)
+  hasStartedPlaying: false,  
 };
 
 export const songSlice = createSlice({
@@ -28,7 +28,7 @@ export const songSlice = createSlice({
     setCurrentSong: (state, action: PayloadAction<any>) => {
       state.currentSong = action.payload;
       state.isPlaying = true;
-      state.hasStartedPlaying = true; // ✅ ברגע שנבחר שיר, הנגן יורשה להופיע
+      state.hasStartedPlaying = true;
     },
 
     togglePlay: (state) => {
@@ -39,17 +39,15 @@ export const songSlice = createSlice({
       state.volume = action.payload;
     },
 
-    // פונקציה שתקראי לה גם בזמן Logout
     stopSong: (state) => {
       state.currentSong = null;
       state.currentPlaylist = [];
       state.isPlaying = false;
-      state.hasStartedPlaying = false; // ✅ מאפס את המצב כך שבכניסה הבאה הנגן יהיה מוסתר
+      state.hasStartedPlaying = false; 
     },
   },
 });
 
-// ייצוא הפעולות
 export const { 
   setCurrentSong, 
   setCurrentPlaylist, 
