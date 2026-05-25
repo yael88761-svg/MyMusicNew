@@ -6,27 +6,119 @@
     max-height: 100vh; /* מונע מהקומפוננטה לחרוג מגובה המסך */
     overflow: hidden; /* מונע גלילה כללית של כל המיכל */
     box-sizing: border-box;
-    padding: 20px;
-    background-color: #000000; /* או צבע הרקע הכהה של האפליקציה שלך */
+    padding: 10px 24px 0px 24px;
+    background-color: #000000; 
+    direction: rtl;
 }
 
-/* כותרת הפלייליסט נשארת קבועה למעלה */
+/* כותרת הפלייליסט נשארת קבועה למעלה ומחולקת ל-3 חלקים לצורך מרכוז */
 .playlist-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     flex-shrink: 0; /* מונע מהכותרת להתכווץ */
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* צד ימין: כותרת וסטטיסטיקה */
+.recent-details-left {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    text-align: right;
 }
 
 .playlist-header h1 {
     margin: 0;
     color: #ffffff;
-    font-size: 2rem;
+    font-size: 1.4rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.recent-stats {
+    color: #b3b3b3 !important;
+    font-size: 0.75rem !important;
+}
+
+/* --- מערך רכיבי החיפוש במרכז ה-Header --- */
+.header-search-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    flex: 1;
+}
+
+.header-search-input {
+    background-color: #121212;
+    color: #ffffff;
+    border: 1px solid #282828;
+    border-radius: 20px;
+    padding: 6px 34px 6px 14px;
+    font-size: 0.8rem;
+    width: 200px;
+    direction: rtl;
+    outline: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.header-search-input:focus {
+    border-color: #1db954;
+    background-color: #1a1a1a;
+    width: 240px; /* אפקט התרחבות קל בפוקוס */
+}
+
+.header-search-input::placeholder {
+    color: #727272;
+}
+
+.input-search-icon {
+    position: absolute;
+    right: calc(50% + 82px);
+    color: #727272;
+    pointer-events: none;
+    transition: right 0.2s ease-in-out;
+}
+
+.header-search-input:focus ~ .input-search-icon {
+    right: calc(50% + 102px);
+}
+
+.input-clear-icon {
+    position: absolute;
+    left: calc(50% - 82px);
+    color: #727272;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.header-search-input:focus ~ .input-clear-icon {
+    left: calc(50% - 102px);
+}
+
+.input-clear-icon:hover {
+    color: #ffffff;
+}
+
+/* צד שמאל: פלייסהולדר לאיזון */
+.header-actions-placeholder {
+    flex: 1;
 }
 
 /* מיכל הטבלה - האזור שאחראי על הגלילה הפנימית */
 .recent-table-container {
+    width: 100%;
     flex-grow: 1; /* לוקח את כל הגובה שנותר במיכל */
-    overflow-y: auto; /* מאפשר גלילה אנכית רק עבור הטבלה */
+    overflow-y: auto !important; /* מאפשר גלילה אנכית רק עבור הטבלה */
     overflow-x: hidden; /* מונע גלילה אופקית מיותרת */
+    padding-bottom: 2px;
+    box-sizing: border-box;
 }
 
 /* עיצוב פס הגלילה הפנימי של הטבלה להתאמה לעיצוב הכהה */
@@ -45,4 +137,11 @@
 
 .recent-table-container::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.3);
+}
+
+.no-search-results {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
 }

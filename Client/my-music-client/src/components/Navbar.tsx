@@ -69,7 +69,6 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
       <div className="nav-auth">
         {currentUser ? (
           <div className="user-profile">
-            <span>שלום, <strong>{currentUser.name}</strong></span>
             <button onClick={handleLogout} className="logout-btn">התנתק</button>
           </div>
         ) : (
