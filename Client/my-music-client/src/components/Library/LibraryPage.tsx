@@ -8,7 +8,6 @@ import { Library } from 'lucide-react';
 import PlaylistList from './Sidebar/PlaylistList'; 
 import CreatePlaylistBtn from './Sidebar/CreatePlaylistBtn'; 
 import PlaylistView from '../Library/Content/PlaylistView'; 
-import RecentPlaylistView from '../Library/Sidebar/RecentPlaylistView';
 import AllSongsView from '../Library/Content/AllSongsView'; 
 import { setCurrentSong } from '../../features/song/songSlice';
 
@@ -24,7 +23,6 @@ const LibraryPage = () => {
     const currentSong = useSelector((state: any) => state.song.currentSong);
 
     const isAllSongsSelected = selectedPlaylist?.playlistId === 'all-songs';
-    const isRecentSelected = selectedPlaylist?.playlistId === 'recent';
     const activePlaylistData = playlists?.find((pl: any) => pl.playlistId === selectedPlaylist?.playlistId);
 
     // פונקציית מחיקה גלובלית ברמת העמוד
@@ -71,7 +69,7 @@ const LibraryPage = () => {
 
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        if (!file || !selectedPlaylist || isRecentSelected || isAllSongsSelected) return; 
+        if (!file || !selectedPlaylist || isAllSongsSelected) return; 
         
         const formData = new FormData();
         formData.append('file', file);
@@ -109,10 +107,6 @@ const LibraryPage = () => {
                 {isAllSongsSelected ? (
                     /* העברת פונקציית המחיקה המעודכנת למסך כל השירים */
                     <AllSongsView playlists={playlists || []} onDeleteSong={handleDeleteSong} />
-                ) : isRecentSelected ? (
-                    <div className="content-wrapper">
-                        <RecentPlaylistView />
-                    </div>
                 ) : activePlaylistData ? (
                     <div className="content-wrapper">
                         <PlaylistView 
@@ -133,4 +127,4 @@ const LibraryPage = () => {
     );
 };
 
-export default LibraryPage;
+export default LibraryPage;+

@@ -52,12 +52,12 @@ function App() {
               </ProtectedRoute>
             } />
             
-            <Route path="/playlist/recent" element={
+            {/* <Route path="/playlist/recent" element={
               <ProtectedRoute>
                 <RecentPlaylistView />
               </ProtectedRoute>
             } />
-
+ */}
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>

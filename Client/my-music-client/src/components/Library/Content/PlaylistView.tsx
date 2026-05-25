@@ -60,7 +60,7 @@ const PlaylistView: React.FC<PlaylistViewProps> = ({ playlistData, fileInputRef,
                 <div className="playlist-details-left">
                     <Typography className="type-label">פלייליסט:</Typography>
                     <h1 className="playlist-name-title">
-                        {playlistData?.playlistName || "23"}
+                        {playlistData?.playlistName || " "}
                     </h1>
                     <Typography variant="body2" className="playlist-stats">
                         ({allFormattedSongs.length} שירים)

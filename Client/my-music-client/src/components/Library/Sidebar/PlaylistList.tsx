@@ -41,7 +41,7 @@ const PlaylistList: React.FC<PlaylistListProps> = ({ playlists, selectedPlaylist
 
     return (
         <ul className="playlist-list">
-            {/* הצגת הפלייליסט המיוחד תמיד בראש הרשימה */}
+            {/* הצגת הפלייליסט המיוחד תמיד בראש הרשימה
             <li 
                 key={recentPlaylist.playlistId}
                 onClick={() => onSelect(recentPlaylist)}
@@ -49,7 +49,7 @@ const PlaylistList: React.FC<PlaylistListProps> = ({ playlists, selectedPlaylist
             >
                 <span className="playlist-name-text">{recentPlaylist.playlistName}</span>
             </li>
-
+ */}
             <hr className="playlist-divider" />
 
             {/* הצגת שאר הפלייליסטים מהשרת */}
