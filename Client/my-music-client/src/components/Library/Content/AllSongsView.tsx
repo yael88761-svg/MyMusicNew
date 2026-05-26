@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Typography } from '@mui/material';
 import { Music, Search, X } from 'lucide-react';
 import SongTable from './SongTable';
-import './AllSongsView.css'; // ייבוא ה-CSS המעודכן
+import './AllSongsView.css'; 
 
 interface AllSongsViewProps {
   playlists: any[];
@@ -10,7 +10,6 @@ interface AllSongsViewProps {
 }
 
 const AllSongsView: React.FC<AllSongsViewProps> = ({ playlists, onDeleteSong }) => {
-  // 1. הוספת ה-State עבור החיפוש
   const [searchQuery, setSearchQuery] = useState<string>('');
   
   const getAllSongsFromPlaylists = () => {
@@ -47,7 +46,6 @@ const AllSongsView: React.FC<AllSongsViewProps> = ({ playlists, onDeleteSong }) 
 
   const allSongs = getAllSongsFromPlaylists();
 
-  // 2. סינון כל שירה ספריה בזמן אמת לפי כותרת או אמן
   const filteredSongs = allSongs.filter((item: any) => {
     if (!item.song) return false;
     
@@ -61,17 +59,14 @@ const AllSongsView: React.FC<AllSongsViewProps> = ({ playlists, onDeleteSong }) 
   return (
     <div className="content-wrapper">
       
-      {/* מבנה ה-Header החדש עם שלוש עמודות (ימין, מרכז, שמאל) */}
       <div className="library-all-songs-header">
         
-        {/* צד ימין: כותרת העמוד */}
         <div className="library-details-left">
           <Typography variant="h6" sx={{ color: 'white', fontWeight: 'semibold', m: 0, lineHeight: 1 }}>
             הספרייה שלי
           </Typography>
         </div>
 
-        {/* מרכז: תיבת החיפוש הממורכזת */}
         <div className="header-search-center">
           <input
             type="text"
@@ -91,11 +86,9 @@ const AllSongsView: React.FC<AllSongsViewProps> = ({ playlists, onDeleteSong }) 
           )}
         </div>
 
-        {/* צend שמאל: פלייסהולדר ריק לשמירה על איזון התיבה באמצע */}
         <div className="header-actions-placeholder"></div>
       </div>
       
-      {/* הצגת השירים המסוננים או הודעת שגיאה */}
       {allSongs && allSongs.length > 0 ? (
         filteredSongs.length > 0 ? (
           <SongTable songs={filteredSongs} onDeleteSong={onDeleteSong} />

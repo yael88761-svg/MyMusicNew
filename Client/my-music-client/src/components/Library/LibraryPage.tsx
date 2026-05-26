@@ -25,21 +25,18 @@ const LibraryPage = () => {
     const isAllSongsSelected = selectedPlaylist?.playlistId === 'all-songs';
     const activePlaylistData = playlists?.find((pl: any) => pl.playlistId === selectedPlaylist?.playlistId);
 
-    // פונקציית מחיקה גלובלית ברמת העמוד
+    // global delete function  
     const handleDeleteSong = async (songIdToDelete: string) => {
         const isConfirmed = window.confirm("האם אתה בטוח שברצונך למחוק את השיר לחלוטין מהמערכת?");
         if (!isConfirmed) return;
 
-        // 1. העברה אוטומטית לשיר הבא במידה והשיר הנוכחי מתוך הפלייליסט מתנגן
         if (currentSong && (currentSong.songId === songIdToDelete || currentSong.id === songIdToDelete)) {
             dispatch(setCurrentSong(null));
         }
 
-        // 2. שליחת הבקשה לשרת ה-NET.
         try {
             const token = localStorage.getItem('token') || sessionStorage.getItem('token'); 
 
-            // 🌟 התיקון הקריטי: שינוי מ- /api/songs/ ל- /api/Song/ (לשון יחיד, בדיוק כמו ב-Swagger)
             const response = await fetch(`/api/Song/${songIdToDelete}`, {
                 method: 'DELETE',
                 headers: {
@@ -50,7 +47,7 @@ const LibraryPage = () => {
 
             if (response.status === 204) { 
                 console.log("השיר נמחק בהצלחה מהשרת");
-                refetch(); // מרענן אוטומטית את רשימת השירים על המסך דרך RTK Query!
+                refetch(); 
             } else if (response.status === 401) {
                 alert("שגיאה (401): אינך מחובר למערכת או שהטוקן פג תוקף.");
             } else if (response.status === 403) {
@@ -105,7 +102,6 @@ const LibraryPage = () => {
 
             <main className="main-content">
                 {isAllSongsSelected ? (
-                    /* העברת פונקציית המחיקה המעודכנת למסך כל השירים */
                     <AllSongsView playlists={playlists || []} onDeleteSong={handleDeleteSong} />
                 ) : activePlaylistData ? (
                     <div className="content-wrapper">
@@ -114,7 +110,7 @@ const LibraryPage = () => {
                             fileInputRef={fileInputRef} 
                             onUploadClick={() => fileInputRef.current?.click()} 
                             onFileUpload={handleFileUpload}
-                            onDeleteSong={handleDeleteSong} /* העברת הפונקציה המשותפת */
+                            onDeleteSong={handleDeleteSong}
                         />
                     </div>
                 ) : (

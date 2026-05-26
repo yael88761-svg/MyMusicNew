@@ -9,7 +9,6 @@
   direction: rtl;
 }
 
-/* ה-Header הראשי מחולק ל-3 חלקים שווים כדי למרכז את התיבה בצורה מושלמת */
 .library-all-songs-header {
   display: flex;
   justify-content: space-between;
@@ -21,21 +20,19 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* צד ימין: כותרת */
 .library-details-left {
   display: flex;
   align-items: center;
-  flex: 1; /* איזון מול צד שמאל */
+  flex: 1; 
   text-align: right;
 }
 
-/* מרכז: מיקום תיבת החיפוש */
 .header-search-center {
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
-  flex: 1; /* תופס את מרכז השורה */
+  flex: 1; 
 }
 
 .header-search-input {
@@ -54,14 +51,13 @@
 .header-search-input:focus {
   border-color: #1db954;
   background-color: #1a1a1a;
-  width: 240px; /* התרחבות קלה בזמן פוקוס */
+  width: 240px; 
 }
 
 .header-search-input::placeholder {
   color: #727272;
 }
 
-/* אייקון זכוכית מגדלת מימין */
 .input-search-icon {
   position: absolute;
   right: calc(50% + 82px);
@@ -74,7 +70,6 @@
   right: calc(50% + 102px);
 }
 
-/* אייקון ה-X משמאל */
 .input-clear-icon {
   position: absolute;
   left: calc(50% - 82px);
@@ -91,12 +86,10 @@
   color: #ffffff;
 }
 
-/* צד שמאל: שומר מקום ריק כדי שהאמצע יישאר תמיד באמצע */
 .header-actions-placeholder {
   flex: 1;
 }
 
-/* תוצאות חיפוש ריקות */
 .no-search-results {
   width: 100%;
   display: flex;
@@ -104,7 +97,6 @@
   padding: 40px 0;
 }
 
-/* מצב ריק קבוע של עמוד הספרייה */
 .empty-state {
   display: flex;
   flex-direction: column;

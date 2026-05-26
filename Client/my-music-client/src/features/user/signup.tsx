@@ -17,17 +17,13 @@ const Signup: React.FC = () => {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // 1. ביצוע ההרשמה מול השרת
       const response = await signup({ name, email, password }).unwrap();
       
-      // 2. ניקוי שאריות מה-Cache (ליתר ביטחון אם היה משתמש קודם ללא רענון דף)
       dispatch(playlistApi.util.resetApiState());
       dispatch(songApi.util.resetApiState());
 
-      // 3. שמירת המשתמש החדש והטוקן ב-Store
       dispatch(loginSuccess({ user: response, token: response.token }));
       
-      // 4. מעבר אוטומטי לספריה
       navigate('/library');
     } catch (err) {
       console.error('Signup error:', err);

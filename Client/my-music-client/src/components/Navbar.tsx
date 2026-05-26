@@ -3,8 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import type { RootState } from '../app/store.ts';
 import { logout } from '../features/user/userSlice';
-
-// ייבוא ה-APIs לניקוי ה-Cache
 import { playlistApi } from '../features/playlist/playlistApi';
 import { songApi } from '../features/song/songApi';
 
@@ -18,28 +16,22 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
-  // שליפת המשתמש מה-Store
   const { currentUser } = useSelector((state: RootState) => state.user);
 
   const handleLogout = () => {
-    // 1. עדכון ה-State של המשתמש ב-Redux (מנקה טוקן ופרטים)
     dispatch(logout());
 
-    // 2. ניקוי ה-Cache של הנתונים כדי שלא יישארו פלייליסטים בזיכרון
     dispatch(playlistApi.util.resetApiState());
     dispatch(songApi.util.resetApiState());
 
-    // 3. עדכון ה-App שהתנתקנו (יעלים את ה-MusicPlayer ב-App.tsx)
     onLogout();
 
-    // 4. הפניה לדף הלוגין
     navigate('/login');
   };
 
-  // פונקציה להגנת הקישורים במידה והמשתמש לא מחובר
   const handleProtectedClick = (e: React.MouseEvent) => {
     if (!currentUser) {
-      e.preventDefault(); // מונע את הניווט של ה-Link
+      e.preventDefault(); 
       alert("לא התחברת עדיין! יש להתחבר כדי לגשת לחלק זה.");
     }
   };

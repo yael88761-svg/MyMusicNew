@@ -2,9 +2,9 @@ createPlaylist: builder.mutation({
   query: (newPlaylist) => ({
     url: '/Playlist',
     method: 'POST',
-    body: newPlaylist, // צריך להכיל playlistName ו-userId
+    body: newPlaylist,
   }),
-  invalidatesTags: ['Playlists'], // גורם לריאקט לרענן את הרשימה אוטומטית
+  invalidatesTags: ['Playlists'], 
   // songSlice.ts
 }
 }),

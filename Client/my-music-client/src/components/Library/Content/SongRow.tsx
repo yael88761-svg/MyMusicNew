@@ -1,25 +1,22 @@
 import React from 'react';
 import { TableRow, TableCell, Box, Typography } from '@mui/material';
-import { Music, Play, Trash2 } from 'lucide-react'; // ייבוא Trash2
-import './SongRow.css'; // ייבוא קובץ ה-CSS המופרד
+import { Music, Play, Trash2 } from 'lucide-react'; 
+import './SongRow.css'; 
 
 interface SongRowProps {
     song: any;
     index: number;
     onPlay: (song: any) => void;
-    onDelete: (id: string) => void; // פרופ חדש למחיקה
+    onDelete: (id: string) => void; 
 }
 
 const SongRow: React.FC<SongRowProps> = ({ song, index, onPlay, onDelete }) => {
-    // הגנה מפני קריסה אם אובייקט השיר לא קיים
     if (!song) return null;
 
-    // פונקציה שמטפלת בלחיצה על המחיקה ללא הפעלת הנגן
     const handleDeleteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation(); 
 
-    // הגנה מוחלטת מפני קריסה: בדיקה האם onDelete הוא אכן פונקציה
     if (typeof onDelete !== 'function') {
         console.error(
             "טעות: הקומפוננטה שקוראת ל-SongRow לא העבירה את הפונקציה onDelete!",
@@ -41,7 +38,7 @@ const SongRow: React.FC<SongRowProps> = ({ song, index, onPlay, onDelete }) => {
             onClick={() => onPlay(song)}
             className="my-song-row"
         >
-            {/* עמודת מספר/אייקון נגן */}
+            {/* Number column/player icon */}
             <TableCell className="index-cell" sx={{ width: '50px' }}>
                 <Box className="index-cell-container">
                     <span className="num">
@@ -56,8 +53,8 @@ const SongRow: React.FC<SongRowProps> = ({ song, index, onPlay, onDelete }) => {
                 </Box>
             </TableCell>
 
-            {/* עמודת תמונה וכותרת השיר */}
-            <TableCell>
+        {/* Image and song title column */}     
+       <TableCell>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                     <Box className="song-img-placeholder">
                         <Music size={16} color="#b3b3b3" />
@@ -70,12 +67,12 @@ const SongRow: React.FC<SongRowProps> = ({ song, index, onPlay, onDelete }) => {
                 </Box>
             </TableCell>
 
-            {/* עמודת שם האמן */}
+            {/* Artist column */}
             <TableCell className="song-artist-text">
                 {song.artist || "אמן לא ידוע"}
             </TableCell>
 
-            {/* עמודת פעולת מחיקה (פח) */}
+            {/* Delete action column */}
             <TableCell className="delete-cell" sx={{ width: '50px', textAlign: 'center' }}>
                 <button 
                     className="row-delete-icon" 

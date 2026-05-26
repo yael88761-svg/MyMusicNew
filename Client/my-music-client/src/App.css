@@ -1,4 +1,3 @@
-/* בתוך LibraryPage.css */
 .body{
   background-color: #000;
 }
@@ -6,26 +5,24 @@
   display: flex;
   width: 100%;
   height: 100%;
-  direction: rtl; /* חשוב לעברית - שהסיידבר יהיה בימין */
+  direction: rtl; 
 }
 
 .sidebar {
   width: 260px;
-  flex-shrink: 0; /* מונע מהסיידבר להתכווץ */
+  flex-shrink: 0; 
   background-color: #000;
-  /* עיצוב נוסף... */
 }
 
 .main-content {
-  flex-grow: 1; /* תופס את כל שאר המקום */
+  flex-grow: 1; 
   display: flex;
-  justify-content: center; /* ממרכז את התוכן אופקית מול המשתמש */
+  justify-content: center;
   overflow-y: auto;
   padding: 20px;
 }
 
-/* העטיפה הפנימית שבאמת מחזיקה את הטבלה */
 .main-content > div {
   width: 100%;
-  max-width: 1000px; /* גורם לזה להיראות מרכזי ומקצועי, לא נמרח מקצה לקצה */
+  max-width: 1000px; 
 }

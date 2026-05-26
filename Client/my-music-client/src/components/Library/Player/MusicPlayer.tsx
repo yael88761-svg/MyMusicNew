@@ -76,10 +76,8 @@ const MusicPlayer = () => {
             return { song, distance };
         });
 
-        // 4. מיון השירים מהקרוב ביותר לרחוק ביותר
         songsWithDistance.sort((a, b) => a.distance - b.distance);
 
-        // 🔥 מניעת הלולאה האינסופית: במקום לקחת תמיד את המקום ה-1, נגריל שיר מתוך ה-3 הכי קרובים!
         const poolSize = Math.min(3, songsWithDistance.length); 
         const randomIndex = Math.floor(Math.random() * poolSize);
         const selectedSong = songsWithDistance[randomIndex].song;
@@ -96,7 +94,6 @@ const MusicPlayer = () => {
     const playNextSong = () => {
         if (!currentSong) return;
 
-        // ✅ אם מצב הפעלה חכמה פעיל - נשתמש באלגוריתם המקומי על הפלייליסט
         if (isSmartPlay) {
             const success = playSmartNextSong();
             if (success) return; 

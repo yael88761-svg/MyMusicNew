@@ -1,35 +1,33 @@
 .playlist-container {
     display: flex;
     flex-direction: column;
-    padding: 10px 24px 0px 24px; /* אפס ריפוד תחתון להצמדה מלאה לנגן */
+    padding: 10px 24px 0px 24px;
     background-color: #000000 !important;
-    height: 100%; /* תופס בדיוק את כל הגובה הפנוי */
+    height: 100%; 
     width: 100%;
     box-sizing: border-box;
     direction: rtl;
-    overflow: hidden !important; /* מונע מהעמוד כולו לגלול - ה-Header נשאר קבוע למעלה! */
+    overflow: hidden !important; 
 }
 
-/* ה-Header הקבוע - חלוקה ל-3 עמודות שוות כדי למרכז את התיבה בצורה אבסולוטית */
 .playlist-main-header {
     display: flex;
     justify-content: space-between; 
     align-items: center; 
     margin-bottom: 10px;
     width: 100%;
-    flex-shrink: 0; /* מונע מההדר להתכווץ או להשתנות בגובה */
+    flex-shrink: 0; 
     padding: 6px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* קו הפרדה עדין ומקצועי */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* צד ימין של השורה: שם הפלייליסט והסטטיסטיקה */
 .playlist-details-left {
     text-align: right;
     display: flex;
     flex-direction: row; 
     align-items: center;
     gap: 12px;
-    flex: 1; /* לוקח שטח שווה מימין כדי לאזן את המרכז */
+    flex: 1; 
 }
 
 .type-label {
@@ -52,13 +50,12 @@
     font-size: 0.75rem !important;
 }
 
-/* --- רכיבי החיפוש החדשים במרכז השורה --- */
 .header-search-center {
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    flex: 1; /* תופס מרחב שווה במרכז */
+    flex: 1; 
 }
 
 .header-search-input {
@@ -77,7 +74,7 @@
 .header-search-input:focus {
     border-color: #1db954;
     background-color: #1a1a1a;
-    width: 240px; /* התרחבות קלילה ואלגנטית בפוקוס */
+    width: 240px;
 }
 
 .header-search-input::placeholder {
@@ -86,14 +83,14 @@
 
 .input-search-icon {
     position: absolute;
-    right: calc(50% + 82px); /* ממקם את הזכוכית מגדלת צמוד לימין בתוך התיבה */
+    right: calc(50% + 82px); 
     color: #727272;
     pointer-events: none;
     transition: right 0.2s ease-in-out;
 }
 
 .header-search-input:focus ~ .input-search-icon {
-    right: calc(50% + 102px); /* מזיז את האייקון יחד עם התרחבות התיבה */
+    right: calc(50% + 102px);
 }
 
 .input-clear-icon {
@@ -112,16 +109,14 @@
     color: #ffffff;
 }
 
-/* צד שמאל של השורה: כפתורי הפעולה */
 .header-actions-right {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     gap: 12px;
-    flex: 1; /* לוקח שטח שווה משמאל כדי לאזן את המרכז */
+    flex: 1; 
 }
 
-/* כפתור נגן ירוק קטן ומהיר */
 .play-button-main {
     width: 38px;
     height: 38px;
@@ -139,7 +134,6 @@
     transform: scale(1.05);
 }
 
-/* כפתור העלאת שיר קומפקטי במיוחד */
 .upload-button-outline {
     display: flex;
     align-items: center;
@@ -159,17 +153,15 @@
     background: rgba(255, 255, 255, 0.15);
 }
 
-/* מיכל הטבלה */
 .table-wrapper {
     width: 100%;
-    flex-grow: 1; /* לוקח את כל הגובה שנשאר במסך */
-    overflow-y: auto !important; /* פותח גלילה אנכית אך ורק לשירים בטבלה */
+    flex-grow: 1; 
+    overflow-y: auto !important; 
     margin-top: 0px;
-    padding-bottom: 2px; /* ריפוד קטן שמונע מהשיר האחרון להתחבא תחת הנגן */
+    padding-bottom: 2px; 
     box-sizing: border-box;
 }
 
-/* עיצוב פס הגלילה הפנימי של השירים */
 .table-wrapper::-webkit-scrollbar {
     width: 6px;
 }

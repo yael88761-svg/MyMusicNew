@@ -8,7 +8,6 @@ namespace Service.Services
     {
         public MapperProfile()
         {
-            // מיפוי משתמשים
             CreateMap<User, UserDto>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Username))
                 .ReverseMap()
@@ -22,18 +21,13 @@ namespace Service.Services
                 .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password))
                 .ReverseMap();
 
-            // מיפוי שירים
             CreateMap<Song, SongDto>().ReverseMap();
 
-            // מיפוי אובייקט הקשר פלייליסט-שיר
-            // הוספנו מיפוי מפורש לאובייקט השיר כדי לוודא שנתוני השיר עוברים ל-DTO
             CreateMap<PlaylistSong, PlaylistSongDto>()
                 .ForMember(dest => dest.SongTitle, opt => opt.MapFrom(src => src.Song.Title))
                 .ForMember(dest => dest.Song, opt => opt.MapFrom(src => src.Song))
                 .ReverseMap();
 
-            // מיפוי פלייליסט
-            // הוספנו הנחיה מפורשת למיפוי האוסף PlaylistSongs
             CreateMap<Playlist, PlaylistDto>()
                 .ForMember(dest => dest.PlaylistSongs, opt => opt.MapFrom(src => src.PlaylistSongs))
                 .ReverseMap();
@@ -41,13 +35,10 @@ namespace Service.Services
             CreateMap<PlaylistDto, Playlist>()
                 .ForMember(dest => dest.User, opt => opt.Ignore());
 
-            // מיפוי היסטוריית השמעה
             CreateMap<PlayHistory, PlayHistoryDto>()
                 .ForMember(dest => dest.SongTitle, opt => opt.MapFrom(src => src.Song.Title))
                 .ReverseMap()
                 .ForMember(dest => dest.Song, opt => opt.Ignore());
-
-            // מיפוי תכונות אודיו
             CreateMap<AudioFeatures, AudioFeaturesDto>().ReverseMap();
         }
     }

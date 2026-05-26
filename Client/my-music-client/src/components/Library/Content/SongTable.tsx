@@ -19,11 +19,10 @@ const SongTable: React.FC<SongTableProps> = ({ songs, onDeleteSong }) => {
         dispatch(setCurrentPlaylist(songsToPlay));
     };
 
-    // 🌟 פונקציית הגנה חדשה: מקפיצה התראה לפני ביצוע המחיקה
     const handleDeleteWithConfirmation = (id: string) => {
         const isConfirmed = window.confirm("האם אתה בטוח שברצונך למחוק את השיר ואת כל המאפיינים שלו לחלוטין מהמערכת?");
         if (isConfirmed) {
-            onDeleteSong(id); // מפעיל את המחיקה רק אם המשתמש לחץ אישור
+            onDeleteSong(id); 
         }
     };
 
@@ -55,7 +54,6 @@ const SongTable: React.FC<SongTableProps> = ({ songs, onDeleteSong }) => {
                                 song={ps.song} 
                                 index={index} 
                                 onPlay={handlePlaySong} 
-                                // 🌟 משנים כאן: מעבירים את הפונקציה החדשה עם האזהרה במקום את המקורית
                                 onDelete={handleDeleteWithConfirmation} 
                             />
                         )

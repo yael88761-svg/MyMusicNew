@@ -17,7 +17,6 @@ interface PlaylistViewProps {
 const PlaylistView: React.FC<PlaylistViewProps> = ({ playlistData, fileInputRef, onUploadClick, onFileUpload, onDeleteSong }) => {
     const dispatch = useDispatch();
     
-    // 1. הוספת ה-State של החיפוש
     const [searchQuery, setSearchQuery] = useState<string>('');
 
     const getFormattedSongs = () => {
@@ -37,7 +36,6 @@ const PlaylistView: React.FC<PlaylistViewProps> = ({ playlistData, fileInputRef,
 
     const allFormattedSongs = getFormattedSongs();
 
-    // 2. פונקציית סינון השירים על פי הקלדת המשתמש
     const filteredSongs = allFormattedSongs.filter((song: any) => {
         const query = searchQuery.toLowerCase().trim();
         const songTitle = (song.title || '').toLowerCase();
@@ -56,7 +54,6 @@ const PlaylistView: React.FC<PlaylistViewProps> = ({ playlistData, fileInputRef,
         <div className="playlist-container">
             <header className="playlist-main-header">
                 
-                {/* צד ימין: פרטי הפלייליסט */}
                 <div className="playlist-details-left">
                     <Typography className="type-label">פלייליסט:</Typography>
                     <h1 className="playlist-name-title">
@@ -67,7 +64,6 @@ const PlaylistView: React.FC<PlaylistViewProps> = ({ playlistData, fileInputRef,
                     </Typography>
                 </div>
 
-                {/* מרכז בדיוק: רכיב החיפוש החדש */}
                 <div className="header-search-center">
                     <input 
                         type="text" 
@@ -86,7 +82,6 @@ const PlaylistView: React.FC<PlaylistViewProps> = ({ playlistData, fileInputRef,
                     )}
                 </div>
 
-                {/* צד שמאל: כפתורי הפעולה והעלאת הקובץ */}
                 <div className="header-actions-right">
                     <button className="upload-button-outline" onClick={onUploadClick}>
                         <Upload size={13} />
@@ -111,8 +106,8 @@ const PlaylistView: React.FC<PlaylistViewProps> = ({ playlistData, fileInputRef,
                 </div>
             </header>
 
-            {/* גוף הטבלה - מציג את השירים המסוננים או הודעה אם אין תוצאות */}
-            <div className="table-wrapper">
+        {/* Table body - displays the filtered songs or a message if there are no results */}    
+        <div className="table-wrapper">
                 {allFormattedSongs.length > 0 && filteredSongs.length === 0 ? (
                     <div className="no-search-results">
                         <Typography variant="body2" sx={{ color: '#b3b3b3', textAlign: 'center', mt: 4 }}>

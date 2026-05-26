@@ -1,20 +1,16 @@
-/* עיצוב השורה הכללי */
 .my-song-row {
   cursor: pointer;
   transition: background-color 0.2s ease !important;
 }
 
-/* הסרת קווים מפרידים בין התאים */
 .my-song-row td {
   border: none !important;
 }
 
-/* אפקט ריחוף מותאם אישית - שינוי הרקע לאפור עדין */
 .my-song-row:hover {
   background-color: rgba(255, 255, 255, 0.08) !important;
 }
 
-/* פתרון מוחלט למסך השחור: מבטיח שכל הטקסטים יישארו בצבעם המקורי או ילבינו בריחוף */
 .my-song-row:hover .num {
   color: #ffffff !important;
 }
@@ -27,7 +23,6 @@
   color: #ffffff !important;
 }
 
-/* טיפול בהצגת אייקון הנגינה (Play) במקום המספר בזמן ריחוף */
 .index-cell-container {
   position: relative;
   display: flex;
@@ -41,7 +36,6 @@
   display: none;
 }
 
-/* בזמן ריחוף על השורה: תעלים את המספר ותציג את האייקון */
 .my-song-row:hover .num {
   display: none !important;
 }
@@ -50,7 +44,6 @@
   display: block !important;
 }
 
-/* עיצוב הטקסטים עצמם */
 .num {
   font-size: 0.9rem;
   color: #b3b3b3;
@@ -67,7 +60,6 @@
   font-size: 0.85rem;
 }
 
-/* מיכל תמונת השיר */
 .song-img-placeholder {
   width: 40px;
   height: 40px;
@@ -78,17 +70,12 @@
   border-radius: 4px;
 }
 
-/* =========================================
-   עיצוב מעודכן ומתוקן עבור כפתור הפח (מחיקה) 
-   ========================================= */
 
-/* עמודת המחיקה - ביטול הגנות הלחיצה של MUI */
 .delete-cell {
   padding: 0 !important;
   width: 50px !important;
 }
 
-/* כפתור הפח עצמו */
 .row-delete-icon {
   background: none;
   border: none;
@@ -103,19 +90,16 @@
   border-radius: 50%;
   transition: opacity 0.2s ease, color 0.2s ease, background-color 0.2s ease;
 
-  /* התיקון המנצח: מוציא את הכפתור לקדמת השכבות ומוודא שהדפדפן נותן ללחוץ עליו */
   position: relative !important;
   z-index: 99 !important;
   pointer-events: auto !important;
 }
 
-/* ברגע שמרחפים מעל השורה - מציגים את הפח בצורה עדינה */
 .my-song-row:hover .row-delete-icon {
   opacity: 1;
 }
 
-/* כשהעכבר נמצא ישירות מעל כפתור הפח */
 .row-delete-icon:hover {
-  color: #ff5c5c !important; /* אדום עדין למחיקה */
-  background-color: rgba(255, 92, 92, 0.15) !important; /* עיגול רקע אדמדם */
+  color: #ff5c5c !important;
+  background-color: rgba(255, 92, 92, 0.15) !important;
 }

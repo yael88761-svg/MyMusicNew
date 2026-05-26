@@ -35,37 +35,25 @@ namespace Service.Services
 
         public async Task DeleteItem(int id)
         {
-            // 1. שליפת השיר מה-DB כדי לבדוק אם הוא קיים ולקבל את נתיב הקובץ
             var existing = await _repository.GetById(id);
 
             if (existing != null)
             {
-                // 2. מחיקת הקובץ הפיזי בצורה עוקפת Environment
                 if (!string.IsNullOrEmpty(existing.FilePath))
                 {
                     try
                     {
-                        // א. ניקוי תחיליות מהנתיב ששמור ב-DB
                         string cleanedPath = existing.FilePath.Replace("wwwroot/", "").TrimStart('/');
-
-                        // ב. מציאת תיקיית הריצה של ה-API (למשל: YourProject/bin/Debug/net8.0)
                         string baseDir = AppContext.BaseDirectory;
 
-                        // ג. ניווט אחורה מתיקיית ה-bin אל תיקיית הפרויקט הראשית שבה נמצאת wwwroot
                         string projectRoot = Path.GetFullPath(Path.Combine(baseDir, @"..\..\..\..\"));
-
-                        // ד. בניית הנתיב המלא לקובץ בתוך wwwroot של פרויקט ה-API שלך
-                        // הקוד מחפש את התיקייה בתוך הפרויקט הראשי שמריץ את האפליקציה
                         string fullPath = Path.Combine(projectRoot, "WebApi", "wwwroot", cleanedPath);
 
-                        // 💡 אם שם פרויקט ה-Web שלך הוא לא "WebApi" (למשל Server או UI), שנה את המילה "WebApi" למטה לשם המדויק שלו:
                         if (!File.Exists(fullPath))
                         {
-                            // ליתר ביטחון, אם השרת כבר רץ במצב פרודקשן והתיקייה היא מקומית לריצה:
                             fullPath = Path.Combine(baseDir, "wwwroot", cleanedPath);
                         }
 
-                        // ה. מחיקה פיזית של הקובץ מהדיסק
                         if (File.Exists(fullPath))
                         {
                             File.Delete(fullPath);
@@ -74,12 +62,10 @@ namespace Service.Services
                     }
                     catch (Exception ex)
                     {
-                        // הדפסת שגיאה ללוג למקרה שהקובץ בשימוש, כדי שהמחיקה מה-DB לא תיעצר
                         Console.WriteLine($"שגיאה במחיקת הקובץ הפיזי: {ex.Message}");
                     }
                 }
 
-                // 3. מחיקה מה-DB (בזכות ה-Cascade, מוחק אוטומטית את השיר, הפיצ'רים והפלייליסטים!)
                 await _repository.DeleteItem(id);
             }
             else

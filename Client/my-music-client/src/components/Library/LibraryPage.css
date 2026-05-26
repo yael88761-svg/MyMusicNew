@@ -1,4 +1,3 @@
-/* איפוס ויישור גלובלי מהיר */
 html, body, #root, .App {
   margin: 0 !important;
   padding: 0 !important;
@@ -9,13 +8,12 @@ html, body, #root, .App {
   box-sizing: border-box;
 }
 
-/* מבנה ראשי */
 .library-layout {
   display: flex;
   flex-direction: row-reverse;
   width: 100vw !important;
   max-width: 100vw !important;
-  height: calc(100vh - 64px - 90px) !important; /* מוריד את גובה ה-Navbar והנגן */
+  height: calc(100vh - 64px - 90px) !important; 
   background-color: #000000 !important;
   overflow: hidden !important; 
   box-sizing: border-box;
@@ -23,7 +21,6 @@ html, body, #root, .App {
   padding: 0 !important;
 }
 
-/* סיידבר */
 .sidebar {
   width: 240px;
   min-width: 240px;
@@ -39,11 +36,10 @@ html, body, #root, .App {
   border-left: 1px solid rgba(255, 255, 255, 0.1); 
 }
 
-/* אזור התוכן המרכזי - משתף פעולה עם הגלילה הפנימית המלאה */
 .main-content {
   flex-grow: 1;
   background-color: #000000 !important;
-  overflow: hidden !important; /* מונע גלילה כפולה חיצונית */
+  overflow: hidden !important; 
   display: flex;
   flex-direction: column;
   padding: 0 !important;
@@ -62,7 +58,6 @@ html, body, #root, .App {
   padding: 0 !important;
 }
 
-/* תיקון והתאמת צבעים MUI */
 .main-content .MuiPaper-root,
 .main-content .MuiTypography-root,
 .main-content .MuiTable-root,

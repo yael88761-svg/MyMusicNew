@@ -22,7 +22,6 @@ namespace MyMusicNew.Controllers
         {
             try
             {
-                // הדפסה זמנית ל-Console של השרת כדי לראות מה באמת הגיע מה-Frontend
                 Console.WriteLine($"Registering: Name={userRegisterDto.Name}, Email={userRegisterDto.Email}");
 
                 var token = await _registerService.Register(userRegisterDto);
@@ -30,7 +29,6 @@ namespace MyMusicNew.Controllers
             }
             catch (Exception ex)
             {
-                // הוסף את הערכים לשגיאה כדי שתראה אותם בדפדפן
                 return BadRequest($"{ex.Message} (Tried with: {userRegisterDto.Email})");
             }
         }
@@ -39,14 +37,12 @@ namespace MyMusicNew.Controllers
         {
             try
             {
-                // ה-Service מחזיר את הטוקן שנוצר ב-TokenService
                 var token = await _loginService.Login(userLoginDto);
 
                 return Ok(new { token });
             }
             catch (Exception ex)
             {
-                // אם הסיסמה לא נכונה, ה-Service זורק Exception וזה יגיע לכאן
                 return BadRequest(ex.Message);
             }
         }

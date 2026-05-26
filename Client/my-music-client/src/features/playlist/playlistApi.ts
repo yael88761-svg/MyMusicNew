@@ -40,7 +40,7 @@ export const playlistApi = createApi({
       providesTags: (result, error, id) => [{ type: 'Playlists', id }],
     }),
     
-    // יצירת פלייליסט חדש
+    //create playlist
     createPlaylist: builder.mutation<any, { playlistName: string }>({
       query: (newPlaylist) => ({
         url: 'Playlist',
@@ -50,7 +50,7 @@ export const playlistApi = createApi({
       invalidatesTags: [{ type: 'Playlists', id: 'LIST' }],
     }),
 
-    // העלאת שיר וקישורו לפלייליסט ספציפי
+// Upload a song and link it to a specific playlist
     uploadSongToPlaylist: builder.mutation<any, { file: File; playlistId: number }>({
       query: ({ file, playlistId }) => {
         const formData = new FormData();
@@ -65,11 +65,11 @@ export const playlistApi = createApi({
       invalidatesTags: (result, error, { playlistId }) => [
         { type: 'Playlists', id: playlistId },
         { type: 'Playlists', id: 'LIST' },
-        { type: 'Playlists', id: 'RECENT' } // מרענן גם את "נוספו לאחרונה"
+       // { type: 'Playlists', id: 'RECENT' }
       ],
     }),
 
-    // עדכון פלייליסט קיים
+    //update plylist
     updatePlaylist: builder.mutation<any, { id: number; data: any }>({
       query: ({ id, data }) => ({
         url: `Playlist/${id}`,
@@ -79,7 +79,7 @@ export const playlistApi = createApi({
       invalidatesTags: (result, error, { id }) => [{ type: 'Playlists', id }],
     }),
 
-    // מחיקת פלייליסט
+    // delete playlist
     deletePlaylist: builder.mutation<void, number>({
       query: (id) => ({
         url: `Playlist/${id}`,
@@ -94,7 +94,7 @@ export const playlistApi = createApi({
 export const { 
   useGetPlaylistsQuery, 
   useGetPlaylistByIdQuery,
-  useGetRecentPlaylistQuery, // ה-Hook החדש לשימוש בקומפוננטה
+  useGetRecentPlaylistQuery, 
   useCreatePlaylistMutation,
   useUploadSongToPlaylistMutation,
   useUpdatePlaylistMutation,

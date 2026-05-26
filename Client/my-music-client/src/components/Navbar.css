@@ -3,12 +3,12 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 2rem;
-  height: 65px; /* גובה קבוע ודק */
+  height: 65px; 
   width: 95%;
   background-color: #000000;
   border-bottom: 1px solid #282828;
   z-index: 1000;
-  position: relative; /* מבטיח שהנאב-באר יישאר יציב */
+  position: relative; 
 }
 
 #nav-logo {
@@ -34,19 +34,17 @@
   color: white; 
 }
 
-/* --- עיצוב מיוחד עבור קישורים חסומים (משתמש לא מחובר) --- */
 .nav-links a.disabled-link {
-  opacity: 0.4;          /* הופך את הכפתור לעמום וחצי שקוף */
-  cursor: not-allowed;   /* משנה את האייקון של העכבר לסימן חסימה */
-  pointer-events: auto;  /* חשוב! משאיר את ה-click פעיל כדי שה-onClick ב-React יקפיץ את ה-alert */
+  opacity: 0.4;         
+  cursor: not-allowed;   
+  pointer-events: auto;  
 }
 
 .nav-links a.disabled-link:hover {
-  color: #b3b3b3;        /* מונע מהטקסט להפוך ללבן בריחוף */
-  text-decoration: none; /* מונע קו תחתון בריחוף */
+  color: #b3b3b3;       
+  text-decoration: none; 
 }
 
-/* --- אזור כפתורי ההתחברות והפרופיל --- */
 .nav-auth {
   display: flex;
   align-items: center;
@@ -68,7 +66,7 @@
 
 .login-link:hover {
   color: white;
-  transform: scale(1.04); /* אפקט קטן ויפה בריחוף */
+  transform: scale(1.04); 
 }
 
 .signup-btn {
@@ -87,7 +85,6 @@
   background-color: #f6f6f6;
 }
 
-/* --- פרופיל משתמש מחובר --- */
 .user-profile {
   display: flex;
   align-items: center;
@@ -97,7 +94,7 @@
 }
 
 .user-profile strong {
-  color: #1DB954; /* צובע את שם המשתמש בירוק של הלוגו */
+  color: #1DB954; 
 }
 
 .logout-btn {

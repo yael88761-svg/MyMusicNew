@@ -15,20 +15,18 @@ export const songApi = createApi({
   tagTypes: ['Playlists', 'Songs'],
   
   endpoints: (builder) => ({
-    // 1. קבלת כל השירים של המשתמש המחובר (לפי ה-Swagger)
-    getSongs: builder.query<any[], void>({
+      // 1. Get all songs of the logged in user 
+      getSongs: builder.query<any[], void>({
       query: () => 'Song/my-songs',
       providesTags: ['Songs'],
     }),
 
-    // 2. העלאת שיר לפלייליסט מסוים - ה-playlistId עובר כעת בתוך ה-URL
     uploadSong: builder.mutation<any, { formData: FormData; playlistId: string }>({
       query: ({ formData, playlistId }) => ({
         url: `Song/upload-music/${playlistId}`,
         method: 'POST',
         body: formData,
       }),
-      // מרענן גם את הפלייליסט הספציפי וגם את רשימת כל השירים בספרייה הכללית
       invalidatesTags: (result, error, { playlistId }) => [
         { type: 'Playlists', id: playlistId },
         { type: 'Songs' }
