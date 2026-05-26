@@ -10,16 +10,15 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration; // שמירה על ה-using הזה עבור IConfiguration
+using Microsoft.Extensions.Configuration; 
 
 namespace Service
 {
     public class Tools
     {
         private readonly MusicContext _context;
-        private readonly IConfiguration _configuration; // שדה חדש לשמירת ההגדרות
+        private readonly IConfiguration _configuration; 
 
-        // עדכון הבנאי שיקבל גם את ה-IConfiguration מהמערכת
         public Tools(MusicContext context, IConfiguration configuration)
         {
             _context = context;
@@ -54,28 +53,27 @@ namespace Service
                 var client = new RestClient("https://generativelanguage.googleapis.com");
                 var request = new RestRequest("/v1/models/gemini-2.5-flash:generateContent", Method.Post);
 
-                // שימוש ב-_configuration המוזרק במקום builder.Configuration
                 string ApiKey = _configuration["GeminiSettings:ApiKey"];
                 Console.WriteLine($"[Test] My API Key length is: {ApiKey?.Length ?? 0}");
                 request.AddQueryParameter("key", ApiKey);
 
                 var prompt = $@"
-    STRICT INSTRUCTION: Analyze the song title: '{title}' and artist: '{artist}'. 
-    Tasks:
-    1. Separate and clean the title string into two distinct parts: 'cleaned_artist' and 'cleaned_title' (remove underscores, .mp3, junk text).
-    2. Based on your global knowledge of this song, evaluate its musical features: musical key, estimated tempo (BPM as integer), energy level (0.0 to 1.0), valence (happiness 0.0 to 1.0), and danceability (0.0 to 1.0).
-    3. Return the result ONLY as a JSON object matching the format below. Do not include markdown code blocks.
-    
-    Format Example:
-    {{
-        ""cleaned_title"": ""שם השיר"",
-        ""cleaned_artist"": ""שם האמן"",
-        ""key"": ""C Major"",
-        ""tempo"": 120,
-        ""energy"": 0.5,
-        ""valence"": 0.5,
-        ""danceability"": 0.5
-    }}";
+        STRICT INSTRUCTION: Analyze the song title: '{title}' and artist: '{artist}'. 
+        Tasks:
+        1. Separate and clean the title string into two distinct parts: 'cleaned_artist' and 'cleaned_title' (remove underscores, .mp3, junk text).
+        2. Based on your global knowledge of this song, evaluate its musical features: musical key, estimated tempo (BPM as integer), energy level (0.0 to 1.0), valence (happiness 0.0 to 1.0), and danceability (0.0 to 1.0).
+        3. Return the result ONLY as a JSON object matching the format below. Do not include markdown code blocks.
+
+        Format Example:
+        {{
+            ""cleaned_title"": ""שם השיר"",
+            ""cleaned_artist"": ""שם האמן"",
+            ""key"": ""C Major"",
+            ""tempo"": 120,
+            ""energy"": 0.5,
+            ""valence"": 0.5,
+            ""danceability"": 0.5
+        }}";
 
                 request.AddJsonBody(new
                 {
@@ -88,7 +86,6 @@ namespace Service
                 });
                 var response = await client.ExecuteAsync(request);
 
-                // הדפסת לוג בשרת כדי לעקוב אחרי התשובה הגולמית של גוגל
                 if (!response.IsSuccessful)
                 {
                     Console.WriteLine($"[AI Error] Request failed with status: {response.StatusCode}. Content: {response.Content}");
@@ -104,7 +101,6 @@ namespace Service
 
                     var cleanJson = aiRawText?.Replace("```json", "").Replace("```", "").Trim();
 
-                    // שימוש ב-JsonNode לפענוח חסין של השדות ללא תלות ב-Case Sensitivity של ה-DTO
                     var jsonNode = System.Text.Json.Nodes.JsonNode.Parse(cleanJson);
                     if (jsonNode != null)
                     {
@@ -117,7 +113,6 @@ namespace Service
                         float danceability = float.TryParse(jsonNode["danceability"]?.ToString() ?? jsonNode["Danceability"]?.ToString(), out var d) ? d : 0.5f;
                         string key = jsonNode["key"]?.ToString() ?? jsonNode["Key"]?.ToString() ?? "Unknown";
 
-                        // עדכון ה-Song ב-Database (השמירה הסופית תתבצע בקונטרולר)
                         var song = await _context.Songs.FindAsync(songId);
                         if (song != null)
                         {
@@ -142,9 +137,111 @@ namespace Service
                 Console.WriteLine("[AI Critical Exception]: " + ex.Message);
             }
 
-            // ברירת מחדל בטוחה למניעת קריסה
             return new AudioFeatures { SongId = songId, Tempo = 120, Energy = 0.5f, Valence = 0.5f, Danceability = 0.5f, Key = "Unknown" };
         }
+
+        //        public async Task<AudioFeatures> GetAudioFeaturesFromAI(string title, string artist, int songId)
+        //        {
+        //            try
+        //            {
+        //                var client = new RestClient("https://generativelanguage.googleapis.com");
+        //                var request = new RestRequest("/v1/models/gemini-2.5-flash:generateContent", Method.Post);
+
+        //                string ApiKey = _configuration["GeminiSettings:ApiKey"];
+        //                Console.WriteLine($"[Test] My API Key length is: {ApiKey?.Length ?? 0}");
+        //                request.AddQueryParameter("key", ApiKey);
+
+        //                string prompt = $@"Analyze the song title: '{title}' and artist: '{artist}'.
+        //Based on your global knowledge of this song, evaluate its musical features: musical key, estimated tempo (BPM), energy level, valence (happiness), and danceability.
+        //Clean the title and artist name from junk text like '.mp3' or underscores.";
+
+        //                // הגדרת ה-JSON של הבקשה כולל Response Schema למניעת בעיות פרסור
+        //                // הגדרת ה-JSON של הבקשה מותאמת בדיוק לפורמט ה-REST של גוגל
+        //                request.AddJsonBody(new
+        //                {
+        //                    contents = new[] { new { parts = new[] { new { text = prompt } } } },
+        //                    generationConfig = new
+        //                    {
+        //                        temperature = 0.0,
+        //                        response_mime_type = "application/json", // שינוי ל-snake_case עבור ה-API
+        //                        response_schema = new
+        //                        {
+        //                            type = "OBJECT",
+        //                            properties = new
+        //                            {
+        //                                cleaned_title = new { type = "STRING" },
+        //                                cleaned_artist = new { type = "STRING" },
+        //                                key = new { type = "STRING" },
+        //                                tempo = new { type = "NUMBER" },
+        //                                energy = new { type = "NUMBER" },
+        //                                valence = new { type = "NUMBER" },
+        //                                danceability = new { type = "NUMBER" }
+        //                            },
+        //                            required = new[] { "cleaned_title", "cleaned_artist", "key", "tempo", "energy", "valence", "danceability" }
+        //                        }
+        //                    }
+        //                });
+        //                var response = await client.ExecuteAsync(request);
+
+        //                if (!response.IsSuccessful)
+        //                {
+        //                    Console.WriteLine($"[AI Error] Request failed with status: {response.StatusCode}. Content: {response.Content}");
+        //                }
+
+        //                if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+        //                {
+        //                    using var doc = JsonDocument.Parse(response.Content);
+
+        //                    // גישה בטוחה למערך ה-candidates במבנה של ג'מיני 2.5
+        //                    var root = doc.RootElement;
+        //                    if (root.TryGetProperty("candidates", out var candidates) && candidates.GetArrayLength() > 0)
+        //                    {
+        //                        var firstCandidate = candidates[0];
+        //                        if (firstCandidate.TryGetProperty("content", out var content) &&
+        //                            content.TryGetProperty("parts", out var parts) && parts.GetArrayLength() > 0)
+        //                        {
+        //                            var aiRawText = parts[0].GetProperty("text").GetString();
+
+        //                            var jsonNode = System.Text.Json.Nodes.JsonNode.Parse(aiRawText);
+        //                            if (jsonNode != null)
+        //                            {
+        //                                string cleanedTitle = jsonNode["cleaned_title"]?.ToString() ?? jsonNode["Cleaned_Title"]?.ToString();
+        //                                string cleanedArtist = jsonNode["cleaned_artist"]?.ToString() ?? jsonNode["Cleaned_Artist"]?.ToString();
+
+        //                                float tempo = float.TryParse(jsonNode["tempo"]?.ToString() ?? jsonNode["Tempo"]?.ToString(), out var t) ? t : 120f;
+        //                                float energy = float.TryParse(jsonNode["energy"]?.ToString() ?? jsonNode["Energy"]?.ToString(), out var e) ? e : 0.5f;
+        //                                float valence = float.TryParse(jsonNode["valence"]?.ToString() ?? jsonNode["Valence"]?.ToString(), out var v) ? v : 0.5f;
+        //                                float danceability = float.TryParse(jsonNode["danceability"]?.ToString() ?? jsonNode["Danceability"]?.ToString(), out var d) ? d : 0.5f;
+        //                                string key = jsonNode["key"]?.ToString() ?? jsonNode["Key"]?.ToString() ?? "Unknown";
+
+        //                                var song = await _context.Songs.FindAsync(songId);
+        //                                if (song != null)
+        //                                {
+        //                                    if (!string.IsNullOrEmpty(cleanedTitle)) song.Title = cleanedTitle;
+        //                                    if (!string.IsNullOrEmpty(cleanedArtist)) song.Artist = cleanedArtist;
+        //                                }
+
+        //                                return new AudioFeatures
+        //                                {
+        //                                    SongId = songId,
+        //                                    Tempo = tempo,
+        //                                    Energy = energy,
+        //                                    Valence = valence,
+        //                                    Danceability = danceability,
+        //                                    Key = key
+        //                                };
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                Console.WriteLine("[AI Critical Exception]: " + ex.Message);
+        //            }
+
+        //            return new AudioFeatures { SongId = songId, Tempo = 120, Energy = 0.5f, Valence = 0.5f, Danceability = 0.5f, Key = "Unknown" };
+        //        }
 
         public SongInfo ExtractMetadata(string filePath)
         {
@@ -153,7 +250,7 @@ namespace Service
                 var file = TagLib.File.Create(filePath);
                 return new SongInfo
                 {
-                    Title = file.Tag.Title ?? Path.GetFileNameWithoutExtension(filePath), // אם אין כותרת במטא-דאטה, ניקח את שם הקובץ לפחות
+                    Title = file.Tag.Title ?? Path.GetFileNameWithoutExtension(filePath), 
                     Artist = file.Tag.FirstPerformer ?? "Unknown Artist",
                     Duration = file.Properties.Duration
                 };
@@ -168,7 +265,7 @@ namespace Service
 
             return await _context.AudioFeatures
                 .Include(f => f.Song)
-                .Where(f => f.SongId != currentSongId && f.Song.UserId == userId) // סינון: רק שירים ששייכים למשתמש הזה
+                .Where(f => f.SongId != currentSongId && f.Song.UserId == userId) 
                 .OrderBy(f => Math.Abs((double)f.Energy - (double)(currentFeatures.Energy ?? 0.5f)) +
                              Math.Abs((double)f.Valence - (double)(currentFeatures.Valence ?? 0.5f)))
                 .Select(f => f.Song)
