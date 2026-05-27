@@ -9,7 +9,6 @@ import './MusicPlayer.css';
 const MusicPlayer = () => {
     const dispatch = useDispatch();
     
-    // קבלת הנתונים מה-Store (הפלייליסט/הספרייה הנוכחית של המשתמש)
     const currentSong = useSelector((state: RootState) => state.song.currentSong);
     const playlist = useSelector((state: RootState) => state.song.currentPlaylist) || [];
 
@@ -19,10 +18,10 @@ const MusicPlayer = () => {
     const [duration, setDuration] = useState(0);
     const [volume, setVolume] = useState(0.7);
     const [isShuffle, setIsShuffle] = useState(false);
-    const [isSmartPlay, setIsSmartPlay] = useState(false); // מצב בחירה חכמה
+    const [isSmartPlay, setIsSmartPlay] = useState(false);
     const [repeatMode, setRepeatMode] = useState<'none' | 'all' | 'one'>('none');
 
-    // פונקציית עזר לכתובת השיר
+    // Helper function for the song path
     const getAudioUrl = (song: any) => {
         if (!song) return "";
         const path = song.filePath || song.path || song.url;
@@ -30,7 +29,7 @@ const MusicPlayer = () => {
         return path.startsWith('http') ? path : `http://localhost:5270${path}`;
     };
 
-    // מציאת אינדקס חסינה במיוחד
+    //  find index
     const getCurrentIndex = () => {
         if (!currentSong || playlist.length === 0) return -1;
         
@@ -41,7 +40,7 @@ const MusicPlayer = () => {
         });
     };
 
-    // הפעלה אוטומטית כשמתחלף שיר
+// Autoplay when song changes    
     useEffect(() => {
         const url = getAudioUrl(currentSong);
         if (url && audioRef.current) {
@@ -52,26 +51,25 @@ const MusicPlayer = () => {
         }
     }, [currentSong?.id, currentSong?.songId, currentSong?.title]);
 
-    // ✅ אלגוריתם בחירה חכמה ישירות מתוך הפלייליסט/ספרייה הנוכחית
+    //smart choosing
     const playSmartNextSong = () => {
         if (playlist.length <= 1) return false;
 
-        // 1. סינון השיר הנוכחי כדי שלא יחזור על עצמו מיד
         const currentId = String(currentSong?.id || currentSong?.songId || "");
         const otherSongs = playlist.filter(s => String(s.id || s.songId || "") !== currentId);
 
         if (otherSongs.length === 0) return false;
 
-        // 2. חילוץ מדדי ה-AI של השיר הנוכחי (אנרגיה ומצב רוח)
+        // 2. Extracting the AI ​​metrics of the current song (energy and mood)
         const currentEnergy = currentSong?.audioFeatures?.energy ?? currentSong?.energy ?? 0.5;
         const currentValence = currentSong?.audioFeatures?.valence ?? currentSong?.valence ?? 0.5;
-
-        // 3. חישוב המרחק לכל השירים האחרים ברשימה
+        
+        //distanse
         const songsWithDistance = otherSongs.map(song => {
             const songEnergy = song?.audioFeatures?.energy ?? song?.energy ?? 0.5;
             const songValence = song?.audioFeatures?.valence ?? song?.valence ?? 0.5;
             
-            // נוסחת מרחק מנהטן (בדיוק כמו בשרת)
+            // Using a simple distance formula to find songs that are similar in energy and mood
             const distance = Math.abs(songEnergy - currentEnergy) + Math.abs(songValence - currentValence);
             return { song, distance };
         });

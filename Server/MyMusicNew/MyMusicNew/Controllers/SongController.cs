@@ -87,7 +87,6 @@ namespace MyMusicNew.Controllers
                 if (userIdClaim == null || file == null) return BadRequest("משתמש לא מזוהה או קובץ חסר");
                 int currentUserId = int.Parse(userIdClaim.Value);
 
-                // 1. יצירת נתיב ושמירת הקובץ בדיסק
                 string fileName = Guid.NewGuid().ToString() + "_" + file.FileName;
                 string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
 
@@ -100,10 +99,8 @@ namespace MyMusicNew.Controllers
                     await file.CopyToAsync(stream);
                 }
 
-                // 2. חילוץ מטא-דאטה ראשוני מהקובץ
                 var info = _tools.ExtractMetadata(filePath);
 
-                // 3. הוספת השיר לטבלת Songs
                 var addedSong = await _service.AddItem(new SongDto
                 {
                     Title = info.Title,
@@ -112,14 +109,11 @@ namespace MyMusicNew.Controllers
                     UserId = currentUserId
                 });
 
-                // שמירה ראשונית כדי שה-Database ייצר באופן סופי מזהה (SongId) לשיר החדש!
                 await _context.SaveChangesAsync();
 
-                // 4. הקריאה ל-Tools לניתוח מעמיק ושמירת הפיצ'רים (העברת ה-SongId שנוצר בזה הרגע)
                 var features = await _tools.GetAudioFeaturesFromAI(addedSong.Title, addedSong.Artist, addedSong.SongId);
                 _context.AudioFeatures.Add(features);
 
-                // 5. יצירת הקשר והשיוך לפלייליסט הספציפי
                 var playlistLink = new PlaylistSong
                 {
                     PlaylistId = playlistId,
@@ -128,17 +122,14 @@ namespace MyMusicNew.Controllers
                 };
                 _context.PlaylistSongs.Add(playlistLink);
 
-                // שמירה סופית של הפיצ'רים והקישור לפלייליסט במכה אחת
                 await _context.SaveChangesAsync();
 
-                // 🌟 התיקון החסין: שולפים את ה-Entity האמיתי ולא את ה-Dto, ומבצעים Reload
                 var songEntity = await _context.Songs.FindAsync(addedSong.SongId);
                 if (songEntity != null)
                 {
                     await _context.Entry(songEntity).ReloadAsync();
                 }
 
-                // 6. שליפת השיר המעודכן והמלא דרך ה-Service
                 var updatedSong = await _service.GetById(addedSong.SongId);
 
                 return Ok(new

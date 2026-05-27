@@ -24,7 +24,7 @@ namespace Service
             _context = context;
             _configuration = configuration;
         }
-
+        // Retrieves the user's most frequently played songs sorted by play count.
         public async Task<List<Song>> GetTopTracksAsync(int userId, int limit = 10)
         {
             var topStats = await _context.PlayHistories
@@ -45,7 +45,7 @@ namespace Service
                 .Where(s => songIds.Contains(s.SongId))
                 .ToListAsync();
         }
-
+        // Calls the Gemini AI API to extract audio features and clean song metadata.
         public async Task<AudioFeatures> GetAudioFeaturesFromAI(string title, string artist, int songId)
         {
             try
@@ -140,7 +140,7 @@ namespace Service
             return new AudioFeatures { SongId = songId, Tempo = 120, Energy = 0.5f, Valence = 0.5f, Danceability = 0.5f, Key = "Unknown" };
         }
 
-
+        // Extracts track title, artist, and duration from physical file ID3 tags.
         public SongInfo ExtractMetadata(string filePath)
         {
             try
@@ -155,7 +155,7 @@ namespace Service
             }
             catch { return new SongInfo { Title = Path.GetFileNameWithoutExtension(filePath), Artist = "Unknown Artist", Duration = TimeSpan.Zero }; }
         }
-
+        // Finds the closest matching song based on the absolute distance of musical features.
         public async Task<Song?> GetSimilarSongAsync(int currentSongId, int userId)
         {
             var currentFeatures = await _context.AudioFeatures.FirstOrDefaultAsync(f => f.SongId == currentSongId);
